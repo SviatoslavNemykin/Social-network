@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% block links %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<header class="header">
+    <div class="logo-image">
+        <a href="{% url 'home' %}">
+            <img class="logo" src="{% static 'images/worldit.svg' %}" />
+        </a>
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-btn">
+            <a href="{% url 'home' %}">
+                <img class="navbar-image" src="{% static 'images/Vector.svg' %}" />
+                <p class="navbar-text"><b>Головна</b></p>
+            </a>
+        </div>
+        <div class="navbar-btn">
+            <a href="{% url 'my_publications' %}">
+                <img class="navbar-image" src="{% static 'images/pictures_img.svg' %}" />
+                <p class="navbar-text"><b>Мої публікації</b></p>
+            </a>
+        </div>
+        <div class="navbar-btn">
+            <a href="{% url 'friends' %}">
+                <img class="navbar-image" src="{% static 'images/friends.svg' %}" />
+                <p class="navbar-text"><b>Друзі</b></p>
+            </a>
+        </div>
+        <div class="navbar-btn">
+            <a href="{% url 'home' %}">
+                <img class="navbar-image" src="{% static 'images/chats.svg' %}" />
+                <p class="navbar-text"><b>Чати</b></p>
+            </a>
+        </div>
+        <div class="navbar-btn">
+            <a href="{% url 'user' %}">
+                <img class="navbar-image" src="{% static 'images/Settings.svg' %}" />
+                <p class="navbar-text"><b>Налаштування</b></p>
+            </a>
+        </div>
+
+        <button class="logout-btn">
+            <img class="navbar-image" src="{% static 'images/logout.svg' %}" />
+            <p class="logout-text">Вихід</p>
+        </button>
+    </div>
+</header>
+
+<main>
+    {% block site-bar %} 
+    
+    {% endblock %}
+
+    {% block content %} 
+
+    {% endblock %}
+</main>
+
+<footer>
+    <P></P>
+</footer>
+</body>
+</html>

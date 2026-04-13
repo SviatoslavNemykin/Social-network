@@ -1,0 +1,90 @@
+/* 
+высота 900
+ширина 1440
+*/
+
+a {
+    all: unset;
+    cursor: pointer;      
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 0.93vh 1.04vw;
+    padding-left: 5.55vw;
+    padding-right: 5.55vw;
+    color: white;
+    height: 9.77vh;
+}
+
+
+.logo {
+    font-weight: bold;
+    color: #543C52;
+    width: 10.06vw;
+    height: 2vh;
+}
+
+.logo-image {
+    width: 10.06vw;
+    height: 2vh;
+}
+
+.navbar-btn, a {
+    color: #070A1C;
+    user-select: none;
+    cursor:pointer;
+    padding-top: 0.44vh;
+    padding-bottom: 0.44vh;
+    padding-left: 0.55vw;
+    padding-right: 0.55vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.41vw;
+}
+
+.logout-btn {
+    display: flex;
+    cursor:pointer;
+    user-select: none;
+    justify-content: center;
+    align-items: center;
+    gap: 0.55vw;
+    background-color: white;
+    border: 0.13vw solid black;
+    border-radius: 85.69vw;
+    padding: 1.11vh 1.11vw;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #FAF8FF;
+}
+
+.navbar{
+    gap: 1.11vw;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.logout-text{
+    color: #543C52;
+    margin: 0; 
+    font-size: 0.97vw;
+}
+
+.navbar-text{
+    font-size: 1.11vw;
+    margin: 0;
+}
+
+.navbar-image{
+    width: 1.39vw;
+    height: 2.22vh;
+}
