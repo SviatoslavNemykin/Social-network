@@ -9,64 +9,63 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
-<header class="header">
-    <div class="logo-image">
-        <a href="{% url 'home' %}">
-            <img class="logo" src="{% static 'images/worldit.svg' %}" />
-        </a>
-    </div>
+<header>
+    <div class="container">
+    <a href="{% url 'home' %} " class="logo">
+        <img class="logo-image" src="{% static 'images/worldit.svg' %}" />
+    </a>
 
     <div class="navbar">
-        <div class="navbar-btn">
-            <a href="{% url 'home' %}">
-                <img class="navbar-image" src="{% static 'images/Vector.svg' %}" />
-                <p class="navbar-text"><b>Головна</b></p>
-            </a>
-        </div>
-        <div class="navbar-btn">
-            <a href="{% url 'my_publications' %}">
-                <img class="navbar-image" src="{% static 'images/pictures_img.svg' %}" />
-                <p class="navbar-text"><b>Мої публікації</b></p>
-            </a>
-        </div>
-        <div class="navbar-btn">
-            <a href="{% url 'friends' %}">
-                <img class="navbar-image" src="{% static 'images/friends.svg' %}" />
-                <p class="navbar-text"><b>Друзі</b></p>
-            </a>
-        </div>
-        <div class="navbar-btn">
-            <a href="{% url 'home' %}">
-                <img class="navbar-image" src="{% static 'images/chats.svg' %}" />
-                <p class="navbar-text"><b>Чати</b></p>
-            </a>
-        </div>
-        <div class="navbar-btn">
-            <a href="{% url 'user' %}">
-                <img class="navbar-image" src="{% static 'images/Settings.svg' %}" />
-                <p class="navbar-text"><b>Налаштування</b></p>
-            </a>
-        </div>
-
-        <button class="logout-btn">
+        
+        <a href="{% url 'home' %}" class="navbar-url">
+            <img class="navbar-image" src="{% static 'images/Vector.svg' %}" />
+            <p class="navbar-text"><b>Головна</b></p>
+        </a>
+    
+        <a href="{% url 'my_publications' %}" class="navbar-url">
+            <img class="navbar-image" src="{% static 'images/pictures_img.svg' %}" />
+            <p class="navbar-text"><b>Мої публікації</b></p>
+        </a>
+    
+        <a href="{% url 'friends' %}" class="navbar-url">
+            <img class="navbar-image" src="{% static 'images/friends.svg' %}" />
+            <p class="navbar-text"><b>Друзі</b></p>
+        </a>
+    
+        <a href="{% url 'home' %}" class="navbar-url">
+            <img class="navbar-image" src="{% static 'images/chats.svg' %}" />
+            <p class="navbar-text"><b>Чати</b></p>
+        </a>
+    
+        <a href="{% url 'user' %}" class="navbar-url">
+            <img class="navbar-image" src="{% static 'images/Settings.svg' %}" />
+            <p class="navbar-text"><b>Налаштування</b></p>
+        </a>
+        
+        <a href="{% url 'home' %}" class="logout-btn">
             <img class="navbar-image" src="{% static 'images/logout.svg' %}" />
             <p class="logout-text">Вихід</p>
-        </button>
+        </a>
     </div>
 </header>
 
 <main>
+    <div class="site-bar">
     {% block site-bar %} 
-    
+        <p>привет!ршщыиашщрцащришшщрыаиршожцизцкиложцвишщжрциж</p>
     {% endblock %}
-
+    </div>
+    <div class="content">
     {% block content %} 
 
     {% endblock %}
+    </div>
 </main>
 
 <footer>
     <P></P>
 </footer>
+
+    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>

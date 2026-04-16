@@ -1,51 +1,54 @@
-/* 
-высота 900
-ширина 1440
-*/
-
 a {
     all: unset;
     cursor: pointer;      
 }
 
-.header {
+header {
+    background-color: white;
+    padding: 1.6rem 0; 
+}
+
+.container {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 0 5rem; 
+    
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
-    padding: 0.93vh 1.04vw;
-    padding-left: 5.55vw;
-    padding-right: 5.55vw;
-    color: white;
-    height: 9.77vh;
 }
-
 
 .logo {
     font-weight: bold;
     color: #543C52;
-    width: 10.06vw;
-    height: 2vh;
+    width: 9rem;
+    height: 1.125rem;
 }
 
 .logo-image {
-    width: 10.06vw;
-    height: 2vh;
+    width: 9rem;
+    height: 1.125rem;
 }
 
-.navbar-btn, a {
+.darkened{
+    background-color: #E9E5EE;
+}
+
+.navbar-url {
+    display: flex;
     color: #070A1C;
     user-select: none;
     cursor:pointer;
-    padding-top: 0.44vh;
-    padding-bottom: 0.44vh;
-    padding-left: 0.55vw;
-    padding-right: 0.55vw;
-    display: flex;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     align-items: center;
     justify-content: center;
-    gap: 0.41vw;
+    gap: .375rem;
+    border-radius: 0.187rem;
 }
+
 
 .logout-btn {
     display: flex;
@@ -53,13 +56,12 @@ a {
     user-select: none;
     justify-content: center;
     align-items: center;
-    gap: 0.55vw;
+    gap: 0.5rem;
     background-color: white;
-    border: 0.13vw solid black;
-    border-radius: 85.69vw;
-    padding: 1.11vh 1.11vw;
+    border: 0.125px solid black;
+    border-radius: 77.125rem;
+    padding: 0.625rem 1rem 0.625rem 1rem
 }
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -67,7 +69,7 @@ body {
 }
 
 .navbar{
-    gap: 1.11vw;
+    gap: 1rem;
     display: flex; 
     align-items: center; 
     justify-content: center;
@@ -76,15 +78,36 @@ body {
 .logout-text{
     color: #543C52;
     margin: 0; 
-    font-size: 0.97vw;
+    font-size: 0.875rem;
 }
 
 .navbar-text{
-    font-size: 1.11vw;
+    font-size: 1rem;
     margin: 0;
 }
 
 .navbar-image{
-    width: 1.39vw;
-    height: 2.22vh;
+    width: 1.25rem;
+    height: 1.25rem;
 }
+
+main {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+
+    max-width: 1440px;
+    margin: 0 auto; 
+    padding: 0 5rem;
+}
+
+/* обертка не нужна — используем сам main */
+.site-bar {
+    width: 21.875rem; /* 350px */
+}
+
+.content {
+    width: 57.6875rem; /* 923px */
+}
+
+/* чтобы они стояли рядом */
