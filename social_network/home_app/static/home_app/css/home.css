@@ -1,3 +1,7 @@
+.side-bar{
+    height: 801px;
+}
+
 .profile-block {
     display: flex;
     flex-direction: column;
@@ -6,7 +10,8 @@
     border-radius: 0.625rem;
     background: #FFFFFF;
     padding: 1rem 0;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
+    margin-top: 1rem;
     gap: 1rem;
 }
 
@@ -43,7 +48,7 @@
 
 .bottom-data{
     display: flex;
-    padding: 0.625rem;
+    /* padding: 0.625rem; */
 }
 
 .user-data, .border-style {
@@ -72,4 +77,135 @@
     font-size: 1rem;
     font-weight: 500;
     color: #81818D;
+}
+
+.requests {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.0625rem solid #CDCED2;
+    border-radius: 0.625rem;
+    background: #FFFFFF;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    margin: 0.5rem 0;
+
+}
+
+.requests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* margin: 0; */
+}
+
+.requests-title {
+    padding-left: 1rem;   
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    font-style: medium;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #81818D;
+    margin: 0;
+}
+
+.requests-watch {
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+    font-style: medium;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #543C52;
+    line-height: 1.5rem;
+}
+
+.requests-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    /* padding: 0; */
+    margin: 0;
+    /* padding-bottom: 1rem; */
+}
+
+.request-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 90%;
+    height: 46px;
+}
+
+.request-text{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    /* align-items: center; */
+    /* justify-content: space-between; */
+}
+
+.request-name {
+    margin: 0;
+    font-style: medium;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #070A1C;
+    font-family: GT Walsheim Pro;
+   line-height: 1rem;
+}
+
+.request-count-folower {
+    margin: 0;
+    font-style: medium;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #81818D;
+}
+
+
+
+.message-text {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 0.5rem;
+    width: 90%;
+    margin: 0;
+}
+.message-informarion {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    width: 100%;
+    margin: 0;
+}
+
+.message-name {
+    margin: 0;
+    font-style: medium;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #070A1C;
+    font-family: GT Walsheim Pro;
+   line-height: 1rem;
+}
+.message-time {
+    margin: 0;
+    font-style: regular;
+    font-size: 0.750rem;
+    font-weight: 400;
+    color: #81818D;
+}
+.message-text-preview {
+   margin: 0;
+    font-style: regular;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #070A1C;
 }
