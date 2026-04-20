@@ -1,13 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Мої Друзі
 {% endblock  %}
 
 {% block links %}
-    <link rel="stylesheet" href="/static/css/friends.css">
+    <link rel="stylesheet" href="{% static 'friends_app/css/friends.css' %}">
 {% endblock  %}
 
 {% block content %}
     <h1>Список Друзів</h1>
+{% endblock  %}
+
+{% block side-bar %}
+     <div class="menu-block">
+        <a class="menu-item, active">Головна</a>
+        <a class="menu-item">Запити</a>
+        <a class="menu-item">Рекомендації</a>
+        <a class="menu-item">Всі друзі</a>
+    </div>
+
 {% endblock  %}

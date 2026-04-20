@@ -1,0 +1,34 @@
+.menu-block{
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 1rem;
+}
+
+.menu-item, .active {
+    /* gap: 0.5rem; */
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #81818D;
+    cursor: pointer;
+    position: relative;
+    width: fit-content;
+}
+
+.active {
+    color: #070A1C;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background: #543C52;
+    border-radius: 2px;
+}

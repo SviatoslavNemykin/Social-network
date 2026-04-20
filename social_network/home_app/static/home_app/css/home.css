@@ -1,0 +1,75 @@
+.profile-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.0625rem solid #CDCED2;
+    border-radius: 0.625rem;
+    background: #FFFFFF;
+    padding: 1rem 0;
+    margin: 1rem 0;
+    gap: 1rem;
+}
+
+.top-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.text-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.nickname{
+    font-size: 1.5rem;
+    font-style: bold;
+    font-weight: 700;
+    color: #070A1C;
+    margin: 0%;
+    gap: 0.5rem;
+}
+.username{
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: medium;
+    color: #070A1C;
+    margin: 0%;
+    letter-spacing: 0.001rem;
+}
+
+.bottom-data{
+    display: flex;
+    padding: 0.625rem;
+}
+
+.user-data, .border-style {
+    width: 116px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4375rem;
+    
+}
+
+.border-style {
+    border-right: 1px solid #000000;
+}
+
+.number-text{
+    margin: 0;
+    font-style: bold;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.text{
+    margin: 0;
+    font-style: medium;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #81818D;
+}

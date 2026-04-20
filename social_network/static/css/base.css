@@ -11,7 +11,7 @@ header {
 .container {
     max-width: 90rem;
     margin: 0 auto;
-    padding: 0 5rem; 
+    padding: 0 0rem; 
     
     display: flex;
     align-items: center;
@@ -23,6 +23,7 @@ header {
     color: #543C52;
     width: 9rem;
     height: 1.125rem;
+    padding-left: 5rem;
 }
 
 .logo-image {
@@ -39,10 +40,7 @@ header {
     color: #070A1C;
     user-select: none;
     cursor:pointer;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 0.25rem 0.5rem;
     align-items: center;
     justify-content: center;
     gap: .375rem;
@@ -58,7 +56,7 @@ header {
     align-items: center;
     gap: 0.5rem;
     background-color: white;
-    border: 0.125px solid black;
+    border: 0.0625rem solid black;
     border-radius: 77.125rem;
     padding: 0.625rem 1rem 0.625rem 1rem
 }
@@ -69,10 +67,11 @@ body {
 }
 
 .navbar{
-    gap: 1rem;
+    gap: 1.5rem;
     display: flex; 
     align-items: center; 
     justify-content: center;
+    padding-right: 5rem;
 }
 
 .logout-text{
@@ -94,20 +93,22 @@ body {
 main {
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
+    /* gap: 2rem; */
 
     max-width: 1440px;
     margin: 0 auto; 
-    padding: 0 5rem;
+    padding: 0;
 }
 
 /* обертка не нужна — используем сам main */
-.site-bar {
+.side-bar {
     width: 21.875rem; /* 350px */
+    padding-left: 5rem;
 }
 
 .content {
     width: 57.6875rem; /* 923px */
+    padding-right: 5rem;
 }
 
 /* чтобы они стояли рядом */

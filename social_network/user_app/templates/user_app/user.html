@@ -3,12 +3,17 @@
 
 {% block title %} User {% endblock title %}
 
-{% block link %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock link %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'user_app/css/user.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1>Налаштування</h1>
-
-    
 {% endblock %}
+
+{% block side-bar %}
+    <div class="menu-block">
+        <a class="menu-item, active">Особиста інформація</a>
+        <a class="menu-item">Альбоми</a>
+    </div>
+{% endblock  %}

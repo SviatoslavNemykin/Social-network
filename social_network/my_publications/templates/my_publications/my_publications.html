@@ -3,10 +3,43 @@
 
 {% block title %} Publications {% endblock title %}
 
-{% block link %}
-    <link rel="stylesheet" href="{% static 'css/my_publications.css' %}">
-{% endblock link %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'my_publications/css/my_publications.css' %}">
+{% endblock links %}
 
 {% block content %}
     <h1>Publications Page</h1>
 {% endblock %}
+
+{% block side-bar %}
+    <div class="profile-block">
+        <div class="top-data">
+            <div class="indicator">
+                <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
+                <span class="avatar-indicator"></span>
+            </div>
+            <div class="text-data">
+                <p class="nickname">Lina Li</p>
+                <p class="username">@thelili</p>
+            </div>
+        </div>
+
+        <div class="bottom-data">
+            <div class="user-data border-style">
+                <p class="number-text">566</p>
+                <p class="text">Дописи</p>
+            </div>
+
+            <div class="user-data border-style">
+                <p class="number-text">12.1K</p>
+                <p class="text">Читачі</p>
+
+            </div>
+
+            <div class="user-data">
+                <p class="number-text">222</p>
+                <p class="text">Друзі</p>
+            </div>
+        </div>
+    </div>>
+{% endblock  %}

@@ -1,14 +1,123 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Home {% endblock title %}
+{% block title %} User {% endblock title %}
 
-{% block link %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock link %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'home_app/css/home.css' %}">
+{% endblock links %}
 
 {% block content %}
-    <h1>Home Page</h1>
-
-    
+    <h1>Home</h1>
 {% endblock %}
+
+{% block side-bar %}
+    <div class="profile-block">
+        <div class="top-data">
+            <div class="indicator">
+                <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
+                <span class="avatar-indicator"></span>
+            </div>
+            <div class="text-data">
+                <p class="nickname">Lina Li</p>
+                <p class="username">@thelili</p>
+            </div>
+        </div>
+
+        <div class="bottom-data">
+            <div class="user-data border-style">
+                <p class="number-text">566</p>
+                <p class="text">Дописи</p>
+            </div>
+
+            <div class="user-data border-style">
+                <p class="number-text">12.1K</p>
+                <p class="text">Читачі</p>
+
+            </div>
+
+            <div class="user-data">
+                <p class="number-text">222</p>
+                <p class="text">Друзі</p>
+            </div>
+        </div>
+    </div>
+    <div class="requests">
+
+        <div class="requests-header">
+            <p class="requests-title"><img src="{% static 'home_app/images/friend-requests.svg' %}" alt="Запити на дружбу">Запити на дружбу</p>
+            <a class="requests-watch" href="#">Дивитись всі</a>
+        </div>
+
+        <div class="requests-list">
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="request-text">
+                    <p class="request-name">Yehor Aung</p>
+                    <p class="request-count-folower">4.3к підписників</p>
+                </div>
+            </a>
+
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="request-text">
+                    <p class="request-name">Ann Ann</p>
+                    <p class="request-count-folower">1.6к підписників</p>
+                </div>
+            </a>
+
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="request-text">
+                    <p class="request-name">Yeugen Jenua</p>
+                    <p class="request-count-folower">10.3к підписників</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="requests">
+
+        <div class="requests-header">
+            <p class="requests-title"><img src="{% static 'home_app/images/friend-requests.svg' %}" alt="Запити на дружбу">Повідомлення</p>
+            <a class="requests-watch" href="#">Дивитись всі</a>
+        </div>
+
+        <div class="requests-list">
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="message-text">
+                    <div>
+                        <p class="message-name">Yehor Aung</p>
+                        <p class="message-time">Привіт! Як справи?</p>
+                    </div>
+                    <p class="message-text-preview">4.3к підписників</p>
+                </div>
+            </a>
+
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="message-text">
+                    <div>
+                        <p class="message-name">Yehor Aung</p>
+                        <p class="message-time">Привіт! Як справи?</p>
+                    </div>
+                    <p class="message-text-preview">4.3к підписників</p>
+                </div>
+            </a>
+
+            <a class="request-item" href="#">
+                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                <div class="message-text">
+                    <div>
+                        <p class="message-name">Yehor Aung</p>
+                        <p class="message-time">Привіт! Як справи?</p>
+                    </div>
+                    <p class="message-text-preview">4.3к підписників</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+{% endblock  %}
