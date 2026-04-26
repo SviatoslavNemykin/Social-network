@@ -1,3 +1,10 @@
+.side-bar{
+    height: 50.0625rem;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
 .profile-block {
     display: flex;
     flex-direction: column;
@@ -6,7 +13,7 @@
     border-radius: 0.625rem;
     background: #FFFFFF;
     padding: 1rem 0;
-    margin: 1rem 0;
+    margin-top: 1rem;
     gap: 1rem;
 }
 
@@ -43,11 +50,11 @@
 
 .bottom-data{
     display: flex;
-    padding: 0.625rem;
+    /* padding: 0.625rem; */
 }
 
 .user-data, .border-style {
-    width: 116px;
+    width: 7.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;

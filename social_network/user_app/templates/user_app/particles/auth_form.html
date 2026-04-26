@@ -1,0 +1,25 @@
+{% load static %}
+<div class="reg-auth-btns">
+    <button onclick="showReg()" class="reg-auth-btn deactivate">Реєстрація</button>
+    <button onclick="showAuth()" class="reg-auth-btn">Авторизація</button>
+</div>
+<p class="reg-auth-p">Раді тебе знову бачити!</p>
+<form action="" method="post">
+    <div class="form">
+    {% csrf_token %}
+    <div class="input-container">
+        <label for="email" class="label">Електронна пошта</label>
+        <div class="input">
+            <input type="email" name="email" id="email" required placeholder="you@example.com"> 
+            <img src=""></div>
+    </div>
+    <div class="input-container">
+        <label for="email" class="label">Пароль</label>
+        <div class="input">
+            <input type="password" name="password" id="password" required placeholder="Введи пароль"> 
+            <img src="{% static 'user_app/images/eye.svg' %}" alt="show_pass" class="show-pass" onclick="showPass(this)">
+        </div>
+    </div>
+    </div>
+    <button type="submit" class="submit"> Увійти </button>
+</form>

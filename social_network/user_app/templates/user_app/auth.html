@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Реєстрація/Авторизація
+{% endblock title %}
+{% block links %}
+
+<link rel="stylesheet" href="{% static 'user_app/css/auth.css' %}">
+
+{% endblock links %}
+
+
+{% block side-bar %}
+    
+    <div id="auth-block" class="block">
+        {% include 'user_app/particles/auth_form.html' %}
+    </div>
+
+    <div id="reg-block" style="display: none;" class="block">
+        {% include 'user_app/particles/reg_form.html' %}
+    </div>
+
+    <div id="email-block" style="display: none;" class="block">
+        {% include 'user_app/particles/email_confirm.html' %}
+    </div>
+    <img src="{% static 'user_app/images/Container.svg' %}" alt="auth_bg" class="auth-bg">
+    
+{% endblock side-bar %}
+
+{% block scripts %}
+<script src="{% static 'user_app/js/switchForm.js' %}"></script>
+{% endblock %}

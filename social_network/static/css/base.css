@@ -5,17 +5,23 @@ a {
 
 header {
     background-color: white;
-    padding: 1.6rem 0; 
+    /* padding: 1.6rem 0;  */
+    /* padding: 0; */
+    height: 5.8rem;
+    display: flex;
+    align-items: center;
 }
 
 .container {
-    max-width: 90rem;
+    width: 80rem;
     margin: 0 auto;
     padding: 0 0rem; 
     
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: center;
+    gap: 21rem;
 }
 
 .logo {
@@ -23,7 +29,7 @@ header {
     color: #543C52;
     width: 9rem;
     height: 1.125rem;
-    padding-left: 5rem;
+    /* padding-left: 5rem; */
 }
 
 .logo-image {
@@ -45,6 +51,7 @@ header {
     justify-content: center;
     gap: .375rem;
     border-radius: 0.187rem;
+    white-space: nowrap;
 }
 
 
@@ -71,7 +78,7 @@ body {
     display: flex; 
     align-items: center; 
     justify-content: center;
-    padding-right: 5rem;
+    /* padding-right: 5rem; */
 }
 
 .logout-text{
