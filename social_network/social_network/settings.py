@@ -126,3 +126,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+AUTH_USER_MODEL = 'user_app.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

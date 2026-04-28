@@ -30,4 +30,9 @@
 
 {% block scripts %}
 <script src="{% static 'user_app/js/switchForm.js' %}"></script>
+{% if show_confirm %}
+    <script>
+        showConfirm();
+    </script>
+{% endif %}
 {% endblock %}

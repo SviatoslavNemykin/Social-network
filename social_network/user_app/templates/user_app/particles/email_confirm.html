@@ -1,17 +1,16 @@
 <p class="title">Підтвердження пошти</p>
 <p class="conf-p">Ми надіслали 6-значний код на вашу пошту (you@example.com). Введіть його нижче, щоб підтвердити аккаунт</p>
-<form action="" method="post">
+<form action="{% url 'confirm' %}" method="post">
     <div class="form">
     {% csrf_token %}
-    <!-- {{ confirm_form.as_p }} -->
     <label for="email" class="label">Код підтвердження</label>
     <div class="code-inputs">
-        <input type="text" name="conf" maxlength="1" required>
-        <input type="text" maxlength="1" required>
-        <input type="text" maxlength="1" required>
-        <input type="text" maxlength="1" required>
-        <input type="text" maxlength="1" required>
-        <input type="text" maxlength="1" required>
+        {{ confirm_form.num1 }}
+        {{ confirm_form.num2 }}
+        {{ confirm_form.num3 }}
+        {{ confirm_form.num4 }}
+        {{ confirm_form.num5 }}
+        {{ confirm_form.num6 }}
     </div>
     </div>
     <div class="buttons">

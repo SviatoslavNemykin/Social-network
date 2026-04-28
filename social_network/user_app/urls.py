@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import render_user, AuthView
+from .views import render_user, RegisterLoginView, RegisterView, LoginView, ConfirmView
 
 urlpatterns = [
     path("", render_user, name="user"),
-    path('auth/', AuthView.as_view(), name='auth')
+    path('auth/', RegisterLoginView.as_view(), name='auth'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('confirm/', ConfirmView.as_view(), name='confirm'),
 ]
