@@ -4,9 +4,9 @@
     <button onclick="showAuth()" class="reg-auth-btn">Авторизація</button>
 </div>
 <p class="reg-auth-p">Раді тебе знову бачити!</p>
-<form action="{%url 'login'%}" method="post">
+<form action="{%url 'login'%}" method="post" id='authForm'>
     <div class="form">
-    {% csrf_token %}
+    <!-- {% csrf_token %} -->
     <div class="input-container">
         <label for="email" class="label">Електронна пошта</label>
         <div class="input">

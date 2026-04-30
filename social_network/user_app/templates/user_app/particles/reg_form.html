@@ -4,29 +4,25 @@
     <button onclick="showAuth()" class="reg-auth-btn deactivate">Авторизація</button>
 </div>
 <p class="reg-auth-p">Приєднуйся до World IT</p>
-<form action="{%url 'register'%}" method="post">
+<form action="{%url 'register'%}" method="post" id="regForm">
     <div class="form">
-    {% csrf_token %}
+    <!-- {% csrf_token %} -->
     <div class="input-container">
         <label for="email" class="label">Електронна пошта</label>
         <div class="input">
-            <!-- <input type="email" name="email" id="email" required placeholder="you@example.com">  -->
             {{ reg_form.email }}
             <img src=""></div>
     </div>
     <div class="input-container">
         <label for="email" class="label">Пароль</label>
         <div class="input">
-            <!-- <input type="password" name="password" id="password" required placeholder="Введи пароль">  -->
             {{ reg_form.password }}
-             <!-- <img src="{% static 'user_app/images/eye.svg' %}" alt="show_pass" class="show-pass" onclick="showPass(this)"> -->
             <img src="{% static 'user_app/images/eye.svg' %}" alt="show_pass" class="show-pass" onclick="showPass(this)">
         </div>
     </div>
     <div class="input-container">
         <label for="email" class="label">Пароль</label>
         <div class="input">
-            <!-- <input type="password" name="conf-password" id="conf-password" required placeholder="Повтори пароль">  -->
              {{ reg_form.confirm_password }}
             <img src="{% static 'user_app/images/eye.svg' %}" alt="show_pass" class="show-pass" onclick="showPass(this)">
         </div>

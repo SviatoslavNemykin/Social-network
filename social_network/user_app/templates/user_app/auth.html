@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block meta %} 
+    <meta content="{{ csrf_token }}" name="csrf-token">
+{% endblock %}
+
 {% block title %}
     Реєстрація/Авторизація
 {% endblock title %}
@@ -29,7 +33,7 @@
 {% endblock side-bar %}
 
 {% block scripts %}
-<script src="{% static 'user_app/js/switchForm.js' %}"></script>
+<script src="{% static 'user_app/js/auth.js' %}"></script>
 {% if show_confirm %}
     <script>
         showConfirm();

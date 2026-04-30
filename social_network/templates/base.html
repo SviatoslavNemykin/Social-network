@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
     {% block links %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -42,7 +43,7 @@
                 <p class="navbar-text"><b>Налаштування</b></p>
             </a>
             
-            <a href="{% url 'auth' %}" class="logout-btn">
+            <a href="{% url 'logout' %}" class="logout-btn">
                 <img class="navbar-image" src="{% static 'images/logout.svg' %}" />
                 <p class="logout-text">Вихід</p>
             </a>

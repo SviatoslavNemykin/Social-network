@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from .forms import RegForm, AuthForm, ConfirmForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def render_user(request):
     return render(request, "user_app/user.html")
 
@@ -74,9 +76,14 @@ class LoginView(View):
             user = form.get_user()
             login(request, user)
 
+            # return JsonResponse({
+            #     "success": True,
+            #     "message": "Авторизація успішна!"
+            # })
+            # return redirect('home')
             return JsonResponse({
                 "success": True,
-                "message": "Авторизація успішна!"
+                "redirect_url": reverse('home')
             })
         
         return JsonResponse({
@@ -86,3 +93,9 @@ class LoginView(View):
             },
             status=400
             )
+    
+class LogoutView(View):
+    def get(self, request, ):
+        logout(request)
+        return redirect("auth")
+    
