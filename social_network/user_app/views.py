@@ -40,7 +40,12 @@ class RegisterView(View):
                 [form.cleaned_data['email']],
             )
             
-            return redirect('auth')
+            return JsonResponse({
+                "success": True,
+                "redirect_url": reverse('auth')
+            })
+
+            # return redirect('auth')
 
         #     return JsonResponse({
         #         "success": True,
@@ -64,7 +69,11 @@ class ConfirmView(View):
                 )
 
                 request.session.flush()
-                return redirect('auth')
+                # return redirect('auth')
+                return JsonResponse({
+                "success": True,
+                "redirect_url": reverse('auth')
+                })
                 
 
     
