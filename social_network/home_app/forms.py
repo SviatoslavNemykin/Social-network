@@ -8,6 +8,14 @@ class UsernameSetupForm(forms.ModelForm):
     class Meta:
         model = user
         fields = ['username', 'first_name']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'placeholder': '@'
+            }),
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'Введіть Псевдонім автора'
+            }),
+        }
 
     def clean_username(self):
         username = self.cleaned_data['username']

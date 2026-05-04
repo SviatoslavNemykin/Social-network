@@ -213,3 +213,102 @@
 .message-read {
     background-color: #E9E5EE;
 }
+
+
+.username-setup-form{
+    z-index: 3;
+    position: relative;
+    top: 7rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 25.125rem;
+    height: 24.8125rem;
+    border: 0.0625rem solid #CDCED2;
+    border-radius: 1.25rem;
+    background: #FFFFFF;
+    padding: 1.5rem 2.75rem;
+}
+
+.form-title {
+    font-style: medium;
+    font-size: 2.125rem;
+    font-weight: 500;
+    color: #070A1C;
+    letter-spacing: -1%;
+    line-height: 100%;
+    margin: 0;
+}
+
+.inputs-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;    
+    /* justify-content: space-between; */
+    padding: 1rem 0;
+    width: 25.125rem;
+    height: 11.5rem;
+}
+
+.input-block{
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.form-label {
+    font-style: medium;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #070A1C;
+    letter-spacing: -0.7%;
+}
+
+input {
+    all: unset;
+}
+
+input{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 25rem;
+    max-height: 2.5rem;
+    border-radius: 0.625rem;
+    border-width: 0.0625rem ;
+    padding: 0.625rem 1rem;
+    gap: 1rem;
+    background-color: white;
+    border-color: #CDCED2;
+    border-style: solid;
+}
+
+.submit{
+    all: unset;
+    cursor: pointer; 
+    max-width:7rem;
+    max-height: 2.5rem;
+    border-style: solid;
+    background-color: #543C52;
+    border-radius: 77rem;
+    padding: 0.625rem 1rem;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium; 
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+}
+
+.submit-block {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}

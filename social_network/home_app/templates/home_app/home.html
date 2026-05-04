@@ -10,23 +10,37 @@
 {% block content %}
     <h1>Home</h1>
     {%if form %}
-        <form method="post">
+        <style>
+            body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Черный цвет с 50% прозрачностью */
+            z-index: 2; /* Чтобы слой был поверх всего */
+            pointer-events: none; /* Позволяет кликать по элементам ПОД затемнением */
+        }
+        </style>
+        <form method="post" class="username-setup-form">
             {% csrf_token %}
-            <!-- {{ form.as_p }} -->
             <p class="form-title">Додай деталі про себе</p> 
 
-                <div class = "inputs-group">
+                <div class="inputs-group">
                     <div class="input-block">
-                        <label for="first_name">Псевдонім автора</label>
+                        <label for="first_name" class="form-label">Псевдонім автора</label>
                         {{ form.first_name }}  
                     </div>
 
                     <div class="input-block">
-                        <label for="first_name">Ім'я користувача</label>
+                        <label for="first_name" class="form-label">Ім'я користувача</label>
                         {{ form.username }}  
                     </div>
                 </div>
-            <button type="submit">Продовжити</button>
+            <div class="submit-block">
+                <button type="submit" class="submit">Продовжити</button>
+            </div>
         </form>
     {% endif %}
 {% endblock %}
@@ -141,3 +155,7 @@
         </div>
     </div>
 {% endblock  %}
+
+{% block scripts %}
+    <script src="{% static 'home_app/js/usernameSetup.js' %}"></script>
+{% endblock scripts %}

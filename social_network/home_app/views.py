@@ -10,7 +10,7 @@ from .forms import UsernameSetupForm
 
 class HomeView(View):
     def get(self, request):
-        if not request.user.username:
+        if request.user.username == ' ' or request.user.username is None:
             form = UsernameSetupForm()
             return render(request=request, template_name='home_app/home.html', context={'form': form})
         return render(request=request, template_name='home_app/home.html')
@@ -19,5 +19,9 @@ class HomeView(View):
         form = UsernameSetupForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            
             return redirect('home')
+
         return render(request=request, template_name='home_app/home.html', context={'form': form})
+
+
