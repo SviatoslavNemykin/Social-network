@@ -9,6 +9,26 @@
 
 {% block content %}
     <h1>Home</h1>
+    {%if form %}
+        <form method="post">
+            {% csrf_token %}
+            <!-- {{ form.as_p }} -->
+            <p class="form-title">Додай деталі про себе</p> 
+
+                <div class = "inputs-group">
+                    <div class="input-block">
+                        <label for="first_name">Псевдонім автора</label>
+                        {{ form.first_name }}  
+                    </div>
+
+                    <div class="input-block">
+                        <label for="first_name">Ім'я користувача</label>
+                        {{ form.username }}  
+                    </div>
+                </div>
+            <button type="submit">Продовжити</button>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block side-bar %}

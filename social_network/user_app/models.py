@@ -9,7 +9,8 @@ class User(AbstractUser):
     username = models.CharField(
         blank=True,
         null=True, 
-        max_length=255
+        max_length=255,
+        unique=True
         )
 
     USERNAME_FIELD = 'email'
