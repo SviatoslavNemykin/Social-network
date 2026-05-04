@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def render_user(request):
+    if request.user.username == ' ' or request.user.username is None:
+        return redirect('home')
     return render(request, "user_app/user.html")
 
 class RegisterLoginView(TemplateView):

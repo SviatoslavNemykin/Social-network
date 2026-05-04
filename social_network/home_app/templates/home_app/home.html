@@ -23,7 +23,7 @@
             pointer-events: none; /* Позволяет кликать по элементам ПОД затемнением */
         }
         </style>
-        <form method="post" class="username-setup-form">
+        <form method="post" class="username-setup-form" id="usernameSetupForm" action="{% url 'setup_username' %}">
             {% csrf_token %}
             <p class="form-title">Додай деталі про себе</p> 
 
