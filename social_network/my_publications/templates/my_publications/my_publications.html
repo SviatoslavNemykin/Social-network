@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="{% static 'my_publications/css/my_publications.css' %}">
 {% endblock links %}
 
-{% block content %}
-    <h1>Publications Page</h1>
-{% endblock %}
 
 {% block side-bar %}
     <div class="profile-block">
@@ -43,3 +40,18 @@
         </div>
     </div>
 {% endblock  %}
+
+{% block content %}
+    <!-- <h1>Publications Page</h1> -->
+    <div class="create-publications">
+        <input type="text" class="text-publications" placeholder="Текст публікації">
+        <div class="publications-buttons">
+            <button class="buttong-img"><img src="{% static 'my_publications/images/Component 4.svg' %}" alt=""></button>
+            <button class="to-publications" onclick="toggleStyleTag()">Перейти до оформлення</button>
+        </div>
+    </div>
+    
+    <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
+{% endblock %}
+
+{% block scripts %} <script src="{% static 'my_publications/js/showForm.js' %}"></script> {% endblock %}

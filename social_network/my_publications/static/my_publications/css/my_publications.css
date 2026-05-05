@@ -80,3 +80,55 @@
     font-weight: 500;
     color: #81818D;
 }
+
+
+.create-publications{
+    margin-top: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 57.5rem;
+    height: 7.5rem;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #CDCED2;
+    background: white;
+    justify-content: space-between;
+}
+
+.text-publications{
+    all: unset;
+    width: 55.65rem;
+    height: 1.375rem;
+}
+
+.publications-buttons{
+    display: flex;
+    gap: 0.825rem;
+    width: 15rem;
+    align-items: center;
+    margin-left: auto;
+}
+
+.buttong-img{
+    all:unset;
+}
+
+.to-publications{
+    all:unset;
+    max-width: 122rem;
+    height: 1.25rem;
+    padding: 0.625rem 1rem;
+    background-color: #543C52;
+    border-radius: 77.125rem;
+    color: white;   
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-style: medium;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    font-family: GT Walsheim Pro, sans-serif;
+    white-space: nowrap;
+    
+}
+
