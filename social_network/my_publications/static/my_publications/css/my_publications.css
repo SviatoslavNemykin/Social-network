@@ -132,3 +132,192 @@
     
 }
 
+#create-publication{
+    z-index: 3;
+    position: relative;
+    top: -14rem;
+    left: -6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 42.8125rem;
+    height: auto;
+    border: 0.0625rem solid #CDCED2;
+    border-radius: 1.25rem;
+    background: #FFFFFF;
+    padding: 1.5rem 2.75rem;
+    
+}
+
+.close-form{
+    all: unset;
+    margin-left: auto;
+    display: flex;
+}
+
+.form-title{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2.125rem;
+    font-weight: 500;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: bold;
+    line-height: 100%;
+    color: #070A1C;
+    letter-spacing: -1%;
+}
+
+.form-content{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem
+}
+
+.form-inputs, .form-inputs-links{
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.form-label{
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 400;
+    font-style: regular;
+    font-size: 1rem;
+    letter-spacing: 0.7%;
+    line-height: 100%;
+    color: #070A1C;
+}
+
+
+
+.form-input{
+    all: unset;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 25rem;
+    max-height: 2.5rem;
+    border-radius: 0.625rem;
+    border-width: 0.0625rem ;
+    padding: 0.625rem 1rem;
+    gap: 1rem;
+    background-color: white;
+    border-color: #CDCED2;
+    border-style: solid;
+}
+
+.form-tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    width: 42.8125rem;
+}
+
+.tag, .tag-selected{
+    all: unset;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.625rem;
+    border-width: 0.0625rem ;
+    padding: 0.375rem;
+    gap: 1rem;
+    background-color: #E9E5EE;
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+    font-family: GT Walsheim Pro, sans-serif;
+    color: #543C52;
+    letter-spacing: 0;
+    line-height: 100%;
+}
+
+.tag-selected{
+    background-color: #543C52;
+    color: white;
+}
+
+.new-tag{
+    all: unset;
+    display: flex;
+}
+
+.form-text-area {
+  width: 40.8125rem;
+  min-height: 8rem;
+
+  padding: 1rem;
+
+  font-size: 1rem;
+  line-height: 1.4;
+
+  border: 0.0625rem solid #CDCED2;
+  border-radius: 0.625rem;
+
+  outline: none;
+  resize: none;
+
+  overflow-y: auto;
+
+  font-family: sans-serif;
+  color: #333;
+}
+
+.form-text-area::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.for-text-area::-webkit-scrollbar-thumb {
+  background: #543C52;
+  border-radius: 0.625rem;
+}
+
+.new-link, .new-link img{
+    all: unset;
+    display: flex;
+    width: 1.5rem;
+    height: auto;
+}
+
+.form-inputs div, .form-inputs-links div{
+    display: flex;
+    gap: 0.375rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-container{
+    all: unset;
+    display: flex;
+    margin-left: auto;
+    gap: 0.625rem;
+    align-items: center;
+}
+
+.bottom-container div button{
+    all: unset;
+    display: flex;
+}
+
+.bottom-container div,.bottom-container div button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 77.125rem;
+    border-width: 0.0625rem ;
+    padding: 0.375rem;
+    gap: 1rem;
+    background-color: #543C52;
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+    font-family: GT Walsheim Pro, sans-serif;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    line-height: 100%;
+    align-items: center;
+}

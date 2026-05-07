@@ -1,1 +1,52 @@
-<h1>lorem ajkdfasjfkla[]r190 1219, dadas ad </h1>
+{% load static %}
+<form action="" method="post">
+    {% csrf_token %}
+    <button class="close-form" onclick="toggleStyleTag()"><img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image"></button>
+    <p class="form-title">Створення публікації</p>
+    <div class="form-content">
+        <div class="form-inputs">
+            <label for="" class="form-label">Назва публікації</label>
+            <input type="text" id="" class="form-input" placeholder="Напишіть назву публікації">
+        </div>
+
+        <div class="form-inputs">
+            <label for="" class="form-label">Тема публікації</label>
+            <input type="text" id="" class="form-input" placeholder="Напишіть тему публікації">
+        </div>
+
+        <div class="form-tags">
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag-selected">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag">#тег</p>
+            <p class="tag-selected">#тег</p>
+            <button class="new-tag"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
+        </div>
+
+        <textarea class="form-text-area" placeholder="Напишіть текст публікації"></textarea>
+   
+        <div class="form-inputs-links">
+            <label for="" class="form-label">Посилання</label>
+            <div>
+                <input type="text" id="" class="form-input" placeholder="Напишіть посилання">
+                <button class="new-link"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
+            </div>
+        </div>
+     </div>
+    <div class="bottom-container">
+        <label for="file-input">
+            <img src="{% static 'my_publications/images/Component 3.svg' %}" alt="Загрузить"/>
+        </label>
+        <div>
+            <input id="file-input" type="file" accept="image/*" style="all: unset; display: none;"/>
+            <button type="submit">Публікація<img src="{% static 'my_publications/images/Component 6.svg' %}" alt="Publication Image"></button>
+        </div>
+    </div>
+    
+</form>
