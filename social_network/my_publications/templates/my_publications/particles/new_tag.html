@@ -1,21 +1,24 @@
 {% load static %}
-<button type="button" class="close-form" onclick="closeTagModal()">
-    <img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image">
-</button>
+<div class="new-tag-modal">
+    <button type="button" class="close-form" onclick="closeTagModal()">
+        <img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image">
+    </button>
 
-<p class="form-title">Додати хештег</p>
+    <p class="form-title">Додати хештег</p>
 
-<div class="form-inputs">
-    <label class="form-label">Назва</label>
+    <div class="form-inputs">
+        <label class="form-label">Назва</label>
 
-    <input 
-        type="text" 
-        id="newTagInput" 
-        class="form-input" 
-        placeholder="#"
-    >
+        <input 
+            type="text" 
+            id="newTagInput" 
+            class="form-input" 
+            placeholder="#"
+        >
+    </div>
+    <div>
+        <button type="button" onclick="addNewTag()" class="to-publications" style="width: 5.625rem; align-items: center; justify-content: center; display: flex;margin-left: auto;">
+            Зберегти
+        </button>
+    </div>
 </div>
-
-<button type="button" onclick="addNewTag()">
-    Додати
-</button>
