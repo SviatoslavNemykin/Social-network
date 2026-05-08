@@ -75,3 +75,49 @@ document.getElementById('addLink').addEventListener('click', function () {
 
     linksDiv.appendChild(wrapper)
 })
+
+
+function newTag() {
+    document.getElementById('new-tag-modal').style.display = 'flex'
+    document.getElementById('create-publication').style.display = 'none';
+    styleAdded = false;
+}
+
+function closeTagModal() {
+    document.getElementById('new-tag-modal').style.display = 'none'
+    toggleStyleTag()
+}
+
+function addNewTag() {
+
+    const input = document.getElementById('newTagInput')
+    let value = input.value.trim()
+
+    if (value === '') return
+
+    // добавляем #
+    if (!value.startsWith('#')) {
+        value = '#' + value
+    }
+
+    // создаем тег
+    const tag = document.createElement('p')
+
+    tag.textContent = value
+    tag.classList.add('tag-selected')
+
+    // контейнер тегов
+    const tagsContainer = document.querySelector('.form-tags')
+
+    // кнопка +
+    const addButton = document.querySelector('.new-tag')
+
+    // вставляем перед кнопкой
+    tagsContainer.insertBefore(tag, addButton)
+
+    // очистка
+    input.value = ''
+
+    // закрытие модалки
+    closeTagModal()
+}

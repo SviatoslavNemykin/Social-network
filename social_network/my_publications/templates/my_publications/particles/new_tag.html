@@ -1,6 +1,21 @@
-<button class="close-form" onclick="toggleStyleTag()"><img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image"></button>
-<p class="form-title">Додати хештех</p>
+{% load static %}
+<button type="button" class="close-form" onclick="closeTagModal()">
+    <img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image">
+</button>
+
+<p class="form-title">Додати хештег</p>
+
 <div class="form-inputs">
-    <label for="" class="form-label">Назва</label>
-    <input type="text" id="" class="form-input" placeholder="#">
+    <label class="form-label">Назва</label>
+
+    <input 
+        type="text" 
+        id="newTagInput" 
+        class="form-input" 
+        placeholder="#"
+    >
 </div>
+
+<button type="button" onclick="addNewTag()">
+    Додати
+</button>
