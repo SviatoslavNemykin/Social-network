@@ -26,7 +26,7 @@
             <p class="tag">#тег</p>
             <p class="tag">#тег</p>
             <p class="tag-selected">#тег</p>
-            <button class="new-tag"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
+            <button class="new-tag" type="button" onclick="newTag()"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
         </div>
 
         <textarea class="form-text-area" placeholder="Напишіть текст публікації"></textarea>
@@ -34,8 +34,10 @@
         <div class="form-inputs-links">
             <label for="" class="form-label">Посилання</label>
             <div>
-                <input type="text" id="" class="form-input" placeholder="Напишіть посилання">
-                <button class="new-link"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
+                <div id="linksList">
+                    <input type="url" name="links" class="form-input" placeholder="Напишіть посилання">
+                </div>
+                <button class="new-link" type="button" id="addLink"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
             </div>
         </div>
      </div>
