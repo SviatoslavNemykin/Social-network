@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import render_my_publications
+from .views import PostCreateView
+
 
 urlpatterns = [
-    path('', render_my_publications, name='my_publications')
+    path('', PostCreateView.as_view(), name='my_publications')
 ]
