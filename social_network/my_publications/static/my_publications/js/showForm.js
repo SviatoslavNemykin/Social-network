@@ -163,3 +163,75 @@ document.querySelector('.form-tags').addEventListener('click', function (e) {
     }
 
 });
+
+const fileInput = document.getElementById('file-input');
+const preview = document.getElementById('imagePreview');
+
+// храним файлы вручную
+let filesArray = [];
+
+fileInput.addEventListener('change', function (e) {
+
+    const newFiles = Array.from(e.target.files);
+
+    newFiles.forEach(file => {
+        filesArray.push(file);
+    });
+
+    renderImages();
+
+    updateInputFiles();
+});
+
+function renderImages() {
+
+    preview.innerHTML = '';
+
+    filesArray.forEach((file, index) => {
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            const div = document.createElement('div');
+            div.classList.add('image-item');
+
+            div.innerHTML = `
+                <img src="${e.target.result}">
+                <button type="button" data-index="${index}" style="margin: 0px;padding: 0px;"><img src="/static/my_publications/images/trash.svg" style="width: 28px;"></button>
+            `;
+
+            preview.appendChild(div);
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+// удаление картинки
+preview.addEventListener('click', function (e) {
+
+    const button = e.target.closest('button');
+
+    if (!button) return;
+
+    const index = button.dataset.index;
+
+    filesArray.splice(index, 1);
+
+    renderImages();
+
+    updateInputFiles();
+});
+
+// обновляем input.files
+function updateInputFiles() {
+
+    const dataTransfer = new DataTransfer();
+
+    filesArray.forEach(file => {
+        dataTransfer.items.add(file);
+    });
+
+    fileInput.files = dataTransfer.files;
+}

@@ -28,9 +28,14 @@ class PostCreateView(LoginRequiredMixin, FormView):
 
             kwargs['images'] = self.request.FILES.getlist('images')
 
-            kwargs['tags'] = json.loads(
-                self.request.POST.get('selected_tags', '[]')
-            )
+            raw_tags = self.request.POST.get('selected_tags', '[]')
+
+            try:
+                tags = json.loads(raw_tags) if raw_tags else []
+            except json.JSONDecodeError:
+                tags = []
+
+            kwargs['tags'] = tags
 
         return kwargs
 

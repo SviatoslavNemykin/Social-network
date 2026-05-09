@@ -30,7 +30,6 @@
             </button>
         </div>
 
-        <!-- <textarea class="form-text-area" placeholder="Напишіть текст публікації"></textarea> -->
         {{form.content}}
 
         <div class="form-inputs-links">
@@ -43,12 +42,13 @@
             </div>
         </div>
      </div>
+    <div id="imagePreview" class="image-preview"></div>
     <div class="bottom-container">
         <label for="file-input">
             <img src="{% static 'my_publications/images/Component 3.svg' %}" alt="Загрузить"/>
         </label>
         <div>
-            <input id="file-input" type="file" name="images" multiple accept="image/*"/>
+            <input id="file-input" type="file" name="images" multiple accept="image/*" style="display: none;"/>
             <button type="submit">Публікація<img src="{% static 'my_publications/images/Component 6.svg' %}" alt="Publication Image"></button>
         </div>
     </div>
