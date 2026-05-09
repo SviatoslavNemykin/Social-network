@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,3 +133,6 @@ AUTH_USER_MODEL = 'user_app.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL = 'auth'
+
+MEDIA_URL = '/media/'
+MEADIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -80,12 +80,13 @@ document.getElementById('addLink').addEventListener('click', function () {
 function newTag() {
     document.getElementById('new-tag-modal').style.display = 'flex'
     document.getElementById('create-publication').style.display = 'none';
-    styleAdded = false;
+    // styleAdded = false;
 }
 
 function closeTagModal() {
     document.getElementById('new-tag-modal').style.display = 'none'
-    toggleStyleTag()
+    // toggleStyleTag()
+    document.getElementById('create-publication').style.display = 'flex';
 }
 
 function addNewTag() {
@@ -101,10 +102,12 @@ function addNewTag() {
     }
 
     // создаем тег
-    const tag = document.createElement('p')
+    const tag = document.createElement('button')
 
     tag.textContent = value
     tag.classList.add('tag-selected')
+    tag.type = 'button'
+    tag.dataset.tag = value
 
     // контейнер тегов
     const tagsContainer = document.querySelector('.form-tags')
@@ -121,3 +124,42 @@ function addNewTag() {
     // закрытие модалки
     closeTagModal()
 }
+
+
+
+const selectedTagsInput = document.getElementById('selectedTags');
+
+function updateSelectedTags() {
+
+    const selected = [];
+
+    document.querySelectorAll('.tag-selected').forEach(tag => {
+        selected.push(tag.dataset.tag);
+    });
+
+    selectedTagsInput.value = JSON.stringify(selected);
+}
+
+
+// EVENT DELEGATION
+document.querySelector('.form-tags').addEventListener('click', function (e) {
+
+    // проверяем что клик был по тегу
+    if (e.target.classList.contains('tag') || e.target.classList.contains('tag-selected')) {
+
+        if (e.target.classList.contains('tag-selected')) {
+
+            e.target.classList.remove('tag-selected');
+            e.target.classList.add('tag');
+
+        } else {
+
+            e.target.classList.remove('tag');
+            e.target.classList.add('tag-selected');
+
+        }
+
+        updateSelectedTags();
+    }
+
+});

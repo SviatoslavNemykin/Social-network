@@ -1,36 +1,38 @@
 {% load static %}
 <form action="" method="post">
     {% csrf_token %}
-    <button class="close-form" onclick="toggleStyleTag()"><img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image"></button>
+    <button class="close-form" onclick="toggleStyleTag()" type="button"><img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image"></button>
     <p class="form-title">Створення публікації</p>
     <div class="form-content">
         <div class="form-inputs">
             <label for="" class="form-label">Назва публікації</label>
-            <input type="text" id="" class="form-input" placeholder="Напишіть назву публікації">
+            {{ form.title }}
         </div>
 
         <div class="form-inputs">
             <label for="" class="form-label">Тема публікації</label>
-            <input type="text" id="" class="form-input" placeholder="Напишіть тему публікації">
+            {{ form.topic }}
         </div>
 
         <div class="form-tags">
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag-selected">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag">#тег</p>
-            <p class="tag-selected">#тег</p>
-            <button class="new-tag" type="button" onclick="newTag()"><img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt=""></button>
+            
+            <input type="hidden" name="selected_tags" id="selectedTags">
+
+            <button type="button" class="tag" data-tag="тег1">#тег1</button>
+            <button type="button" class="tag" data-tag="тег2">#тег2</button>
+            <button type="button" class="tag" data-tag="тег3">#тег3</button>
+            <button type="button" class="tag" data-tag="тег4">#тег4</button>
+            <button type="button" class="tag" data-tag="тег5">#тег5</button>
+            <button type="button" class="tag" data-tag="тег6">#тег6</button>
+
+            <button class="new-tag" type="button" onclick="newTag()">
+                <img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt="">
+            </button>
         </div>
 
-        <textarea class="form-text-area" placeholder="Напишіть текст публікації"></textarea>
-   
+        <!-- <textarea class="form-text-area" placeholder="Напишіть текст публікації"></textarea> -->
+        {{form.content}}
+
         <div class="form-inputs-links">
             <label for="" class="form-label">Посилання</label>
             <div>

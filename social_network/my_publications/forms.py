@@ -43,6 +43,23 @@ class PostForm(forms.ModelForm):
             'topic': 'Тема публікації',
             'content': 'Текст публікації',
             }
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Напишіть назву публікації'
+            }),
+
+            'topic': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Напишіть тему публікації'
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'form-text-area',
+                'placeholder': 'Напишіть текст публікації',
+                'rows': '',
+                'cols': '',
+            })
+        }
         
     
     def __init__(self, *args, links = None, images = None, **kwargs):
