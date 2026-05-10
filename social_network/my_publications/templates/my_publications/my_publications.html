@@ -53,9 +53,50 @@
             <button class="to-publications" onclick="toggleStyleTag()">Перейти до оформлення</button>
         </div>
     </div>
+
+        <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
+        <div id="new-tag-modal" style="display: none;">{% include 'my_publications/particles/new_tag.html' %}</div>
+
+    <div class="post">
+        <div class="post-header">
+            <div class="post-header-content">
+                <div class="post-avatar">
+                    <img src="{% static 'my_publications/images/avatar.svg' %}" alt="">
+                    <p class="user-name">Lina Li</p>
+                
+            </div>
+            <img class="singnature" src="{% static 'my_publications/images/Interaction.svg' %}" alt="">
+            </div>
+            <button type="button" class="more"><img src="{% static 'my_publications/images/more.svg' %}" alt=""></button>
+        </div>
+
+
+        <div class="post-content">
+            <p class="post-title">Природа, книга і спокій 🌿</p>
+            <div class="post-contents">
+                <p class="post-text">
+                    Інколи найкращі ідеї народжуються в тиші
+                    Природа, книга і спокій — усе, що потрібно, аби перезавантажитись.
+                </p>
+                <p class="post-tags">#відпочинок #натхнення #життя #природа #читання #спокій #гармонія</p> 
+            </div>
+            <div class="post-links">
+                <a class="post-link" href="https://www.instagram.com/world.it.academy/?locale=ru">https://www.instagram.com/world.it.academy/?locale=ru</a>
+            </div>
+            <div class="post-images">
+                <img class="post-image" src="{% static 'my_publications/images/Frame.svg' %}" alt=""" alt="">
+                <img class="post-image" src="{% static 'my_publications/images/Frame2.svg' %}" alt=""" alt="">
+                <img class="post-image" src="{% static 'my_publications/images/Frame3.svg' %}" alt=""" alt="">
+            </div>
+            <div class="post-bottom">
+                <p class="post-bottom-button"><img src="{% static 'my_publications/images/like.svg' %}" alt="">120 Вподобань</p>
+                <p class="post-bottom-button"><img src="{% static 'my_publications/images/like_finger.svg' %}" alt="">120 Вподобань</p>
+                <p class="post-bottom-button"><img src="{% static 'my_publications/images/eye.svg' %}" alt="">120 Переглядid</p>
+                
+            </div>
+        </div>
+    </div>
     
-    <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
-    <div id="new-tag-modal" style="display: none;">{% include 'my_publications/particles/new_tag.html' %}</div>
 {% endblock %}
 
 {% block scripts %} <script src="{% static 'my_publications/js/showForm.js' %}"></script> {% endblock %}

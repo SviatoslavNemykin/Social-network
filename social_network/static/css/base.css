@@ -116,6 +116,9 @@ main {
 .content {
     width: 57.6875rem; /* 923px */
     padding-right: 5rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-direction: column;
 }
 
 /* чтобы они стояли рядом */
