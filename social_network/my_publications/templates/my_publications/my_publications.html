@@ -3,6 +3,10 @@
 
 {% block title %} Publications {% endblock title %}
 
+{% block meta %} 
+    <meta content="{{ csrf_token }}" name="csrf-token">
+{% endblock %}
+
 {% block links %}
     <link rel="stylesheet" href="{% static 'my_publications/css/my_publications.css' %}">
 {% endblock links %}

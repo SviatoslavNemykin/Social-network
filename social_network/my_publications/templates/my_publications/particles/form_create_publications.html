@@ -1,6 +1,6 @@
 {% load static %}
-<form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data" id="createPostForm">
+    <!-- {% csrf_token %} -->
     <button class="close-form" onclick="toggleStyleTag()" type="button"><img src="{% static 'my_publications/images/Component 5.svg' %}" alt="Publication Image"></button>
     <p class="form-title">Створення публікації</p>
     <div class="form-content">
@@ -17,13 +17,10 @@
         <div class="form-tags">
             
             <input type="hidden" name="selected_tags" id="selectedTags">
-
-            <button type="button" class="tag" data-tag="тег1">#тег1</button>
-            <button type="button" class="tag" data-tag="тег2">#тег2</button>
-            <button type="button" class="tag" data-tag="тег3">#тег3</button>
-            <button type="button" class="tag" data-tag="тег4">#тег4</button>
-            <button type="button" class="tag" data-tag="тег5">#тег5</button>
-            <button type="button" class="tag" data-tag="тег6">#тег6</button>
+            
+            {% for tag in tag_list %}
+                <button type="button" class="tag" data-tag="{{ tag.name }}">#{{ tag.name }}</button>
+            {% endfor %}
 
             <button class="new-tag" type="button" onclick="newTag()">
                 <img src="{% static 'my_publications/images/Inputs Tag.svg' %}" alt="">

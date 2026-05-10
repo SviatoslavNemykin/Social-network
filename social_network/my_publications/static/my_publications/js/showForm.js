@@ -88,6 +88,9 @@ function closeTagModal() {
     // toggleStyleTag()
     document.getElementById('create-publication').style.display = 'flex';
 }
+const selectedTagsInput = document.getElementById('selectedTags');
+
+const selected = [];
 
 function addNewTag() {
 
@@ -100,6 +103,9 @@ function addNewTag() {
     if (!value.startsWith('#')) {
         value = '#' + value
     }
+    
+    selected.push(value);
+    selectedTagsInput.value = JSON.stringify(selected);
 
     // создаем тег
     const tag = document.createElement('button')
@@ -127,12 +133,9 @@ function addNewTag() {
 
 
 
-const selectedTagsInput = document.getElementById('selectedTags');
+
 
 function updateSelectedTags() {
-
-    const selected = [];
-
     document.querySelectorAll('.tag-selected').forEach(tag => {
         selected.push(tag.dataset.tag);
     });
@@ -148,7 +151,10 @@ document.querySelector('.form-tags').addEventListener('click', function (e) {
     if (e.target.classList.contains('tag') || e.target.classList.contains('tag-selected')) {
 
         if (e.target.classList.contains('tag-selected')) {
-
+            console.log(e.target.dataset.tag);
+            if(selected.indexOf(e.target.dataset.tag) !== -1){
+                selected.splice(selected.indexOf(e.target.dataset.tag), 1);
+            }
             e.target.classList.remove('tag-selected');
             e.target.classList.add('tag');
 
@@ -235,3 +241,44 @@ function updateInputFiles() {
 
     fileInput.files = dataTransfer.files;
 }
+
+function getCSRFToken() {
+  return document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute("content");
+}
+
+
+document.getElementById('createPostForm').addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  fetch(form.action, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": getCSRFToken(),
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: formData,
+  })
+    .then(async (response) => {
+        const data = await response.json()
+
+        if (!response.ok){
+            throw data;
+        }
+        return data  
+    })
+    .then((data) => {
+    if (data.redirect_url) {
+        window.location.href = data.redirect_url;
+    }
+})
+    .catch((data) => {
+        if (data.errors){
+            console.log(data.errors);
+        }
+    })
+});

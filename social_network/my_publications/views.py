@@ -2,21 +2,23 @@ import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView, ListView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse
 
-from .models import Post
+from .models import Post, Tag
 from .forms import PostForm
 
 
 class PostCreateView(LoginRequiredMixin, FormView):
-
     # template_name = 'my_publications/my_publications.html'
     template_name = 'my_publications/my_publications.html'
-
     form_class = PostForm
-
     login_url = reverse_lazy('auth')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_list'] = Tag.objects.all()
+        return context
 
     def get_form_kwargs(self):
 
@@ -34,8 +36,9 @@ class PostCreateView(LoginRequiredMixin, FormView):
                 tags = json.loads(raw_tags) if raw_tags else []
             except json.JSONDecodeError:
                 tags = []
-
-            kwargs['tags'] = tags
+    
+            cleaned_tags = [tag.lstrip('#') for tag in tags]
+            kwargs['tags'] = cleaned_tags
 
         return kwargs
 
@@ -44,9 +47,9 @@ class PostCreateView(LoginRequiredMixin, FormView):
         form.save(author=self.request.user)
 
         return JsonResponse({
-            'success': True,
-            'message': 'Публікація успішно створена'
-        })
+                "success": True,
+                "redirect_url": reverse('my_publications')
+            })
 
     def form_invalid(self, form):
 
