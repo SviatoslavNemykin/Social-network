@@ -18,6 +18,7 @@ class PostCreateView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tag_list'] = Tag.objects.all()
+        context['posts'] = Post.objects.all()
         return context
 
     def get_form_kwargs(self):

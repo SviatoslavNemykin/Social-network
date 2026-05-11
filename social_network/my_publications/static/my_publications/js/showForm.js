@@ -1,8 +1,16 @@
 let styleAdded = false;
 let styleTag;
 
+let posts
+
 function toggleStyleTag() {
     if (!styleAdded) {
+        posts = document.querySelectorAll('.post');
+
+        posts.forEach(post => {
+            post.style.position = 'relative';
+            post.style.top = '-41.4rem'; 
+        });
         document.getElementById('create-publication').style.display = 'flex';
         styleTag = document.createElement("style");
         styleTag.innerHTML = `
@@ -24,6 +32,13 @@ function toggleStyleTag() {
         document.getElementById('create-publication').style.display = 'none';
         styleTag.remove();
         styleAdded = false;
+
+        posts = document.querySelectorAll('.post');
+
+        posts.forEach(post => {
+            post.style.position = 'relative';
+            post.style.top = '0'; 
+        });
     }
 }
 
@@ -81,12 +96,25 @@ function newTag() {
     document.getElementById('new-tag-modal').style.display = 'flex'
     document.getElementById('create-publication').style.display = 'none';
     // styleAdded = false;
+    
+    posts = document.querySelectorAll('.post');
+
+    posts.forEach(post => {
+        // post.style.position = 'relative';
+        post.style.top = '-18.8rem'; 
+    });
 }
 
 function closeTagModal() {
     document.getElementById('new-tag-modal').style.display = 'none'
     // toggleStyleTag()
     document.getElementById('create-publication').style.display = 'flex';
+    posts = document.querySelectorAll('.post');
+
+    posts.forEach(post => {
+        post.style.position = 'relative';
+        post.style.top = '-41.4rem'; 
+    });
 }
 const selectedTagsInput = document.getElementById('selectedTags');
 
