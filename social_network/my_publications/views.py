@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView, ListView
 from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.core.paginator import Page
 
 from .models import Post, Tag
 from .forms import PostForm
@@ -11,15 +13,15 @@ from .forms import PostForm
 
 class PostCreateView(LoginRequiredMixin, FormView):
     # template_name = 'my_publications/my_publications.html'
-    template_name = 'my_publications/my_publications.html'
+    # template_name = 'my_publications/my_publications.html'
     form_class = PostForm
     login_url = reverse_lazy('auth')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag_list'] = Tag.objects.all()
-        context['posts'] = Post.objects.all()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['tag_list'] = Tag.objects.all()
+    #     context['posts'] = Post.objects.all()
+    #     return context
 
     def get_form_kwargs(self):
 
@@ -61,21 +63,40 @@ class PostCreateView(LoginRequiredMixin, FormView):
         })
 
 
-# class PostListView(ListView):
 
-#     model = Post
+class PostListView(ListView):
+    model = Post
+    template_name = 'my_publications/my_publications.html'
+    context_object_name = 'posts'
+    paginate_by = 3
 
-#     template_name = 'post_app/post_list.html'
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
+            page_obj: Page = context["page_obj"]
 
-#     context_object_name = 'posts'
+            html = render_to_string(
+                "my_publications/particles/post_items.html",
+                {"posts": context["posts"]},
+                request=self.request
+            )
+            return JsonResponse({
+                "html":html,
+                "has_next": page_obj.has_next()
+            })
+        return super().render_to_response(context, **response_kwargs)
 
-#     paginate_by = 2
+    def get_queryset(self):
+        return (
+            Post.objects.filter(author = self.request.user).
+            select_related('author').
+            prefetch_related('tags', 'links', 'images').
+            order_by('-id')
+            )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-#     def get_queryset(self):
+        context['form'] = PostForm()
+        context['tag_list'] = Tag.objects.all()
 
-#         return (
-#             Post.objects
-#             .select_related('author')
-#             .prefetch_related('tags', 'links', 'images')
-#             .order_by('-id')
-#         )
+        return context

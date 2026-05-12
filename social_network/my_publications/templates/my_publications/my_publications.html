@@ -57,126 +57,15 @@
         <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
         <div id="new-tag-modal" style="display: none;">{% include 'my_publications/particles/new_tag.html' %}</div>
 
-    <!-- <div class="post">
-        <div class="post-header">
-            <div class="post-header-content">
-                <div class="post-avatar">
-                    <img src="{% static 'my_publications/images/avatar.svg' %}" alt="">
-                    <p class="user-name">Lina Li</p>
-                
-            </div>
-            <img class="singnature" src="{% static 'my_publications/images/Interaction.svg' %}" alt="">
-            </div>
-            <button type="button" class="more"><img src="{% static 'my_publications/images/more.svg' %}" alt=""></button>
-        </div>
-
-
-        <div class="post-content">
-            <p class="post-title">Природа, книга і спокій 🌿</p>
-            <div class="post-contents">
-                <p class="post-text">
-                    Інколи найкращі ідеї народжуються в тиші
-                    Природа, книга і спокій — усе, що потрібно, аби перезавантажитись.
-                </p>
-                <p class="post-tags">#відпочинок #натхнення #життя #природа #читання #спокій #гармонія</p> 
-            </div>
-            <div class="post-links">
-                <a class="post-link" href="https://www.instagram.com/world.it.academy/?locale=ru">https://www.instagram.com/world.it.academy/?locale=ru</a>
-            </div>
-            <div class="post-images">
-                <img class="post-image" src="{% static 'my_publications/images/Frame.svg' %}" alt=""" alt="">
-                <img class="post-image" src="{% static 'my_publications/images/Frame2.svg' %}" alt=""" alt="">
-                <img class="post-image" src="{% static 'my_publications/images/Frame3.svg' %}" alt=""" alt="">
-            </div>
-            <div class="post-bottom">
-                <p class="post-bottom-button"><img src="{% static 'my_publications/images/like.svg' %}" alt="">120 Вподобань</p>
-                <p class="post-bottom-button"><img src="{% static 'my_publications/images/like_finger.svg' %}" alt="">120 Вподобань</p>
-                <p class="post-bottom-button"><img src="{% static 'my_publications/images/eye.svg' %}" alt="">120 Переглядid</p>
-                
-            </div>
-        </div>
-    </div> -->
-
-    {% for post in posts %}
-    <div class="post">
-        <div class="post-header">
-            <div class="post-header-content">
-                <div class="post-avatar">
-                    <img src="{% static 'my_publications/images/avatar.svg' %}" alt="avatar">
-
-                    <p class="user-name">
-                        {{ post.author.first_name }}
-                    </p>
-                </div>
-
-                <img class="singnature"
-                    src="{% static 'my_publications/images/Interaction.svg' %}"
-                    alt="">
-            </div>
-
-            <button type="button" class="more">
-                <img src="{% static 'my_publications/images/more.svg' %}" alt="">
-            </button>
-        </div>
-
-        <div class="post-content">
-
-            <p class="post-title">
-                {{ post.title }}
-            </p>
-
-            <div class="post-contents">
-                <p class="post-text">
-                    {{ post.content }}
-                </p>
-
-                <p class="post-tags">
-                    {% for tag in post.tags.all %}
-                        #{{ tag.name }}
-                    {% endfor %}
-                </p>
-            </div>
-
-            {% if post.links.all %}
-            <div class="post-links">
-                {% for link in post.links.all %}
-                    <a class="post-link" href="{{ link.url }}" target="_blank">
-                        {{ link.url }}
-                    </a>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {% if post.images.all %}
-            <div class="post-images">
-                {% for image in post.images.all %}
-                    <img class="post-image"
-                        src="{{ image.original.url }}"
-                        alt="post image">
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <div class="post-bottom">
-                <p class="post-bottom-button">
-                    <img src="{% static 'my_publications/images/like.svg' %}" alt="">
-                    120 Вподобань
-                </p>
-
-                <p class="post-bottom-button">
-                    <img src="{% static 'my_publications/images/like_finger.svg' %}" alt="">
-                    120 Коментарів
-                </p>
-
-                <p class="post-bottom-button">
-                    <img src="{% static 'my_publications/images/eye.svg' %}" alt="">
-                    120 Переглядів
-                </p>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
     
+    <div class="posts-list">
+        {% include 'my_publications/particles/post_items.html' %}
+    </div>
+    
+    <div id = "post-load-sentinel" style="height: 1px;"></div>
 {% endblock %}
 
-{% block scripts %} <script src="{% static 'my_publications/js/showForm.js' %}"></script> {% endblock %}
+{% block scripts %} 
+    <script src="{% static 'my_publications/js/showForm.js' %}"></script> 
+    <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
+{% endblock %}
