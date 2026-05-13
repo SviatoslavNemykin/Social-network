@@ -300,8 +300,10 @@ document.getElementById('createPostForm').addEventListener("submit", (e) => {
         return data  
     })
     .then((data) => {
-    if (data.redirect_url) {
+    if(window.location.pathname === data.redirect_url) {
         window.location.href = data.redirect_url;
+    }else {
+        window.location.href = '/';
     }
 })
     .catch((data) => {

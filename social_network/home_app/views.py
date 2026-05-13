@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UsernameSetupForm
+from my_publications.forms import PostForm
+from my_publications.models import Tag
 
 
 class HomeView(LoginRequiredMixin, View):
@@ -12,8 +14,9 @@ class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         if request.user.username == ' ' or request.user.username is None:
             form = UsernameSetupForm()
-            return render(request=request, template_name='home_app/home.html', context={'form': form})
-        return render(request=request, template_name='home_app/home.html')
+            return render(request=request, template_name='home_app/home.html', context={'form_user_setup': form})
+        form = PostForm()
+        return render(request=request, template_name='home_app/home.html', context={'form': form, 'tag_list': Tag.objects.all()})
     
 
 class UsernameSetupView(LoginRequiredMixin, View):

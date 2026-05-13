@@ -6,6 +6,7 @@ from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Page
+from django.shortcuts import redirect
 
 from .models import Post, Tag
 from .forms import PostForm
@@ -69,6 +70,11 @@ class PostListView(ListView):
     template_name = 'my_publications/my_publications.html'
     context_object_name = 'posts'
     paginate_by = 3
+
+    def get(self, request, *args, **kwargs):
+        if request.user.username == ' ' or request.user.username is None:
+            return redirect('home')
+        return super().get(request, *args, **kwargs)
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
