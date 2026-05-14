@@ -17,6 +17,7 @@ class PostCreateView(LoginRequiredMixin, FormView):
     # template_name = 'my_publications/my_publications.html'
     form_class = PostForm
     login_url = reverse_lazy('auth')
+    login_url = 'auth'
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -65,8 +66,9 @@ class PostCreateView(LoginRequiredMixin, FormView):
 
 
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
+    login_url = 'auth'
     template_name = 'my_publications/my_publications.html'
     context_object_name = 'posts'
     paginate_by = 3

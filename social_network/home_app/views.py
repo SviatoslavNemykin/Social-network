@@ -23,8 +23,9 @@ from django.shortcuts import redirect
 #         return render(request=request, template_name='home_app/home.html', context={'form': form, 'tag_list': Tag.objects.all()})
     
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Post
+    login_url = 'auth'
     template_name = 'home_app/home.html'
     context_object_name = 'posts'
     paginate_by = 3

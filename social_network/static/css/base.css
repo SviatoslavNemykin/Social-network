@@ -122,3 +122,35 @@ main {
 }
 
 /* чтобы они стояли рядом */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* header {
+  position: sticky;
+  top: 20px;
+} */
+
+.side-bar{
+    position: fixed;
+    top: 5.75rem
+}
+
+.content{
+    position: relative;
+    left: 27.4rem;
+    top: 5.75rem
+}
+
+html, body {
+    -ms-overflow-style: none;  /* IE и Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}
