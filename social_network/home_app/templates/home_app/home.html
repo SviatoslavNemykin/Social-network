@@ -55,8 +55,14 @@
         </div>
     </div>
 
-        <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
-        <div id="new-tag-modal" style="display: none;">{% include 'my_publications/particles/new_tag.html' %}</div>
+    <div id="create-publication" style="display: none;">{% include 'my_publications/particles/form_create_publications.html' %}</div>
+    <div id="new-tag-modal" style="display: none;">{% include 'my_publications/particles/new_tag.html' %}</div>
+
+    <div class="posts-list">
+    {% include 'my_publications/particles/post_items.html' %}
+    </div>
+
+    <div id = "post-load-sentinel" style="height: 1px;"></div>
 {% endblock %}
 
 {% block side-bar %}
@@ -174,5 +180,5 @@
 {% block scripts %}
     <script src="{% static 'home_app/js/usernameSetup.js' %}"></script>
     <script src="{% static 'my_publications/js/showForm.js' %}"></script> 
-    <!-- <script src="{% static 'my_publications/js/postLoad.js' %}"></script> -->
+    <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
 {% endblock scripts %}
