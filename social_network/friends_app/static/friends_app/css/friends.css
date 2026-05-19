@@ -32,3 +32,151 @@
     background: #543C52;
     border-radius: 2px;
 }
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#requests{
+    margin-top: 1rem;
+}
+
+.friends-block{
+    width: 55.0125rem;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #CDCED2;
+    background: white;
+    justify-content: space-between;
+}
+
+p{
+    margin: 0;
+}
+
+.friends-block-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.friends-block-title{
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #070A1C;
+    position: relative;
+    width: fit-content;
+}
+
+.friends-block-link{
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #543C52;
+    cursor: pointer;
+    position: relative;
+    width: fit-content;
+}
+
+.friends-block-content{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.profile-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.0625rem solid #CDCED2;
+    border-radius: 0.625rem;
+    background: #FFFFFF;
+    padding: 1rem 0;
+    gap: 1rem;
+    width: 17.8rem;
+}
+
+.top-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.text-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.nickname{
+    font-size: 1.5rem;
+    font-style: bold;
+    font-weight: 700;
+    color: #070A1C;
+    margin: 0%;
+    gap: 0.5rem;
+}
+.username{
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: medium;
+    color: #070A1C;
+    margin: 0%;
+    letter-spacing: 0.001rem;
+}
+
+.bottom-data{
+    display: flex;
+    /* padding: 0.625rem; */
+    gap: 1rem;
+}
+
+.confirm-link{
+    all: unset;
+    cursor: pointer;
+    /* width: 23.75rem;
+    max-height: 3.25rem; */
+    border-style: solid;
+    background-color: #543C52;
+    border-radius: 77rem;
+    padding: 0.625rem 1rem;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0.0625rem;
+}
+
+.delete-link{
+    all: unset;
+    cursor: pointer;
+    border-style: solid;
+    background-color: white;
+    border-radius: 77rem;
+    border-color: #543C52;
+    padding: 0.625rem 1rem;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    color: #543C52;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0.0625rem;
+}
