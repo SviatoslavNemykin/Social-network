@@ -6,7 +6,8 @@
 }
 
 .menu-item, .active {
-    /* gap: 0.5rem; */
+    all: unset;
+    cursor: pointer;
     margin: 0;
     font-size: 16px;
     font-weight: 500;
@@ -39,7 +40,13 @@
     gap: 0.5rem;
 }
 
-#requests{
+.content-div{
+    display: flex;
+    gap: 0.4rem;
+    flex-direction: column;
+}
+
+#requests, #friends, #recommendations{
     margin-top: 1rem;
 }
 
@@ -74,6 +81,7 @@ p{
 }
 
 .friends-block-link{
+    all: unset;
     margin: 0;
     font-size: 16px;
     font-weight: 500;
