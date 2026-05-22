@@ -1,308 +1,59 @@
 {% load static %}
-<div class="friends-block" id="requests">
+
+{% for key, section in sections.items %}
+<div class="friends-block" id="{{ key }}">
+    
     <div class="friends-block-header">
-        <p class="friends-block-title">Запити</p>
-        <button class="friends-block-link" data-target="requests">Дивитись всі</button>
+        <p class="friends-block-title">{{ section.title }}</p>
+        <button class="friends-block-link" data-target="{{ key }}">
+            Дивитись всі
+        </button>
     </div>
 
     <div class="friends-block-content">
 
+        {% for person in section.users %}
         <div class="profile-block">
+
             <div class="top-data">
                 <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
+                    <img src="{% static 'home_app/images/avatar.svg' %}" alt="Аватар">
                     <span class="avatar-indicator"></span>
                 </div>
+
                 <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
+                    <p class="nickname">
+                        {{ person.first_name }}
+                    </p>
+
+                    <p class="username">
+                        @{{ person.username }}
+                    </p>
                 </div>
             </div>
 
             <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href="" class="delete-link">Видалити</a>
+
+                {% if key == 'requests' %}
+                    <a href="" class="confirm-link">Підтвердити</a>
+                    <a href="" class="delete-link">Видалити</a>
+
+                {% elif key == 'recomendations' %}
+                    <a href="" class="confirm-link">Додати</a>
+                    <a href="" class="delete-link">Видалити</a>
+
+                {% elif key == 'friends' %}
+                    <a href="" class="confirm-link">Повідомлення</a>
+                    <a href="" class="delete-link">Видалити</a>
+
+                {% endif %}
+
             </div>
+
         </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href="" class="delete-link">Видалити</a>
-            </div>
-            
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href=""class="delete-link">Видалити</a>
-
-            </div>
-        </div>
+        {% endfor %}
 
     </div>
 
 </div>
-
-<div class="friends-block">
-    <div class="friends-block-header">
-        <p class="friends-block-title">Рекомендації</p>
-        <button class="friends-block-link" data-target="recomendations">Дивитись всі</button>
-    </div>
-
-    <div class="friends-block-content">
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Додати</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-<div class="friends-block">
-    <div class="friends-block-header">
-        <p class="friends-block-title">Всі друзі</p>
-        <button class="friends-block-link" data-target="friends">Дивитись всі</button>
-    </div>
-
-    <div class="friends-block-content">
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Повідомлення</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                    <a href=""class="confirm-link">Повідомлення</a>
-                    <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Повідомлення</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Повідомлення</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Повідомлення</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href=""class="confirm-link">Повідомлення</a>
-                <a href=""class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+{% endfor %}

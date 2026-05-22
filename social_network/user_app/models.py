@@ -17,4 +17,13 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     
 
+class Friendship(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_friendships")
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_friendships")
+    status = models.CharField(max_length=20, default="pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("from_user", "to_user")
+
     
