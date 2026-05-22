@@ -11,27 +11,57 @@
 
 {% block side-bar %}
      <div class="menu-block">
-        <button id="menu-item-main" class="menu-item active">Головна</button>
-        <button id="menu-item-requests" class="menu-item">Запити</button>
-        <button id="menu-item-recomendations" class="menu-item">Рекомендації</button>
-        <button id="menu-item-friends" class="menu-item">Всі друзі</button>
+        <button id="menu-item-main" data-menu="main" class="menu-item active">Головна</button>
+        <button id="menu-item-requests" data-menu="requests" class="menu-item">Запити</button>
+        <button id="menu-item-recomendations" data-menu="recommendations" class="menu-item">Рекомендації</button>
+        <button id="menu-item-friends" data-menu="friends" class="menu-item">Всі друзі</button>
     </div>
 
 {% endblock  %}
 
+
+
 {% block content %}
-    <div id="mainBlock" class="content-div" style="display: flex;">
+
+<div id="mainBlock" class="content-div">
+
     {% include 'friends_app/particles/main.html' %}
-    </div>
-    <div id="requestsBlock" class="content-div" style="display: none;">
+
+</div>
+
+
+<div
+    id="requestsBlock"
+    class="content-div"
+    style="display:none;"
+>
+
     {% include 'friends_app/particles/requests.html' %}
-    </div>
-    <div id="recomendationsBlock" class="content-div" style="display: none;">
-    {% include 'friends_app/particles/recomendations.html' %}
-    </div>
-    <div id="friendsBlock" class="content-div" style="display: none;">
+
+</div>
+
+
+<div
+    id="recommendationsBlock"
+    class="content-div"
+    style="display:none;"
+>
+
+    {% include 'friends_app/particles/recommendations.html' %}
+
+</div>
+
+
+<div
+    id="friendsBlock"
+    class="content-div"
+    style="display:none;"
+>
+
     {% include 'friends_app/particles/friends.html' %}
-    </div>
+
+</div>
+
 {% endblock %}
 
 {% block scripts %}

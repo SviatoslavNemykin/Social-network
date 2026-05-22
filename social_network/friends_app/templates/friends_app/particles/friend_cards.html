@@ -1,0 +1,67 @@
+{% load static %}
+
+{% for person in users %}
+
+<div class="profile-block">
+
+    <div class="top-data">
+
+        <div class="indicator">
+            <img src="{% static 'home_app/images/avatar.svg' %}" alt="">
+            <span class="avatar-indicator"></span>
+        </div>
+
+        <div class="text-data">
+
+            <p class="nickname">
+                {{ person.first_name }}
+            </p>
+
+            <p class="username">
+                @{{ person.username }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="bottom-data">
+
+        {% if section == 'requests' %}
+
+            <a href="" class="confirm-link">
+                Підтвердити
+            </a>
+
+            <a href="" class="delete-link">
+                Видалити
+            </a>
+
+        {% elif section == 'recommendations' %}
+
+            <a href="" class="confirm-link">
+                Додати
+            </a>
+
+            <a href="" class="delete-link">
+                Видалити
+            </a>
+
+        {% elif section == 'friends' %}
+
+            <a href="" class="confirm-link">
+                Повідомлення
+            </a>
+
+            <a href="" class="delete-link">
+                Видалити
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endfor %}

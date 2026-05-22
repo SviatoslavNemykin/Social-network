@@ -188,3 +188,7 @@ p{
     align-items: center;
     border-width: 0.0625rem;
 }
+
+.content{
+    margin-top: 1rem;
+}

@@ -4,13 +4,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, TemplateView
 from user_app.models import Friendship
 from friends_app.services.friend_quries import *
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 # Create your views here.
 
-@login_required
-def render_friends(request):
-    if request.user.username == ' ' or request.user.username is None:
-        return redirect('home')
-    return render(request=request, template_name="friends_app/friends.html")
+# @login_required
+# def render_friends(request):
+#     if request.user.username == ' ' or request.user.username is None:
+#         return redirect('home')
+#     return render(request=request, template_name="friends_app/friends.html")
 
 class friendsView(LoginRequiredMixin, TemplateView):
     login_url = 'auth'
@@ -26,9 +29,57 @@ class friendsView(LoginRequiredMixin, TemplateView):
 
         context['sections'] = {
             "requests": {"title": "Запити", "users":get_friendship_requests(self.request.user)[:6]},
-            "recomendations": {"title": "Рекомендації", "users":get_friendship_recommendations(self.request.user)[:6]},
+            "recommendations": {"title": "Рекомендації", "users":get_friendship_recommendations(self.request.user)[:6]},
             "friends": {"title": "Усі друзі", "users":get_friends(self.request.user)[:6]},
         }
 
         return context
     
+class FriendsSectionView(LoginRequiredMixin, View):
+
+    sections_map = {
+        "requests": {
+            "title": "Запити",
+            "getter": get_friendship_requests,
+        },
+
+        "recommendations": {
+            "title": "Рекомендації",
+            "getter": get_friendship_recommendations,
+        },
+
+        "friends": {
+            "title": "Всі друзі",
+            "getter": get_friends,
+        },
+    }
+
+    def get(self, request, section, *args, **kwargs):
+
+        if section not in self.sections_map:
+            return JsonResponse(
+                {"error": "Invalid section"},
+                status=404
+            )
+
+        users = self.sections_map[section]["getter"](
+            request.user
+        )
+
+        page = request.GET.get("page", 1)
+
+        page_obj = Paginator(users, 6).get_page(page)
+
+        html = render_to_string(
+            "friends_app/particles/friend_cards.html",
+            {
+                "users": page_obj.object_list,
+                "section": section,
+            },
+            request=request,
+        )
+
+        return JsonResponse({
+            "html": html,
+            "has_next_page": page_obj.has_next(),
+        })

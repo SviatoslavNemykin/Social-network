@@ -1,68 +1,19 @@
-{% load static %}
+<div class="friends-block">
 
-<div class="friends-block" id="requests">
     <div class="friends-block-header">
-        <p class="friends-block-title">Запити</p>
+        <p class="friends-block-title">
+            Запити
+        </p>
     </div>
 
-    <div class="friends-block-content">
+    <div
+        class="friends-block-content"
+        id="requestsList"
+    ></div>
 
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href="" class="delete-link">Видалити</a>
-            </div>
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href="" class="delete-link">Видалити</a>
-            </div>
-            
-        </div>
-
-        <div class="profile-block">
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-                <div class="text-data">
-                    <p class="nickname">Lina Li</p>
-                    <p class="username">@thelili</p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-                <a href="" class="confirm-link">Підтвердити</a>
-                <a href=""class="delete-link">Видалити</a>
-
-            </div>
-        </div>
-
-    </div>
+    <div
+        class="load-sentinel"
+        data-section="requests"
+    ></div>
 
 </div>

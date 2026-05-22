@@ -1,59 +1,31 @@
 {% load static %}
 
 {% for key, section in sections.items %}
-<div class="friends-block" id="{{ key }}">
-    
+
+<div class="friends-block">
+
     <div class="friends-block-header">
-        <p class="friends-block-title">{{ section.title }}</p>
-        <button class="friends-block-link" data-target="{{ key }}">
+
+        <p class="friends-block-title">
+            {{ section.title }}
+        </p>
+
+        <button
+            class="friends-block-link"
+            data-open-section="{{ key }}"
+        >
             Дивитись всі
         </button>
+
     </div>
+
 
     <div class="friends-block-content">
 
-        {% for person in section.users %}
-        <div class="profile-block">
-
-            <div class="top-data">
-                <div class="indicator">
-                    <img src="{% static 'home_app/images/avatar.svg' %}" alt="Аватар">
-                    <span class="avatar-indicator"></span>
-                </div>
-
-                <div class="text-data">
-                    <p class="nickname">
-                        {{ person.first_name }}
-                    </p>
-
-                    <p class="username">
-                        @{{ person.username }}
-                    </p>
-                </div>
-            </div>
-
-            <div class="bottom-data">
-
-                {% if key == 'requests' %}
-                    <a href="" class="confirm-link">Підтвердити</a>
-                    <a href="" class="delete-link">Видалити</a>
-
-                {% elif key == 'recomendations' %}
-                    <a href="" class="confirm-link">Додати</a>
-                    <a href="" class="delete-link">Видалити</a>
-
-                {% elif key == 'friends' %}
-                    <a href="" class="confirm-link">Повідомлення</a>
-                    <a href="" class="delete-link">Видалити</a>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-        {% endfor %}
+        {% include "friends_app/particles/friend_cards.html" with users=section.users section=key %}
 
     </div>
 
 </div>
+
 {% endfor %}

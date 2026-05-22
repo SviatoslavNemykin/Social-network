@@ -1,72 +1,192 @@
-// const menuItems = document.querySelectorAll('.menu-item');
+const menuButtons = document.querySelectorAll(".menu-item");
 
+const openSectionButtons = document.querySelectorAll(
+    "[data-open-section]"
+);
 
-// menuItems.forEach(item => {
-//     item.addEventListener('click', function(){
-//         // Используем querySelector (без "All"), чтобы найти один активный элемент
-//         const currentActive = document.querySelector('.menu-item.active');
-        
-//         // Если такой элемент найден, удаляем у него класс
-//         if (currentActive) {
-//             currentActive.classList.remove('active');
-//         }
-        
-//         // Добавляем класс текущей кнопке
-//         this.classList.add('active');
-//     });
-// });
-
-const buttons = document.querySelectorAll('.menu-item');
-const viewAllButtons = document.querySelectorAll('.friends-block-link');
 
 const blocks = {
-    main: document.getElementById('mainBlock'),
-    requests: document.getElementById('requestsBlock'),
-    recomendations: document.getElementById('recomendationsBlock'),
-    friends: document.getElementById('friendsBlock'),
+    main: document.getElementById("mainBlock"),
+
+    requests: document.getElementById("requestsBlock"),
+
+    recommendations: document.getElementById("recommendationsBlock"),
+
+    friends: document.getElementById("friendsBlock"),
 };
 
-const map = {
-    'menu-item-main': 'main',
-    'menu-item-requests': 'requests',
-    'menu-item-recomendations': 'recomendations',
-    'menu-item-friends': 'friends',
+
+
+const state = {
+    requests: {
+        page: 1,
+        loaded: false,
+        hasNext: true,
+        isLoading: false,
+    },
+
+    recommendations: {
+        page: 1,
+        loaded: false,
+        hasNext: true,
+        isLoading: false,
+    },
+
+    friends: {
+        page: 1,
+        loaded: false,
+        hasNext: true,
+        isLoading: false,
+    },
 };
+
+
 
 function showBlock(key) {
+
     Object.values(blocks).forEach(block => {
-        block.style.display = 'none';
+        block.style.display = "none";
     });
 
-    blocks[key].style.display = 'flex';
+    blocks[key].style.display = "flex";
+
+    setActiveMenu(key);
 }
+
+
 
 function setActiveMenu(key) {
-    buttons.forEach(btn => btn.classList.remove('active'));
 
-    const activeBtn = document.querySelector(`[data-menu="${key}"]`);
-    if (activeBtn) activeBtn.classList.add('active');
+    menuButtons.forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    const activeBtn = document.querySelector(
+        `[data-menu="${key}"]`
+    );
+
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
 }
 
-// обычные кнопки меню
-buttons.forEach(button => {
-    button.setAttribute('data-menu', map[button.id]);
 
-    button.addEventListener('click', () => {
-        const key = map[button.id];
+
+async function loadSection(section) {
+
+    const sectionState = state[section];
+
+    if (sectionState.isLoading) return;
+
+    if (!sectionState.hasNext) return;
+
+    sectionState.isLoading = true;
+
+    const response = await fetch(
+        `/friends/${section}/?page=${sectionState.page}`,
+        {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    const list = document.getElementById(
+        `${section}List`
+    );
+
+    list.insertAdjacentHTML(
+        "beforeend",
+        data.html
+    );
+
+    sectionState.page++;
+
+    sectionState.hasNext = data.has_next_page;
+
+    sectionState.loaded = true;
+
+    sectionState.isLoading = false;
+}
+
+
+
+async function openSection(section) {
+
+    showBlock(section);
+
+    const sectionState = state[section];
+
+    if (!sectionState.loaded) {
+        await loadSection(section);
+    }
+}
+
+
+
+menuButtons.forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+        const key = button.dataset.menu;
+
         showBlock(key);
 
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+        if (key !== "main") {
+
+            const sectionState = state[key];
+
+            if (!sectionState.loaded) {
+                await loadSection(key);
+            }
+        }
     });
 });
 
-// кнопки "Дивитись всі"
-viewAllButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const key = btn.dataset.target;
 
-        showBlock(key);
-        setActiveMenu(key);
+
+openSectionButtons.forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+        const section = button.dataset.openSection;
+
+        await openSection(section);
     });
 });
+
+
+
+const observer = new IntersectionObserver(
+    async entries => {
+
+        for (const entry of entries) {
+
+            if (!entry.isIntersecting) continue;
+
+            const section = entry.target.dataset.section;
+
+            const block = blocks[section];
+
+            const isVisible =
+                block.style.display !== "none";
+
+            if (!isVisible) continue;
+
+            await loadSection(section);
+        }
+    },
+    {
+        rootMargin: "300px",
+    }
+);
+
+
+
+document
+    .querySelectorAll(".load-sentinel")
+    .forEach(sentinel => {
+        observer.observe(sentinel);
+    });
