@@ -30,21 +30,21 @@
 
         {% if section == 'requests' %}
 
-            <a href="" class="confirm-link">
+            <a href="{% url 'user_posts' person.id %}" class="confirm-link">
                 Підтвердити
             </a>
 
-            <a href="" class="delete-link">
+            <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
             </a>
 
         {% elif section == 'recommendations' %}
 
-            <a href="" class="confirm-link">
+            <a href="{% url 'user_posts' person.id %}" class="confirm-link">
                 Додати
             </a>
 
-            <a href="" class="delete-link">
+            <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
             </a>
 
@@ -54,7 +54,7 @@
                 Повідомлення
             </a>
 
-            <a href="" class="delete-link">
+            <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
             </a>
 

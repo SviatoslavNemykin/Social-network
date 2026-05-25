@@ -5,6 +5,10 @@
     flex-direction: column;
 }
 
+.content{
+    margin-top: 1rem;
+}
+
 .profile-block {
     display: flex;
     flex-direction: column;
@@ -83,7 +87,6 @@
 
 
 .create-publications{
-    margin-top: 1rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Publications {% endblock title %}
+
+{% block meta %} 
+    <meta content="{{ csrf_token }}" name="csrf-token">
+{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'my_publications/css/my_publications.css' %}">
+{% endblock links %}
+
+
+{% block side-bar %}
+    <div class="profile-block">
+        <div class="top-data">
+            <div class="indicator">
+                <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
+                <span class="avatar-indicator"></span>
+            </div>
+            <div class="text-data">
+                <p class="nickname">{{user.first_name}}</p>
+                <p class="username">@{{user.username}}</p>
+            </div>
+        </div>
+
+        <div class="bottom-data">
+            <div class="user-data border-style">
+                <p class="number-text">566</p>
+                <p class="text">Дописи</p>
+            </div>
+
+            <div class="user-data border-style">
+                <p class="number-text">12.1K</p>
+                <p class="text">Читачі</p>
+            </div>
+
+            <div class="user-data">
+                <p class="number-text">222</p>
+                <p class="text">Друзі</p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+
+{% block content %}
+    <div class="posts-list">
+        {% include 'my_publications/particles/post_items.html' %}
+    </div>
+    
+    <div id="post-load-sentinel" style="height: 1px;"></div>
+{% endblock %}
+
+{% block scripts %} 
+    <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
+{% endblock %}
