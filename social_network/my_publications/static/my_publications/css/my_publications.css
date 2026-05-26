@@ -538,3 +538,45 @@ form{
     flex-direction: column;
     gap: 0.4rem;
 }
+
+
+.confirm-link{
+    all: unset;
+    cursor: pointer;
+    border-style: solid;
+    background-color: #543C52;
+    border-radius: 77rem;
+    padding: 0.625rem 1rem;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0.0625rem;
+}
+
+.delete-link{
+    all: unset;
+    cursor: pointer;
+    border-style: solid;
+    background-color: white;
+    border-radius: 77rem;
+    border-color: #543C52;
+    padding: 0.625rem 1rem;
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.6%;
+    color: #543C52;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0.0625rem;
+}

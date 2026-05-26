@@ -41,6 +41,48 @@
                 <p class="text">Друзі</p>
             </div>
         </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;gap: 1rem;">
+        {% if relationship == "pending" %}
+            <button
+            type="button"
+            class="confirm-link friend-action"
+            data-url="{% url 'friend_action' user.id 'accept' %}"
+            >
+            Підтвердити
+            </button>
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' user.id 'delete' %}"
+            >
+            Відхилити
+            </button>
+        {% elif relationship == "not_friends" %}
+            <button
+            type="button"
+            class="confirm-link friend-action"
+            data-url="{% url 'friend_action' user.id 'add' %}"
+            >
+            Додати
+            </button>
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' user.id 'dismiss' %}"
+            >
+            Приховати
+            </button>
+        {% elif relationship == "accepted" %}
+            <button class="confirm-link friend-action">Повідомлення</button>
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' user.id 'delete' %}"
+            >
+            Видалити
+            </button>
+        {% endif %} 
+        </div>
     </div>
 {% endblock  %}
 
@@ -54,4 +96,5 @@
 
 {% block scripts %} 
     <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
+    <script src="{% static 'friends_app/js/friend_actions.js' %}"></script>
 {% endblock %}

@@ -6,6 +6,7 @@ from user_app.models import Friendship
 from my_publications.models import Post, Tag
 from django.core.paginator import Page
 from friends_app.services.friend_quries import *
+from friends_app.services.friend_actions import *
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
@@ -94,10 +95,7 @@ class FriendsSectionView(LoginRequiredMixin, View):
             "html": html,
             "has_next_page": page_obj.has_next(),
         })
-    
 
-
-        
 
 class UserFriendView(LoginRequiredMixin, ListView):
     model = Post
@@ -141,4 +139,25 @@ class UserFriendView(LoginRequiredMixin, ListView):
             user,
             id=self.kwargs['user_id']
         )
+        context["relationship"] = get_friendship(self.request.user, context['user'])
         return context
+    
+
+class FriendActionView(LoginRequiredMixin, View):
+    login_url = 'auth'
+
+    def post(self, request, user_id, action, *args, **kwargs):
+        other_user = User.objects.get(id=user_id)
+        current_user = request.user
+
+        if action == "add":
+            return JsonResponse(add_friend_request(current_user, other_user))
+        
+        elif action == "dismiss":
+            return JsonResponse(dismiss_recommendation(current_user, other_user))
+        
+        elif action == "accept":
+            return JsonResponse(accept_friend_request(current_user, other_user))
+        
+        elif action == "delete":
+            return JsonResponse(delete_friendship(current_user, other_user))
