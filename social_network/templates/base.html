@@ -33,7 +33,7 @@
                 <p class="navbar-text"><b>Друзі</b></p>
             </a>
         
-            <a href="" class="navbar-url">
+            <a href="{% url 'chats' %}" class="navbar-url">
                 <img class="navbar-image" src="{% static 'images/chats.svg' %}" />
                 <p class="navbar-text"><b>Чати</b></p>
             </a>
@@ -53,16 +53,24 @@
 </header>
 
 <main>
-    <div class="side-bar">
-    {% block side-bar %} 
-        
-    {% endblock %}
-    </div>
-    <div class="content">
-    {% block content %} 
+    {% if request.resolver_match.url_name != "chats" %}
+        <div class="side-bar">
+        {% block side-bar %} 
+            
+        {% endblock %}
+        </div>
+        <div class="content">
+        {% block content %} 
 
-    {% endblock %}
+        {% endblock %}
+        </div>
+    {% else %}
+    <div class="content-chats">
+        {% block content-chats %} 
+
+        {% endblock %}
     </div>
+    {% endif %}
 </main>
 
 <footer>

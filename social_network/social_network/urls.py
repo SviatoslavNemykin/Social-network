@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/', include('user_app.urls')),
     path('', include('home_app.urls')),
     path('my_publications/', include('my_publications.urls')),
+    path('chats/', include('chats_app.urls')),
 ]
 
 if DEBUG:

@@ -121,6 +121,16 @@ main {
     flex-direction: column;
 }
 
+.content-chats {
+    position: fixed;
+    padding-top: 7.3rem;
+    width: 80rem; /* 923px */
+    padding-right: 5rem;
+    display: flex;
+    gap: 0.4rem;
+    padding-left: 5rem;
+}
+
 /* чтобы они стояли рядом */
 
 header {

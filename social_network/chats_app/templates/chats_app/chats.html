@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Chats {% endblock title %}
+
+{% block meta %} 
+    <meta content="{{ csrf_token }}" name="csrf-token">
+{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'chats_app/css/chats.css' %}">
+{% endblock links %}
+
+
+{% block content-chats %}
+        <div class="profile-container">
+            <button class="create-btn"><img src="{% static 'chats_app/images/Component 5 (5).svg' %}" alt="">Створити груповий чат</button>
+            <div class="contacts">
+                <div class="top-contacts-container">
+                    <img src="{% static 'chats_app/images/people (1).svg' %}"/>
+                    <p class="kontakti">Контакти</p>
+                </div>
+                <div class="input-container-poshuk">
+                    <img src="{% static 'chats_app/images/Component 5 (6).svg' %}" class=""/>
+                    <input class="pushuk-input" placeholder="Пошук" />
+                </div>
+                <div class="contacts-container">
+                    
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+                    <div class="single-contact-container">
+                        <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
+                        <p class="contacts-txt">Jane Cooper</p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="main-chat">
+            <div class="main-chat-header">
+                <p class="main-chat-text-placeholder">Почніть нове спілкування</p>
+                <p class="main-chat-text">
+                    Оберіть контакт зі списку ліворуч<br>
+                    або створіть групу, щоб почати спілкування
+                </p>
+            </div>
+        </div>
+        <div class="right-side-contacts">
+            <div class="right-side-contacts-notifications">
+                <div class="right-side-contacts-notifications-header">
+                    <p class="right-side-contacts-notifications-txt-left"><img src="{% static 'chats_app/images/Group.svg' %}"/>Повідомлення</p>
+                    <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
+                </div>
+                <div class="right-side-contacts-content">
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-side-contacts-notifications">
+                <div class="right-side-contacts-notifications-header">
+                    <p class="right-side-contacts-notifications-txt-left"><img src="{% static 'chats_app/images/Group.svg' %}"/>Групові чати</p>
+                    <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
+                </div>
+                <div class="right-side-contacts-content">
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+                    <div class="right-side-contacts-notifications-body">
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-name">Mona Lisa</p>
+                                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Привіт! Як справи?</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-sub-time">09:41</p>
+                        </div>
+                    </div>
+            </div>
+
+
+            
+        </div>
+{% endblock content-chats%}
