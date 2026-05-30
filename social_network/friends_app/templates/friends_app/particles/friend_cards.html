@@ -34,9 +34,17 @@
                 Підтвердити
             </a>
 
-            <a href="{% url 'user_posts' person.id %}" class="delete-link">
+            <!-- <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
-            </a>
+            </a> -->
+
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' person.id 'delete' %}"
+            >
+            Відхилити
+            </button>
 
         {% elif section == 'recommendations' %}
 
@@ -44,9 +52,17 @@
                 Додати
             </a>
 
-            <a href="{% url 'user_posts' person.id %}" class="delete-link">
+            <!-- <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
-            </a>
+            </a> -->
+
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' person.id 'dismiss' %}"
+            >
+            Приховати
+            </button>
 
         {% elif section == 'friends' %}
 
@@ -54,10 +70,16 @@
                 Повідомлення
             </a>
 
-            <a href="{% url 'user_posts' person.id %}" class="delete-link">
+            <!-- <a href="{% url 'user_posts' person.id %}" class="delete-link">
                 Видалити
-            </a>
-
+            </a> -->
+            <button
+            type="button"
+            class="delete-link friend-action"
+            data-url="{% url 'friend_action' person.id 'delete' %}"
+            >
+            Видалити
+            </button>
         {% endif %}
 
     </div>

@@ -11,7 +11,7 @@ async function handleFriendAction(actionButton) {
 
   const data = await response.json();
   console.log(data);
-  window.location.href = window.location.href;
+  window.location.href = window.location.origin + "/friends/";
 }
 
 function connectFriendActionsButton(parent = document) {
