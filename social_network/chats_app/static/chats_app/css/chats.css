@@ -153,6 +153,21 @@
 .right-side-contacts-content{
     display: flex;
     flex-direction: column;
+    height: 19.07rem;
+    overflow-y: auto;
+    scrollbar-color: #543C52 #E9E5EE;
+    scrollbar-width: auto;
+    overflow-x: hidden;
+}
+
+.right-side-grups-content{
+    display: flex;
+    flex-direction: column;
+    height: 19.07rem;
+    overflow-y: auto;
+    scrollbar-color: #543C52 #E9E5EE;
+    scrollbar-width: auto;
+    overflow-x: hidden;
 }
 
 .right-side-contacts-notifications-header{

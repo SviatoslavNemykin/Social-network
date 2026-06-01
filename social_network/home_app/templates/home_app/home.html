@@ -74,8 +74,8 @@
                 <span class="avatar-indicator"></span>
             </div>
             <div class="text-data">
-                <p class="nickname">Lina Li</p>
-                <p class="username">@thelili</p>
+                <p class="nickname">{{ request.user.first_name }}</p>
+                <p class="username">@{{ request.user.username }}</p>
             </div>
         </div>
 

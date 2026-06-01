@@ -28,7 +28,7 @@
                     {% for friend in friends %}
                         <div class="single-contact-container chat-user-button" data-chat-user="{{ friend.id }}" data-chat-username="{{ friend.email }}" style="cursor: pointer;">
                             <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
-                            <p class="contacts-txt">{{ friend.email }}</p>
+                            <p class="contacts-txt">{{ friend.first_name }}</p>
                         </div>
                     {% empty %}
                         <p style="padding: 10px; color: gray;">Контактів поки немає</p>
@@ -69,7 +69,7 @@
                                     <div class="right-side-contacts-notifications-body-contact">
                                         <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
                                         <div class="right-side-contacts-notifications-body-contact-main-txt">
-                                            <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.email }}</p>
+                                            <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
                                             <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
                                         </div>
                                         <p class="right-side-contacts-notifications-body-contact-sub-time"></p>
@@ -88,7 +88,7 @@
                     <p class="right-side-contacts-notifications-txt-left"><img src="{% static 'chats_app/images/Group.svg' %}"/>Групові чати</p>
                     <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
                 </div>
-                <div class="right-side-contacts-content">
+                <div class="right-side-grups-content">
                     <p style="padding: 10px; color: gray;">Порожньо</p>
                 </div>
             </div>
