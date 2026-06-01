@@ -27,12 +27,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_text = dict_data.get('messageText', '').strip()
         if message_text:
             await self.save_message(message_text)
+            avatar_url = await self.get_user_avatar(self.scope['user'])
+            
+            user = self.scope['user']
+            sender_display_name = user.username if user.username else user.email
+            
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'send_chat_message',
                     'message_text': message_text,
-                    'sender': self.scope['user'].email
+                    'sender_email': user.email,
+                    'sender_name': sender_display_name,
+                    'avatar': avatar_url
                 }
             )
 
@@ -40,10 +47,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'action': 'chat_message',
             'message_text': event['message_text'],
-            'sender': event['sender']
+            'sender_email': event['sender_email'],
+            'sender_name': event['sender_name'],
+            'avatar': event['avatar']
         }))
 
     @database_sync_to_async
     def save_message(self, text):
         user = self.scope['user']
-        Message.objects.create(chat_id=self.chat_id, sender=user, text=text)
+        return Message.objects.create(chat_id=self.chat_id, sender=user, text=text)
+
+    @database_sync_to_async
+    def get_user_avatar(self, user):
+        if hasattr(user, 'avatar') and user.avatar:
+            return user.avatar.url
+        return ""
