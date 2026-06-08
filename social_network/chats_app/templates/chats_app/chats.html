@@ -11,14 +11,13 @@
     <link rel="stylesheet" href="{% static 'chats_app/css/chats.css' %}">
 {% endblock links %}
 
-
 {% block content-chats %}
 <input type="hidden" id="currentUserEmail" value="{{ request.user.email }}">
 
 <div class="chats-page-wrapper">
     
     <div class="profile-container">
-        <button class="create-btn">
+        <button id="open-group-modal" class="create-btn">
             <img src="{% static 'chats_app/images/Component 5 (5).svg' %}" alt="">
             Створити груповий чат
         </button>
@@ -33,7 +32,7 @@
             </div>
             <div class="contacts-container">
                 {% for friend in friends %}
-                    <div class="single-contact-container chat-user-button" data-chat-user="{{ friend.id }}" data-chat-username="{{ friend.email }}" style="cursor: pointer;">
+                    <div class="single-contact-container chat-user-button" data-chat-user="{{ friend.id }}" data-chat-username="{{ friend.first_name }}" style="cursor: pointer;">
                         <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}"/>
                         <p class="contacts-txt">{{ friend.first_name }}</p>
                     </div>
@@ -75,13 +74,7 @@
             <form id="messageForm" class="message-form">
                 <div class="input-wrapper">
                     <input id="messageInput" type="text" placeholder="Повідомлення" autocomplete="off">
-                    <div class="input-actions">
-                        <!-- <button type="button" class="icon-btn">☺</button>
-                        <button type="button" class="icon-btn">📎</button> -->
-                    </div>
                 </div>
-                <button type="submit" class="send-btn-circle"><img src="{% static 'chats_app/images/Btn icons (2).svg' %}" alt=""></button>
-                <button type="submit" class="send-btn-circle"><img src="{% static 'chats_app/images/Btn icons (1).svg' %}" alt=""></button>
                 <button type="submit" class="send-btn-circle"><img src="{% static 'chats_app/images/Btn icons.svg' %}" alt=""></button>
             </form>
         </div>
@@ -100,7 +93,7 @@
                 {% for chat in personal_chats %}
                     {% for person in chat.users.all %}
                         {% if person.id != request.user.id %}
-                            <div class="right-side-contacts-notifications-body chat-user-button" data-chat-user="{{ person.id }}" data-chat-username="{{ person.email }}" style="cursor: pointer;">
+                            <div class="right-side-contacts-notifications-body chat-user-button" data-chat-user="{{ person.id }}" data-chat-username="{{ person.first_name }}" style="cursor: pointer;">
                                 <div class="right-side-contacts-notifications-body-contact">
                                     <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
                                     <div class="right-side-contacts-notifications-body-contact-main-txt">
@@ -124,13 +117,54 @@
                 </p>
                 <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
             </div>
-            <div class="right-side-contacts-content">
-                <p style="padding: 10px; color: gray; font-size: 0.875rem;">Порожньо</p>
+            <div id="group-list" class="right-side-contacts-content">
+                {% for chat in group_chats %}
+                    <div class="right-side-contacts-notifications-body chat-group-button" data-chat-id="{{ chat.id }}" data-chat-title="{{ chat.name }}" style="cursor: pointer; padding: 10px;">
+                        <p style="font-weight: bold; margin: 0;">{{ chat.name }}</p>
+                    </div>
+                {% empty %}
+                    <p id="group-empty" style="padding: 10px; color: gray; font-size: 0.875rem;">Порожньо</p>
+                {% endfor %}
             </div>
         </div>
 
     </div>
+</div>
 
+<div id="group-modal" class="group-modal" hidden>
+    <div class="group-modal__box" style="background: white; padding: 20px; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        
+        <div id="group-step-users">
+            <button id="close-group-modal" class="group-modal__close" type="button">×</button>
+            <h2>Нова група</h2>
+            <p>Вибрано: <span id="selected-count">0</span></p>
+            <div class="group-friends" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+                {% for friend in friends %}
+                    <label class="group-friend" style="display: block; margin-bottom: 5px;">
+                        <input class="group-user-checkbox" type="checkbox" value="{{ friend.id }}" data-user-name="{{ friend.first_name }}">
+                        <span>{{ friend.first_name }} ({{ friend.email }})</span>
+                    </label>
+                {% endfor %}
+            </div>
+            <div class="group-modal__actions">
+                <button id="cancel-group-modal" type="button">Скасувати</button>
+                <button id="next-group-step" type="button">Далі</button>
+            </div>
+        </div>
+
+        <div id="group-step-name" hidden>
+            <button id="close-group-name-modal" class="group-modal__close" type="button">×</button>
+            <h2>Нова група</h2>
+            <label for="group-name">Назва</label>
+            <input id="group-name" type="text" placeholder="Введіть назву" style="display: block; margin-bottom: 15px; width: 100%;">
+            <h3>Учасники</h3>
+            <div id="selected-users-list" style="margin-bottom: 15px; color: gray;"></div>
+            <div class="group-modal__actions">
+                <button id="back-group-step" type="button">Назад</button>
+                <button id="create-group" type="button">Створити групу</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content-chats %}
 
