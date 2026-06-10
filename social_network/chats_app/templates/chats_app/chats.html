@@ -99,6 +99,9 @@
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
                                     </div>
+                                    <p class="right-side-contacts-notifications-body-contact-time">
+                                        10:45
+                                    </p>
                                 </div>
                             </div>
                         {% endif %}
@@ -116,12 +119,26 @@
                 </p>
             </div>
             <div id="group-list" class="right-side-contacts-content">
-                {% for chat in group_chats %}
-                    <div class="right-side-contacts-notifications-body chat-group-button" data-chat-id="{{ chat.id }}" data-chat-title="{{ chat.name }}" style="cursor: pointer; padding: 10px;">
-                        <p style="font-weight: bold; margin: 0;">{{ chat.name }}</p>
+                
+                {% for chat in group_chats%}
+                    
+                        
+                <div class="right-side-contacts-notifications-body chat-group-button" data-chat-id="{{ chat.id }}" data-chat-title="{{ chat.name }}" style="cursor: pointer;">
+                    <div class="right-side-contacts-notifications-body-contact">
+                        <div class="chat-avatar-stub">{{chat.name|slice:":2"}}</div>
+                        <div class="right-side-contacts-notifications-body-contact-main-txt">
+                            <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ chat.name }}</p>
+                            <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
+                        </div>
+                        <p class="right-side-contacts-notifications-body-contact-time">
+                            10:45
+                        </p>
                     </div>
+                </div>
+
+        
                 {% empty %}
-                    <p id="group-empty" style="padding: 10px; color: gray; font-size: 0.875rem;">Порожньо</p>
+                    <p style="padding: 10px; color: gray; font-size: 0.875rem;">Чатів поки немає</p>
                 {% endfor %}
             </div>
         </div>

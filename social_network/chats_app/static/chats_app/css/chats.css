@@ -107,7 +107,7 @@
 }
 
 .main-chat {
-    width: 35.125rem;
+    width: 35.5rem;
     height: 50rem;
     display: flex;
     flex-direction: column;
@@ -359,13 +359,13 @@
 .right-side-contacts {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.5rem;
     flex-shrink: 0;
 }
 
 .right-side-contacts-notifications {
     width: 19.80rem;
-    height: 22.48rem;
+    height: 22.63rem;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -425,5 +425,14 @@
     font-weight: 400;
     font-size: 0.875rem;
     margin: 0;
+    color: #070A1C;
+}
+
+.right-side-contacts-notifications-body-contact-time {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 0.75rem;
+    margin: 0;
+    margin-left: auto;
+    margin-bottom: 1rem;
     color: #81818D;
 }
