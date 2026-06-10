@@ -87,7 +87,6 @@
                 <p class="right-side-contacts-notifications-txt-left">
                     <img src="{% static 'chats_app/images/Group.svg' %}"/>Повідомлення
                 </p>
-                <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
             </div>
             <div class="right-side-contacts-content">
                 {% for chat in personal_chats %}
@@ -95,7 +94,7 @@
                         {% if person.id != request.user.id %}
                             <div class="right-side-contacts-notifications-body chat-user-button" data-chat-user="{{ person.id }}" data-chat-username="{{ person.first_name }}" style="cursor: pointer;">
                                 <div class="right-side-contacts-notifications-body-contact">
-                                    <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Size=M (1).svg' %}" />
+                                    <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Avatar.svg' %}" />
                                     <div class="right-side-contacts-notifications-body-contact-main-txt">
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
@@ -115,7 +114,6 @@
                 <p class="right-side-contacts-notifications-txt-left">
                     <img src="{% static 'chats_app/images/Group.svg' %}"/>Групові чати
                 </p>
-                <p class="right-side-contacts-notifications-txt-right">Дивитись всі</p>
             </div>
             <div id="group-list" class="right-side-contacts-content">
                 {% for chat in group_chats %}
