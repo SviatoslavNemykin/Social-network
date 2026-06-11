@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.utils import timezone  # Додали для відображення точного часу відправки
 from .models import Message
+from django.utils.timezone import now
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -64,7 +65,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'sender_email': event['sender_email'],
             'sender_name': event['sender_name'],
             'avatar': event['avatar'],
-            'time': event.get('time', '')       # Відправляємо час у браузер
+            'time': event.get('time', now().isoformat())       # Відправляємо час у браузер
         }))
 
     @database_sync_to_async

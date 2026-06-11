@@ -69,7 +69,8 @@ class ChatHistoryView(LoginRequiredMixin, View):
                     'sender_name': sender_display_name,
                     'avatar': sender_avatar,
                     'text': msg.text,
-                    'time': msg.created_at.strftime('%H:%M')
+                    # ВАЖНО: Передаем полную дату и время в формате ISO 8601
+                    'time': msg.created_at.isoformat() 
                 })
             
             return JsonResponse({

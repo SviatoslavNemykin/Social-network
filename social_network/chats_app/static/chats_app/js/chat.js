@@ -30,6 +30,28 @@ const selectedUsersList = document.querySelector("#selected-users-list");
 const groupUserCheckboxes = document.querySelectorAll(".group-user-checkbox");
 const groupList = document.querySelector("#group-list");
 
+
+// ==========================================
+// ФУНКЦИИ ДЛЯ РАБОТЫ С КОНВЕРТАЦИЕЙ ВРЕМЕНИ И ДАТ
+// ==========================================
+function parseIsoToLocalDateTime(isoString) {
+    if (!isoString) return new Date();
+    const date = new Date(isoString);
+    return isNaN(date.getTime()) ? new Date() : date;
+}
+
+function formatTimeToHhMm(date) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatDateToDisplayStr(date) {
+    return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' р.', '');
+}
+
+function renderDateSeparator(formattedDate) {
+    return `<div class="chat-date-separator">${formattedDate}</div>`;
+}
+
 // ==========================================
 // ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ (Твої рідні CSS класи)
 // ==========================================
@@ -67,58 +89,79 @@ function renderMessage(senderEmail, senderName, text, time, avatarUrl) {
 // 1. ЛОГІКА ВЕБСОКЕТІВ ТА ВІД КРИТТЯ ЧАТІВ
 // ==========================================
 
-// Функція підключення до WebSocket та завантаження історії
 function setupChatRoom(chatId, title) {
-    // 1. Закриваємо старий сокет, якщо він був відкритий
     if (chatSocket) {
         chatSocket.close();
     }
 
-    // 2. Показуємо вікно чату
     chatPlaceholder.style.display = "none";
     chatWindow.style.display = "flex";
     chatTitle.textContent = title;
-    messagesContainer.innerHTML = ""; // Очищуємо екран
+    messagesContainer.innerHTML = ""; 
+
+    // Завантажуємо історію повідомлень
+    // 1. ДОБАВИТЬ ЭТИ ДВЕ СТРОКИ ПЕРЕД FETCH:
+    let lastHistoryDateObj = null;
+    let globalLastMessageDateObj = null;
 
     // 3. Завантажуємо історію повідомлень з нового універсального URL
     fetch(`/chat/history/${chatId}/`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
+                // ЗАМЕНИТЬ СТАРЫЙ data.history.forEach НА ЭТОТ КУСОК:
                 data.history.forEach(msg => {
-                    // Використовуємо стару добру розмітку для історії
+                    const currentMsgDate = parseIsoToLocalDateTime(msg.time);
+                    const timeHhMm = formatTimeToHhMm(currentMsgDate);
+                    const dateDisplayStr = formatDateToDisplayStr(currentMsgDate);
+
+                    // Проверка смены дня для отображения разделителя
+                    if (!lastHistoryDateObj || lastHistoryDateObj.toDateString() !== currentMsgDate.toDateString()) {
+                        messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+                        lastHistoryDateObj = currentMsgDate;
+                    }
+
                     messagesContainer.insertAdjacentHTML(
                         'beforeend', 
-                        renderMessage(msg.sender_email, msg.sender_name, msg.text, msg.time, msg.avatar)
+                        renderMessage(msg.sender_email, msg.sender_name, msg.text, timeHhMm, msg.avatar)
                     );
                 });
                 scrollToBottom();
+                
+                // ДОБАВИТЬ ЭТУ СТРОКУ после цикла истории:
+                globalLastMessageDateObj = lastHistoryDateObj; 
             }
         });
 
-    // 4. Відкриваємо нове WebSocket з'єднання через Daphne
     const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     chatSocket = new WebSocket(`${wsProtocol}${window.location.host}/chat/${chatId}/`);
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
 
-        // ЯКЩО ЦЕ СИСТЕМНЕ ПІДТВЕРДЖЕННЯ — ПРОСТО ПИШЕМО В КОНСОЛЬ І НЕ ВИВОДИМО В ЧАТ
         if (data.action === 'connection_confirmation') {
             console.log(data.message);
             return; 
         }
 
         if (data.action === "chat_message" || !data.action) {
-            // Формуємо змінні часу та тексту (підтримуємо всі ключі бекенду)
-            const timeStr = data.time || new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            // ЗАМЕНИТЬ ВНУТРЕННОСТЬ ЭТОГО IF НА ЭТОТ КОД:
+            const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
+            const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
+            const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
+
             const messageText = data.message_text || data.message || "";
             const senderName = data.sender_name || "Система";
 
-            // Рендеримо нове повідомлення в чат
+            // Проверка для вывода разделителя даты при получении сообщения в реальном времени
+            if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
+                messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+                globalLastMessageDateObj = currentNewMsgDate;
+            }
+
             messagesContainer.insertAdjacentHTML(
                 'beforeend', 
-                renderMessage(data.sender_email, data.sender_name, messageText, timeStr, data.avatar)
+                renderMessage(data.sender_email, data.sender_name, messageText, timeHhMm, data.avatar)
             );
             scrollToBottom();
         }

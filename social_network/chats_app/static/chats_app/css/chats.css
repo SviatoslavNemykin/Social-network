@@ -209,9 +209,20 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.625rem;
     scrollbar-color: #543C52 #E9E5EE;
     scrollbar-width: thin;
+    
+    /* Убираем эту строку: */
+    /* justify-content: flex-end; */
+    
+    /* Добавляем, чтобы flex-контейнер корректно сжимался внутри родителя */
+    min-height: 0; 
+}
+
+/* Магия: этот селектор прижмет все сообщения вниз, если их мало */
+.messages > :first-child {
+    margin-top: auto;
 }
 
 .chat-message-row {
@@ -414,6 +425,14 @@
     gap: 0.5rem;
     align-items: center;
     padding: 0.25rem 0;
+}
+
+.right-side-contacts-notifications-body-contact-active {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.25rem 0;
+    background-color: #E9E5EE;
 }
 
 .right-side-contacts-notifications-body-contact-main-txt-name {
@@ -713,4 +732,18 @@
 .remove-user-btn{
     all: unset;
     cursor: pointer;
+}
+
+.chat-date-separator {
+    display: block;
+    align-self: center;
+    margin: 0 auto;
+    padding: 0.25rem 0.375rem;
+    background-color: #E9E5EE; /* Подберите точный цвет фона из вашего макета */
+    color: #81818D;            /* Цвет текста */
+    font-size: 1rem;
+    font-weight: 400;
+    border-radius: 0.25rem;        /* Скругление */
+    text-align: center;
+    width: max-content;
 }
