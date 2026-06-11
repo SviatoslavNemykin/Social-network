@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const friendsContainer = document.getElementById("friendsList");
     const friends = [...document.querySelectorAll(".group-friend")];
+    const searchInput = document.getElementById("group-search-input"); // Находим наш инпут поиска
     
     // Сортировка друзей
     friends.sort((a, b) => {
@@ -44,4 +45,43 @@ document.addEventListener("DOMContentLoaded", () => {
             currentGroupContainer.appendChild(friend);
         }
     });
+
+    // ==========================================
+    // ЛОГІКА МИТТЄВОГО ПОШУКУ
+    // ==========================================
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            // Переводим введенный текст в нижний регистр и убираем пробелы по краям
+            const query = searchInput.value.toLowerCase().trim();
+            
+            // Получаем все созданные контейнеры с буквами
+            const letterGroups = friendsContainer.querySelectorAll(".group-user-letters");
+            
+            letterGroups.forEach(group => {
+                const groupFriends = group.querySelectorAll(".group-friend");
+                let hasVisibleFriends = false;
+                
+                groupFriends.forEach(friend => {
+                    // Берем имя из data-name и переводим в нижний регистр для точного сравнения
+                    const name = friend.dataset.name.toLowerCase();
+                    
+                    // Проверяем, начинается ли имя на то, что ввел пользователь
+                    if (name.startsWith(query)) {
+                        friend.style.display = ""; // Показываем пользователя
+                        hasVisibleFriends = true;  // Отмечаем, что в этой группе есть совпадение
+                    } else {
+                        friend.style.display = "none"; // Скрываем пользователя
+                    }
+                });
+                
+                // Если в группе буквы остался хоть один видимый друг — показываем всю группу целиком.
+                // Если совпадений нет — скрываем группу вместе с буквой-заголовком.
+                if (hasVisibleFriends) {
+                    group.style.display = "";
+                } else {
+                    group.style.display = "none";
+                }
+            });
+        });
+    }
 });

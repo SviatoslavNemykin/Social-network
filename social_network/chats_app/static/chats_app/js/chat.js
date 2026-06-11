@@ -274,19 +274,41 @@ function showUsersStep() {
 }
 
 function addGroupButtonToSidebar(chatId, name) {
-    const groupEmpty = document.querySelector("#group-empty");
-    if (groupEmpty) {
-        groupEmpty.remove();
+    // 1. Проверяем, есть ли заглушка "Чатів поки немає" внутри списка групп, и удаляем её
+    const emptyMessage = groupList.querySelector("p");
+    if (emptyMessage && emptyMessage.textContent.includes("Чатів поки немає")) {
+        emptyMessage.remove();
     }
     
+    // 2. Генерируем текущее время (например, "15:30")
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    // 3. Делаем срез первых двух букв названия группы для аватара (аналог chat.name|slice:":2")
+    const avatarLetters = name ? name.slice(0, 2) : "Гр";
+    
+    // 4. Создаем главный контейнер кнопки группы
     const div = document.createElement("div");
     div.className = "right-side-contacts-notifications-body chat-group-button";
     div.dataset.chatId = chatId;
     div.dataset.chatTitle = name;
     div.style.cursor = "pointer";
-    div.style.padding = "10px";
-    div.innerHTML = `<p style="font-weight: bold; margin: 0;">${name}</p>`;
     
+    // 5. Вставляем точную копию твоей HTML-структуры с сохранением всех стилей и классов
+    div.innerHTML = `
+        <div class="right-side-contacts-notifications-body-contact">
+            <div class="chat-avatar-stub">${avatarLetters}</div>
+            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                <p class="right-side-contacts-notifications-body-contact-main-txt-name">${name}</p>
+                <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
+            </div>
+            <p class="right-side-contacts-notifications-body-contact-time">
+                ${timeStr}
+            </p>
+        </div>
+    `;
+    
+    // 6. Добавляем готовую карточку в сайдбар
     groupList.appendChild(div);
 }
 

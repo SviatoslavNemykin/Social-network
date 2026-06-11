@@ -568,7 +568,7 @@
 
 .contacts-name{
     font-family: 'GT Walsheim Pro', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1rem;
     margin: 0;
     color: #070A1C;
@@ -685,4 +685,32 @@
     font-size: 1rem;
     margin: 0;
     color: #070A1C;
+}
+
+#selected-users-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 10rem;
+    scrollbar-color: #543C52 #E9E5EE;
+    scrollbar-width: thin;
+    
+    overflow-y: auto;
+}
+
+.selected-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.selected-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.remove-user-btn{
+    all: unset;
+    cursor: pointer;
 }
