@@ -52,6 +52,40 @@ function renderDateSeparator(formattedDate) {
     return `<div class="chat-date-separator">${formattedDate}</div>`;
 }
 
+// Функция для переключения активного класса чата
+// Функция для переключения активного класса чата (с поддержкой списка контактов)
+function setActiveChat(clickedElement) {
+    // 1. Сначала удаляем активный класс у всех чатов в сайдбаре сообщений
+    document.querySelectorAll(".right-side-contacts-notifications-body-contact").forEach(el => {
+        el.classList.remove("right-side-contacts-notifications-body-contact-active");
+    });
+    
+    // 2. Получаем ID пользователя или группы из дата-атрибутов
+    const userId = clickedElement.dataset.chatUser;
+    const chatId = clickedElement.dataset.chatId;
+
+    if (userId) {
+        // Если есть userId (кликнули в контактах ИЛИ в личных сообщениях)
+        // Ищем элемент чата конкретно в сайдбаре сообщений (по классу .right-side-contacts-notifications-body)
+        const sidebarChatElement = document.querySelector(`.right-side-contacts-notifications-body.chat-user-button[data-chat-user="${userId}"]`);
+        if (sidebarChatElement) {
+            const contactTarget = sidebarChatElement.querySelector(".right-side-contacts-notifications-body-contact");
+            if (contactTarget) {
+                contactTarget.classList.add("right-side-contacts-notifications-body-contact-active");
+            }
+        }
+    } else if (chatId) {
+        // Если есть chatId (кликнули по группе)
+        const sidebarGroupElement = document.querySelector(`.chat-group-button[data-chat-id="${chatId}"]`);
+        if (sidebarGroupElement) {
+            const contactTarget = sidebarGroupElement.querySelector(".right-side-contacts-notifications-body-contact");
+            if (contactTarget) {
+                contactTarget.classList.add("right-side-contacts-notifications-body-contact-active");
+            }
+        }
+    }
+}
+
 // ==========================================
 // ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ (Твої рідні CSS класи)
 // ==========================================
@@ -194,6 +228,10 @@ backToPlaceholder.addEventListener("click", () => {
     if (chatSocket) chatSocket.close();
     chatWindow.style.display = "none";
     chatPlaceholder.style.display = "flex";
+
+    document.querySelectorAll(".right-side-contacts-notifications-body-contact").forEach(el => {
+        el.classList.remove("right-side-contacts-notifications-body-contact-active");
+    });
 });
 
 
@@ -205,6 +243,7 @@ function bindChatButtons() {
     // Кліки по людях (Особисті чати)
     document.querySelectorAll(".chat-user-button").forEach(button => {
         button.onclick = async function() {
+            setActiveChat(this);
             const userId = this.dataset.chatUser;
             const username = this.dataset.chatUsername;
             
@@ -223,6 +262,7 @@ function bindChatButtons() {
     // Кліки по групах
     document.querySelectorAll(".chat-group-button").forEach(button => {
         button.onclick = function() {
+            setActiveChat(this);
             const chatId = this.dataset.chatId;
             const chatTitle = this.dataset.chatTitle;
             setupChatRoom(chatId, chatTitle);
@@ -388,6 +428,10 @@ async function createGroup() {
         addGroupButtonToSidebar(data.chat_id, data.name);
         closeGroupModal();
         bindChatButtons(); 
+
+        const newGroupBtn = groupList.querySelector(`[data-chat-id="${data.chat_id}"]`);
+        if (newGroupBtn) setActiveChat(newGroupBtn);
+
         setupChatRoom(data.chat_id, data.name); 
     } else {
         alert("Помилка створення групи: " + (data.error || "невідома помилка"));

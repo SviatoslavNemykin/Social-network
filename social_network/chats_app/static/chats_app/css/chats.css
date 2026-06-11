@@ -392,6 +392,7 @@
     scrollbar-width: thin;
     
     overflow-y: auto;
+    overflow-x: hidden
 }
 
 .right-side-contacts-notifications-header {
@@ -433,6 +434,7 @@
     align-items: center;
     padding: 0.25rem 0;
     background-color: #E9E5EE;
+    
 }
 
 .right-side-contacts-notifications-body-contact-main-txt-name {
