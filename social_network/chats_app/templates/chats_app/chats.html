@@ -147,36 +147,71 @@
 </div>
 
 <div id="group-modal" class="group-modal" hidden>
-    <div class="group-modal__box" style="background: white; padding: 20px; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-        
-        <div id="group-step-users">
-            <button id="close-group-modal" class="group-modal__close" type="button">×</button>
-            <h2>Нова група</h2>
-            <p>Вибрано: <span id="selected-count">0</span></p>
-            <div class="group-friends" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
-                {% for friend in friends %}
-                    <label class="group-friend" style="display: block; margin-bottom: 5px;">
-                        <input class="group-user-checkbox" type="checkbox" value="{{ friend.id }}" data-user-name="{{ friend.first_name }}">
-                        <span>{{ friend.first_name }} ({{ friend.email }})</span>
-                    </label>
-                {% endfor %}
-            </div>
-            <div class="group-modal__actions">
-                <button id="cancel-group-modal" type="button">Скасувати</button>
-                <button id="next-group-step" type="button">Далі</button>
-            </div>
-        </div>
+    <div class="group-modal-overlay">
+        <div class="group-modal-box">
+            <div id="group-step-users">
+                <button id="close-group-modal" class="group-modal-close" type="button">×</button>
+                <p class="group-modal-title">Нова група</p>
+                <div class="search-input-modal">
+                    <img src="{% static 'chats_app/images/Vector (2).svg' %}" alt="">
+                    <input id="group-search-input" class="friendSearch" placeholder="Пошук" />
+                </div>
+                <p class="group-modal-count">Вибрано: <span id="selected-count">0</span></p>
+                <div class="group-friends-container">
 
-        <div id="group-step-name" hidden>
-            <button id="close-group-name-modal" class="group-modal__close" type="button">×</button>
-            <h2>Нова група</h2>
-            <label for="group-name">Назва</label>
-            <input id="group-name" type="text" placeholder="Введіть назву" style="display: block; margin-bottom: 15px; width: 100%;">
-            <h3>Учасники</h3>
-            <div id="selected-users-list" style="margin-bottom: 15px; color: gray;"></div>
-            <div class="group-modal__actions">
-                <button id="back-group-step" type="button">Назад</button>
-                <button id="create-group" type="button">Створити групу</button>
+                <div class="group-friends" id="friendsList">
+                    {% for friend in friends %}
+                        <label class="group-friend" data-name="{{ friend.first_name }}">
+                            <div class="group-friend-info">
+                                <img class="img-placeholder"src="{% static 'chats_app/images/Avatar.svg' %}">
+                                <p class="contacts-name">
+                                    {{ friend.first_name }}
+                                </p>
+                            </div>
+                            <input class="group-user-checkbox" type="checkbox"value="{{ friend.id }}">
+                        </label>
+                    {% endfor %}
+                </div>
+
+            </div>
+                <div class="group-modal-actions">
+                    <button id="cancel-group-modal" type="button">Скасувати</button>
+                    <button id="next-group-step" type="button">Далі</button>
+                </div>
+            </div>
+
+            <div id="group-step-name" hidden>
+                <button id="close-group-name-modal" class="group-modal-close" type="button">×</button>
+                <p class="group-modal-title">Нова група</p>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                    <label for="group-name" class="group-name-label">Назва групи</label>
+                    <input id="group-name" type="text" placeholder="Введіть назву" class="group-name-input">
+                </div>
+                <div class="avatar-for-group">
+                    <img src="{% static 'chats_app/images/Indicator.svg' %}">
+                    <div class="avatar-for-group-bottom">
+                        <button id="change-avatar-btn" type="button">
+                            <p><img src="{% static 'chats_app/images/Component 5 (8).svg' %}" alt="Змінити аватар">Додайте фото</p>
+                            <p><img src="{% static 'chats_app/images/Component 5 (9).svg' %}" alt="Змінити аватар">Оберiть фото</p>
+                        </button>
+                    </div>
+                </div>
+                <p class="group-name-label">Учасники</p>
+                <div id="selected-users-list">
+                    <div class="selected-user">
+                        <div class="selected-user-info">
+                            <img class="img-placeholder" src="{% static 'chats_app/images/Avatar.svg' %}">
+                            <p class="contacts-name">Пы рфрф</p>
+                        </div>
+                        <button class="remove-user-btn" type="button" disabled>
+                            <img src="{% static 'chats_app/images/Component 5 (10).svg' %}" alt="Видалити">
+                        </button>
+                    </div>
+                </div>
+                <div class="group-modal-actions">
+                    <button id="back-group-step" type="button">Назад</button>
+                    <button id="create-group" type="button">Створити групу</button>
+                </div>
             </div>
         </div>
     </div>
@@ -185,4 +220,5 @@
 
 {% block scripts %}
     <script src="{% static 'chats_app/js/chat.js' %}"></script>
+    <script src="{% static 'chats_app/js/chatHelper.js' %}"></script>
 {% endblock %}
