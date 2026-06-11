@@ -377,6 +377,10 @@
 .right-side-contacts-content{
     display: flex;
     flex-direction: column;
+    scrollbar-color: #543C52 #E9E5EE;
+    scrollbar-width: thin;
+    
+    overflow-y: auto;
 }
 
 .right-side-contacts-notifications-header {

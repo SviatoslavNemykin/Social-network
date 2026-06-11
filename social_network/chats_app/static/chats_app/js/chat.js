@@ -202,28 +202,67 @@ function closeGroupModal() {
     groupModal.hidden = true;
     groupNameInput.value = "";
     selectedUsersList.innerHTML = "";
-    groupUserCheckboxes.forEach(cb => cb.checked = false);
+    // Сбрасываем все чекбоксы динамически
+    document.querySelectorAll(".group-user-checkbox").forEach(cb => cb.checked = false);
     updateSelectedCount();
 }
 
 function updateSelectedCount() {
+    // Считаем только реально выбранные чекбоксы на данный момент
     const count = document.querySelectorAll(".group-user-checkbox:checked").length;
     selectedCount.textContent = count;
 }
 
 function renderSelectedUsers() {
-    selectedUsersList.innerHTML = "";
-    groupUserCheckboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            const p = document.createElement("p");
-            p.textContent = checkbox.dataset.userName;
-            p.style.margin = "2px 0";
-            selectedUsersList.appendChild(p);
-        }
+    selectedUsersList.innerHTML = ""; // Очищаем список перед рендером
+    
+    // Находим все выбранные чекбоксы динамически
+    const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
+    
+    checkedCheckboxes.forEach(checkbox => {
+        // Ищем родительский label, чтобы достать data-name друга
+        const friendLabel = checkbox.closest(".group-friend");
+        const userName = friendLabel ? friendLabel.dataset.name : "Користувач";
+        const userId = checkbox.value;
+
+        // Создаем контейнер для выбранного пользователя (как в вашем HTML)
+        const userRow = document.createElement("div");
+        userRow.className = "selected-user";
+        userRow.dataset.userId = userId;
+
+        // Наполняем версткой из вашего примера
+        userRow.innerHTML = `
+            <div class="selected-user-info">
+                <img class="img-placeholder" src="/static/chats_app/images/Avatar.svg">
+                <p class="contacts-name">${userName}</p>
+            </div>
+            <button class="remove-user-btn" type="button">
+                <img src="/static/chats_app/images/Component%205%20(10).svg" alt="Видалити">
+            </button>
+        `;
+        
+        // Навешиваем событие клика на кнопку удаления ("хрестик")
+        const removeBtn = userRow.querySelector(".remove-user-btn");
+        removeBtn.addEventListener("click", () => {
+            checkbox.checked = false; // Снимаем галочку с основного списка
+            updateSelectedCount();    // Обновляем счетчик "Вибрано: X"
+            renderSelectedUsers();    // Перерисовываем этот список (текущий юзер исчезнет)
+        });
+
+        selectedUsersList.appendChild(userRow);
     });
 }
 
 function showNameStep() {
+    // Считаем количество выбранных чекбоксов
+    const count = document.querySelectorAll(".group-user-checkbox:checked").length;
+    
+    // Если выбрано меньше 3 участников, показываем предупреждение и прерываем выполнение
+    if (count < 2) {
+        alert("Для створення групи необхідно вибрати щонайменше 2-х учасників.");
+        return; // Останавливает функцию, не давая переключить шаг
+    }
+
     renderSelectedUsers();
     groupStepUsers.hidden = true;
     groupStepName.hidden = false;
@@ -252,12 +291,25 @@ function addGroupButtonToSidebar(chatId, name) {
 }
 
 async function createGroup() {
+    // Проверяем количество участников еще раз перед отправкой на сервер
+    const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
+    
+    if (checkedCheckboxes.length < 2) {
+        alert("У групі має бути не менше 2-х учасників. Будь ласка, поверніться та додайте учасників.");
+        return; // Блокирует отправку запроса на бэкенд
+    }
+
+    // Дополнительная базовая проверка: введено ли имя группы
+    if (!groupNameInput.value.trim()) {
+        alert("Будь ласка, введіть назву групи.");
+        return;
+    }
+
     const formData = new FormData();
     formData.append("name", groupNameInput.value);
-    groupUserCheckboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            formData.append("users", checkbox.value);
-        }
+    
+    checkedCheckboxes.forEach(checkbox => {
+        formData.append("users", checkbox.value);
     });
 
     const response = await fetch("/chat/create_group/", {
@@ -270,8 +322,8 @@ async function createGroup() {
     if (data.success) {
         addGroupButtonToSidebar(data.chat_id, data.name);
         closeGroupModal();
-        bindChatButtons(); // Переініціалізуємо кліки для нової кнопки
-        setupChatRoom(data.chat_id, data.name); // Одразу відкриваємо створений чат
+        bindChatButtons(); 
+        setupChatRoom(data.chat_id, data.name); 
     } else {
         alert("Помилка створення групи: " + (data.error || "невідома помилка"));
     }
@@ -286,9 +338,15 @@ if (nextGroupStepButton) nextGroupStepButton.addEventListener("click", showNameS
 if (backGroupStepButton) backGroupStepButton.addEventListener("click", showUsersStep);
 if (createGroupButton) createGroupButton.addEventListener("click", createGroup);
 
-groupUserCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener("change", updateSelectedCount);
-});
+// Делегирование событий для чекбоксов внутри контейнера друзей
+const friendsListContainer = document.getElementById("friendsList");
+if (friendsListContainer) {
+    friendsListContainer.addEventListener("change", (e) => {
+        if (e.target.classList.contains("group-user-checkbox")) {
+            updateSelectedCount();
+        }
+    });
+}
 
 // Запуск при завантаженні сторінки
 document.addEventListener("DOMContentLoaded", () => {
