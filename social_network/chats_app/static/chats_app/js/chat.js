@@ -89,34 +89,46 @@ function setActiveChat(clickedElement) {
 // ==========================================
 // ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ (Твої рідні CSS класи)
 // ==========================================
-function renderMessage(senderEmail, senderName, text, time, avatarUrl) {
-  const isMe = senderEmail === currentUserEmail;
-  const bubbleClass = isMe ? "msg-outgoing" : "msg-incoming";
-  
-  let avatarHtml = '';
-  if (!isMe) {
-    if (avatarUrl) {
-      avatarHtml = `<img src="${avatarUrl}" class="msg-avatar" alt="avatar">`;
-    } else {
-      const initial = senderName ? senderName.charAt(0).toUpperCase() : "?";
-      avatarHtml = `<div class="msg-avatar-stub">${initial}</div>`;
+// Измени заголовок функции, добавив аргумент imageUrls в конец
+function renderMessage(senderEmail, senderName, text, time, avatarUrl, imageUrls = []) {
+    const isMe = senderEmail === currentUserEmail;
+    const bubbleClass = isMe ? "msg-outgoing" : "msg-incoming";
+    
+    // Безопасная генерация блока картинок
+    let imagesHtml = "";
+    if (imageUrls && imageUrls.length > 0) {
+        imagesHtml = '<div class="chat-attached-images" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">';
+        imageUrls.forEach((url) => {
+            imagesHtml += `<img src="${url}" class="attached-img" style="max-width: 150px; max-height: 150px; border-radius: 8px; object-fit: cover;" alt="img">`;
+        });
+        imagesHtml += '</div>';
     }
-  }
 
-  return `
-    <div class="chat-message-row ${isMe ? 'row-reverse' : ''}">
-        ${avatarHtml}
-        <div class="chat-message-bubble ${bubbleClass}">
-            <div class="msg-body">
-                ${!isMe ? `<span class="msg-author">${senderName}</span>` : ''}
-                <div class="msg-content">
-                    <p class="msg-text">${text}</p>
-                    <span class="msg-time">${time} ✔</span>
+    let avatarHtml = '';
+    if (!isMe) {
+        if (avatarUrl) {
+            avatarHtml = `<img src="${avatarUrl}" class="msg-avatar" alt="avatar">`;
+        } else {
+            const initial = senderName ? senderName.charAt(0).toUpperCase() : "?";
+            avatarHtml = `<div class="msg-avatar-stub">${initial}</div>`;
+        }
+    }
+
+    return `
+        <div class="chat-message-row ${isMe ? 'row-reverse' : ''}">
+            ${avatarHtml}
+            <div class="chat-message-bubble ${bubbleClass}">
+                <div class="msg-body">
+                    ${!isMe ? `<span class="msg-author">${senderName}</span>` : ''}
+                    <div class="msg-content">
+                        ${text ? `<p class="msg-text">${text}</p>` : ''}
+                        ${imagesHtml}
+                        <span class="msg-time">${time} ✔</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-  `;
+    `;
 }
 
 // ==========================================
@@ -124,6 +136,7 @@ function renderMessage(senderEmail, senderName, text, time, avatarUrl) {
 // ==========================================
 
 function setupChatRoom(chatId, title) {
+    window.currentActiveChatId = chatId;
     if (chatSocket) {
         chatSocket.close();
     }
@@ -157,7 +170,7 @@ function setupChatRoom(chatId, title) {
 
                     messagesContainer.insertAdjacentHTML(
                         'beforeend', 
-                        renderMessage(msg.sender_email, msg.sender_name, msg.text, timeHhMm, msg.avatar)
+                        renderMessage(msg.sender_email, msg.sender_name, msg.text, timeHhMm, msg.avatar, msg.images)
                     );
                 });
                 scrollToBottom();
@@ -171,35 +184,35 @@ function setupChatRoom(chatId, title) {
     chatSocket = new WebSocket(`${wsProtocol}${window.location.host}/chat/${chatId}/`);
 
     chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
+    const data = JSON.parse(e.data);
 
-        if (data.action === 'connection_confirmation') {
-            console.log(data.message);
-            return; 
+    if (data.action === "chat_message" || !data.action) {
+        const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
+        const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
+        const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
+
+        // ✅ Получаем данные из объекта `data`, а не из несуществующего `msg`
+        const messageText = data.message_text || data.message || "";
+        const senderName = data.sender_name || (data.sender_email ? data.sender_email.split('@')[0] : "Користувач");
+        const senderEmail = data.sender_email || "";
+        const avatar = data.avatar || "";
+        const images = data.images || []; // Массив картинок из вебсокета
+
+        // Проверка разделителя даты
+        if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
+            messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+            globalLastMessageDateObj = currentNewMsgDate;
         }
 
-        if (data.action === "chat_message" || !data.action) {
-            // ЗАМЕНИТЬ ВНУТРЕННОСТЬ ЭТОГО IF НА ЭТОТ КОД:
-            const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
-            const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
-            const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
-
-            const messageText = data.message_text || data.message || "";
-            const senderName = data.sender_name || "Система";
-
-            // Проверка для вывода разделителя даты при получении сообщения в реальном времени
-            if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
-                messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
-                globalLastMessageDateObj = currentNewMsgDate;
-            }
-
-            messagesContainer.insertAdjacentHTML(
-                'beforeend', 
-                renderMessage(data.sender_email, data.sender_name, messageText, timeHhMm, data.avatar)
-            );
-            scrollToBottom();
-        }
-    };
+        // ⚠️ ПРОВЕРЬ ЭТУ СТРОКУ (Здесь должны быть локальные переменные, без всяких "msg.")
+        messagesContainer.insertAdjacentHTML(
+            'beforeend', 
+            renderMessage(senderEmail, senderName, messageText, timeHhMm, avatar, images)
+        );
+        
+        scrollToBottom();
+    }
+};
 
     chatSocket.onclose = function() {
         console.log("WebSocket закритий.");
@@ -211,12 +224,24 @@ function scrollToBottom() {
 }
 
 // Відправка повідомлення через форму
-messageForm.addEventListener("submit", function(e) {
+messageForm.addEventListener("submit", async function(e) {
     e.preventDefault();
-    const messageText = messageInput.value.strip ? messageInput.value.strip() : messageInput.value.trim();
-    if (messageText && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+    const messageText = messageInput.value.trim();
+
+    // Проверяем: если выбраны картинки, шлем через HTTP (sendImages.js)
+    if (window.hasSelectedImages && window.hasSelectedImages()) {
+        const response = await window.sendMessageWithImages(messageText);
+        if (response.success) {
+            messageInput.value = "";
+            window.clearSelectedImages(); // Очищаем выбранные файлы
+        } else {
+            alert("Помилка відправки зображень");
+        }
+    } 
+    // Если картинок нет — отправляем как обычный текст по WebSocket
+    else if (messageText && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
         chatSocket.send(JSON.stringify({
-            'messageText': messageText, // Передаємо обидва ключі для сумісності з вашим consumers.py
+            'messageText': messageText, 
             'message': messageText
         }));
         messageInput.value = "";

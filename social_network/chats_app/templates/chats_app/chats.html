@@ -72,9 +72,14 @@
             <div class="messages" id="messages"></div>
             
             <form id="messageForm" class="message-form">
+    
+                <div id="imagePreviewContainer" class="image-preview-container" style="display: none;"></div>
+
                 <div class="input-wrapper">
                     <input id="messageInput" type="text" placeholder="Повідомлення" autocomplete="off">
                 </div>
+                <input id="messageImages" type="file" multiple accept="image/*" style="display: none;">
+                <button type="button" id="messageImageButton" class="send-btn-file"><img src="{% static 'chats_app/images/Btn icons (1).svg' %}" alt=""></button>
                 <button type="submit" class="send-btn-circle"><img src="{% static 'chats_app/images/Btn icons.svg' %}" alt=""></button>
             </form>
         </div>
@@ -221,4 +226,5 @@
 {% block scripts %}
     <script src="{% static 'chats_app/js/chat.js' %}"></script>
     <script src="{% static 'chats_app/js/chatHelper.js' %}"></script>
+    <script src="{% static 'chats_app/js/sendImages.js' %}"></script>
 {% endblock %}

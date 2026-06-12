@@ -4,10 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from friends_app.services.friend_quries import get_friends
-from .models import Chat
+from .models import Chat, Message, MessageImage
+from channels.layers import get_channel_layer
+from django.utils import timezone
 from .services.chat_actions import get_or_create_chat
+from asgiref.sync import async_to_sync
 
 User = get_user_model()
 
@@ -55,7 +58,9 @@ class ChatHistoryView(LoginRequiredMixin, View):
     def get(self, request, chat_id, *args, **kwargs):
         try:
             chat_obj = Chat.objects.get(id=chat_id, users=request.user)
-            messages_queryset = chat_obj.messages.all().order_by('created_at')
+            
+            # Добавили prefetch_related('images'), чтобы Django доставал картинки за один запрос
+            messages_queryset = chat_obj.messages.all().order_by('created_at').prefetch_related('images')
             
             messages_list = []
             for msg in messages_queryset:
@@ -64,13 +69,16 @@ class ChatHistoryView(LoginRequiredMixin, View):
                 if msg.sender:
                     sender_display_name = msg.sender.username if msg.sender.username else msg.sender.email
 
+                # ВЫТАСКИВАЕМ КАРТИНКИ: Собираем список URL для текущего сообщения
+                image_urls = [img.image.url for img in msg.images.all()]
+
                 messages_list.append({
                     'sender_email': msg.sender.email if msg.sender else "",
                     'sender_name': sender_display_name,
                     'avatar': sender_avatar,
                     'text': msg.text,
-                    # ВАЖНО: Передаем полную дату и время в формате ISO 8601
-                    'time': msg.created_at.isoformat() 
+                    'time': msg.created_at.isoformat(),
+                    'images': image_urls # ПЕРЕДАЕМ В JSON: Массив картинок для фронтенда
                 })
             
             return JsonResponse({
@@ -99,3 +107,57 @@ class CreateGroupView(LoginRequiredMixin, View):
         chat.users.add(*User.objects.filter(id__in=friend_ids))
 
         return JsonResponse({'success': True, 'chat_id': chat.id, "name": chat.name})
+    
+
+class MessageUploadView(LoginRequiredMixin, View):
+    login_url = reverse_lazy("register_login_page")
+
+    def post(self, request: HttpRequest, chat_id):
+        if not Chat.objects.filter(id=chat_id, users=request.user).exists():
+            return JsonResponse({"success": False}, status=403)
+        
+        text = request.POST.get("text", "").strip()
+        images = request.FILES.getlist("images")
+
+        if not text and not images:
+            return JsonResponse({"success": False}, status=400)
+        
+        # Создаем сообщение
+        message = Message.objects.create(chat_id=chat_id, sender=request.user, text=text)
+
+        # Сохраняем все картинки
+        for image in images:
+            MessageImage.objects.create(message=message, image=image)
+
+        image_urls = [img.image.url for img in message.images.all()]
+
+        # Готовим данные для WebSocket рассылки (синхронизируем структуры полей с прошлым кодом)
+        sender_avatar = request.user.avatar.url if hasattr(request.user, 'avatar') and request.user.avatar else ""
+        sender_display_name = request.user.username if request.user.username else request.user.email
+        
+        # Находится внутри MessageUploadView -> def post
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f'chat_{chat_id}',
+            {
+                # 1. ВАЖНО: возвращаем имя обработчика, который написан в вашем consumers.py
+                'type': 'send_chat_message', 
+                
+                # 2. Передаем полный совмещенный набор ключей для consumers.py и для chat.js
+                'action': 'chat_message',
+                'id': message.id,
+                'text': message.text,
+                'message': message.text,
+                'message_text': message.text,
+                'sender': request.user.email,
+                'sender_email': request.user.email,
+                'sender_name': sender_display_name,
+                'avatar': sender_avatar,
+                'created_at': timezone.localtime(message.created_at).isoformat(),
+                'time': timezone.localtime(message.created_at).isoformat(),
+                'images': image_urls
+            }
+        )
+
+        return JsonResponse({'success': True})

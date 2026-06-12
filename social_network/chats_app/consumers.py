@@ -56,18 +56,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+    
+
     async def send_chat_message(self, event):
-        # ВИПРАВЛЕНО: Додано ключ 'message' та 'time', щоб JS на фронтенді міг їх прочитати
+        # Этот метод принимает данные из views.py и рассылает их в браузеры
         await self.send(text_data=json.dumps({
             'action': 'chat_message',
-            'message_text': event['message_text'],
-            'message': event['message_text'],  # Дубликат для JS (data.message)
-            'sender_email': event['sender_email'],
-            'sender_name': event['sender_name'],
-            'avatar': event['avatar'],
-            'time': event.get('time', now().isoformat())       # Відправляємо час у браузер
+            'message_text': event.get('message_text', ''),
+            'sender_email': event.get('sender_email', ''),
+            'sender_name': event.get('sender_name', ''),
+            'avatar': event.get('avatar', ''),
+            'time': event.get('time', ''),
+            
+            # ДОБАВЬ ЭТУ СТРОКУ: без неё сокет отправлял в браузер пустоту вместо картинок!
+            'images': event.get('images', []), 
         }))
-
     @database_sync_to_async
     def save_message(self, text):
         user = self.scope['user']

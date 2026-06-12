@@ -346,7 +346,7 @@
     color: #81818D;
 }
 
-.send-btn-circle {
+.send-btn-circle, .send-btn-file {
     all: unset;
     cursor: pointer;
 
