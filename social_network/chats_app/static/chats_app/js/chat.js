@@ -156,6 +156,9 @@ function setupChatRoom(chatId, title) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
+                if (typeof window.updateChatAdminStatus === 'function') {
+                    window.updateChatAdminStatus(data.is_admin, chatId); // <-- ИЗМЕНЕНО ТУТ
+                }
                 // ЗАМЕНИТЬ СТАРЫЙ data.history.forEach НА ЭТОТ КУСОК:
                 data.history.forEach(msg => {
                     const currentMsgDate = parseIsoToLocalDateTime(msg.time);

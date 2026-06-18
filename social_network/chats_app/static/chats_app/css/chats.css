@@ -199,6 +199,8 @@
 }
 
 .chat-window-header-icon {
+    all: unset;
+    cursor: pointer;
     margin-left: auto;
 }
 
@@ -748,4 +750,44 @@
     border-radius: 0.25rem;        /* Скругление */
     text-align: center;
     width: max-content;
+}
+
+.edit-modal{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    min-width: 19.4375rem;
+    border-radius: 0.625rem;
+    background-color: #E9E5EE;
+    height: min-content;
+    position: relative;
+    left: -44.25rem;   
+    top: 0.55rem;
+}
+
+.three-dots{
+    all: unset;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.group-media{
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    gap: 0.625rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #070A1C; 
+    letter-spacing: -1%;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    align-items: center;
+}
+
+.group-hr{
+    border: none;
+    height: 0.0625rem;
+    background-color: #CDCED2;
+    min-width: 19rem;
 }

@@ -65,7 +65,7 @@
                         <p id="chat-title" class="chat-window-title">Чат</p>
                         <p id="chat-status" class="chat-window-status">в мережі</p>
                     </div>
-                    <img class="chat-window-header-icon" src="{% static 'chats_app/images/Component 6.svg' %}" alt="">
+                    <button type="button" class="chat-window-header-icon"><img src="{% static 'chats_app/images/Component 6.svg' %}" alt=""></button>
                 </div>
             </div>
             
@@ -221,10 +221,22 @@
         </div>
     </div>
 </div>
+
+
+<div hidden class="edit-modal" id="modal-admin">
+    {% include 'chats_app/particles/chat_edit_admin.html' %}
+</div>
+
+<div hidden class="edit-modal" id="modal-user">
+    {% include 'chats_app/particles/chat_edit_user.html' %}
+</div>
+
+
 {% endblock content-chats %}
 
 {% block scripts %}
     <script src="{% static 'chats_app/js/chat.js' %}"></script>
     <script src="{% static 'chats_app/js/chatHelper.js' %}"></script>
     <script src="{% static 'chats_app/js/sendImages.js' %}"></script>
+    <script src="{% static 'chats_app/js/group_edit.js' %}"></script>
 {% endblock %}
