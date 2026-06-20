@@ -496,13 +496,13 @@
     flex-direction: column;
 }
 
-#group-step-users  {
+#group-step-users, #edit-group-step-add-users  {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-#group-step-name {
+#group-step-name, #edit-group-step-details {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -512,7 +512,7 @@
   display: none !important;
 }
 
-.group-modal-close{
+.group-modal-close, .js-close-edit-form-modal, #edit-cancel-add-users-x{
     margin: 0;
     all: unset;
     cursor: pointer;
@@ -598,7 +598,7 @@
     text-align: center;
 }
 
-.group-user-checkbox{
+.group-user-checkbox, .edit-group-user-checkbox{
     margin-left: auto;
     height: 1.25rem;
 }
@@ -609,7 +609,7 @@
     margin-left: auto;
 }
 
-#cancel-group-modal, #back-group-step{
+#cancel-group-modal, #back-group-step, #js-close-edit-form-modal, #edit-cancel-add-users{
         all: unset;
     cursor: pointer;
     border-style: solid;
@@ -630,7 +630,7 @@
     border-width: 0.0625rem;
 }
 
-#next-group-step, #create-group{
+#next-group-step, #create-group, #edit-save-group-changes, #edit-confirm-add-users{
     all: unset;
     cursor: pointer;
     border-style: solid;
@@ -790,4 +790,16 @@
     height: 0.0625rem;
     background-color: #CDCED2;
     min-width: 19rem;
+}
+
+#edit-add-participant-trigger{
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #543C52; 
+    font-family: 'GT Walsheim Pro', sans-serif;
+    align-items: center;
 }

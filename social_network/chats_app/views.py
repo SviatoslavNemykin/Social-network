@@ -169,18 +169,78 @@ class MessageUploadView(LoginRequiredMixin, View):
 
 # 1. Редактирование группы (только для админа)
 class EditGroupView(LoginRequiredMixin, View):
+    
+    def get(self, request, chat_id):
+        chat_obj = get_object_or_404(Chat, id=chat_id, users=request.user)
+        
+        if chat_obj.admin != request.user:
+            return JsonResponse({"success": False, "error": "permission_denied"}, status=403)
+            
+        # 1. Список ТЕКУЩИХ участников группы (Исключаем себя!)
+        current_users = []
+        current_ids = set()
+        
+        # ДОБАВЛЕНО ОГРАНИЧЕНИЕ: .exclude(id=request.user.id)
+        for u in chat_obj.users.exclude(id=request.user.id):
+            current_ids.add(u.id)
+            current_users.append({
+                "id": u.id,
+                "username": u.first_name if u.first_name else u.username  
+            })
+            
+        # 2. ПОЛНЫЙ список друзей для добавления (Тоже исключаем себя на всякий случай)
+        friends_queryset = get_friends(request.user).exclude(id=request.user.id)
+        
+        all_friends_list = []
+        for friend in friends_queryset:
+            all_friends_list.append({
+                "id": friend.id,
+                "first_name": friend.first_name if friend.first_name else friend.username,
+                "is_member": friend.id in current_ids 
+            })
+            
+        return JsonResponse({
+            "success": True,
+            "name": chat_obj.name,
+            "users": current_users,      # Теперь здесь только другие участники
+            "friends": all_friends_list   # И здесь только твои друзья без тебя
+        })
+
     def post(self, request, chat_id):
         chat_obj = get_object_or_404(Chat, id=chat_id)
+        
         if chat_obj.admin != request.user:
             return JsonResponse({"success": False, "error": "permission_denied"}, status=403)
         
         name = request.POST.get("name", "").strip()
+        user_ids = request.POST.getlist("users") 
+
         if not name:
             return JsonResponse({"success": False, "error": "name_required"}, status=400)
             
         chat_obj.name = name
         chat_obj.save()
+        
+        # Процесс сохранения измененного списка
+        if user_ids:
+            user_ids = [int(uid) for uid in user_ids]
+            
+            # Валидируем только через реальных друзей
+            valid_friend_ids = list(get_friends(request.user).filter(id__in=user_ids).values_list("id", flat=True))
+            
+            # ЖЕЛЕЗНОЕ ПРАВИЛО: Админ всегда возвращается в этот чат, 
+            # независимо от того, что прислал фронтенд
+            if request.user.id not in valid_friend_ids:
+                valid_friend_ids.append(request.user.id)
+
+            chat_obj.users.set(User.objects.filter(id__in=valid_friend_ids))
+        else:
+            # Если всех удалили из списка, в группе остается только сам админ
+            chat_obj.users.set([request.user])
+
         return JsonResponse({"success": True, "name": chat_obj.name})
+    
+
 
 # 2. Выход из группы (для любого участника, кроме последнего админа)
 class LeaveGroupView(LoginRequiredMixin, View):
