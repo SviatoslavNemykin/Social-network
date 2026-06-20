@@ -99,7 +99,15 @@
                         {% if person.id != request.user.id %}
                             <div class="right-side-contacts-notifications-body chat-user-button" data-chat-user="{{ person.id }}" data-chat-username="{{ person.first_name }}" style="cursor: pointer;">
                                 <div class="right-side-contacts-notifications-body-contact">
-                                    <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Avatar.svg' %}" />
+                                    <div class="avatar-wrapper" style="position: relative; display: inline-block;">
+                                        <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Avatar.svg' %}" />
+                                        
+                                        <img class="js-status-dynamic-icon" 
+                                            src="{% static 'chats_app/images/offline.svg' %}" 
+                                            data-offline-src="{% static 'chats_app/images/offline.svg' %}"
+                                            alt="Status"
+                                            style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px;" />
+                                    </div>
                                     <div class="right-side-contacts-notifications-body-contact-main-txt">
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
                                         <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
