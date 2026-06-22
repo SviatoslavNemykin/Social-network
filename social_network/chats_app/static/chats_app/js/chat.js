@@ -44,15 +44,6 @@ function formatTimeToHhMm(date) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatDateToDisplayStr(date) {
-    return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' р.', '');
-}
-
-function renderDateSeparator(formattedDate) {
-    return `<div class="chat-date-separator">${formattedDate}</div>`;
-}
-
-// Функция для переключения активного класса чата
 // Функция для переключения активного класса чата (с поддержкой списка контактов)
 function setActiveChat(clickedElement) {
     // 1. Сначала удаляем активный класс у всех чатов в сайдбаре сообщений
@@ -89,7 +80,6 @@ function setActiveChat(clickedElement) {
 // ==========================================
 // ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ (Твої рідні CSS класи)
 // ==========================================
-// Измени заголовок функции, добавив аргумент imageUrls в конец
 function renderMessage(senderEmail, senderName, text, time, avatarUrl, imageUrls = []) {
     const isMe = senderEmail === currentUserEmail;
     const bubbleClass = isMe ? "msg-outgoing" : "msg-incoming";
@@ -147,16 +137,14 @@ function setupChatRoom(chatId, title) {
     messagesContainer.innerHTML = ""; 
 
     // Завантажуємо історію повідомлень
-    // 1. ДОБАВИТЬ ЭТИ ДВЕ СТРОКИ ПЕРЕД FETCH:
     let lastHistoryDateObj = null;
     let globalLastMessageDateObj = null;
 
-    // 3. Завантажуємо історію повідомлень з нового універсального URL
+    // Завантажуємо історію повідомлень з нового універсального URL
     fetch(`/chat/history/${chatId}/`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // ЗАМЕНИТЬ СТАРЫЙ data.history.forEach НА ЭТОТ КУСОК:
                 data.history.forEach(msg => {
                     const currentMsgDate = parseIsoToLocalDateTime(msg.time);
                     const timeHhMm = formatTimeToHhMm(currentMsgDate);
@@ -175,7 +163,6 @@ function setupChatRoom(chatId, title) {
                 });
                 scrollToBottom();
                 
-                // ДОБАВИТЬ ЭТУ СТРОКУ после цикла истории:
                 globalLastMessageDateObj = lastHistoryDateObj; 
             }
         });
@@ -184,35 +171,33 @@ function setupChatRoom(chatId, title) {
     chatSocket = new WebSocket(`${wsProtocol}${window.location.host}/chat/${chatId}/`);
 
     chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
+        const data = JSON.parse(e.data);
 
-    if (data.action === "chat_message" || !data.action) {
-        const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
-        const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
-        const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
+        if (data.action === "chat_message" || !data.action) {
+            const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
+            const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
+            const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
 
-        // ✅ Получаем данные из объекта `data`, а не из несуществующего `msg`
-        const messageText = data.message_text || data.message || "";
-        const senderName = data.sender_name || (data.sender_email ? data.sender_email.split('@')[0] : "Користувач");
-        const senderEmail = data.sender_email || "";
-        const avatar = data.avatar || "";
-        const images = data.images || []; // Массив картинок из вебсокета
+            const messageText = data.message_text || data.message || "";
+            const senderName = data.sender_name || (data.sender_email ? data.sender_email.split('@')[0] : "Користувач");
+            const senderEmail = data.sender_email || "";
+            const avatar = data.avatar || "";
+            const images = data.images || [];
 
-        // Проверка разделителя даты
-        if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
-            messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
-            globalLastMessageDateObj = currentNewMsgDate;
+            // Проверка разделителя даты
+            if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
+                messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+                globalLastMessageDateObj = currentNewMsgDate;
+            }
+
+            messagesContainer.insertAdjacentHTML(
+                'beforeend', 
+                renderMessage(senderEmail, senderName, messageText, timeHhMm, avatar, images)
+            );
+            
+            scrollToBottom();
         }
-
-        // ⚠️ ПРОВЕРЬ ЭТУ СТРОКУ (Здесь должны быть локальные переменные, без всяких "msg.")
-        messagesContainer.insertAdjacentHTML(
-            'beforeend', 
-            renderMessage(senderEmail, senderName, messageText, timeHhMm, avatar, images)
-        );
-        
-        scrollToBottom();
-    }
-};
+    };
 
     chatSocket.onclose = function() {
         console.log("WebSocket закритий.");
@@ -228,17 +213,15 @@ messageForm.addEventListener("submit", async function(e) {
     e.preventDefault();
     const messageText = messageInput.value.trim();
 
-    // Проверяем: если выбраны картинки, шлем через HTTP (sendImages.js)
     if (window.hasSelectedImages && window.hasSelectedImages()) {
         const response = await window.sendMessageWithImages(messageText);
         if (response.success) {
             messageInput.value = "";
-            window.clearSelectedImages(); // Очищаем выбранные файлы
+            window.clearSelectedImages();
         } else {
             alert("Помилка відправки зображень");
         }
     } 
-    // Если картинок нет — отправляем как обычный текст по WebSocket
     else if (messageText && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
         chatSocket.send(JSON.stringify({
             'messageText': messageText, 
@@ -265,14 +248,12 @@ backToPlaceholder.addEventListener("click", () => {
 // ==========================================
 
 function bindChatButtons() {
-    // Кліки по людях (Особисті чати)
     document.querySelectorAll(".chat-user-button").forEach(button => {
         button.onclick = async function() {
             setActiveChat(this);
             const userId = this.dataset.chatUser;
             const username = this.dataset.chatUsername;
             
-            // Отримуємо або створюємо персональну кімнату чату
             const response = await fetch(`/chat/chat_with/${userId}/`, {
                 method: "POST",
                 headers: { "X-CSRFToken": csrfToken }
@@ -284,7 +265,6 @@ function bindChatButtons() {
         };
     });
 
-    // Кліки по групах
     document.querySelectorAll(".chat-group-button").forEach(button => {
         button.onclick = function() {
             setActiveChat(this);
@@ -297,48 +277,43 @@ function bindChatButtons() {
 
 
 // ==========================================
-// 3. ЛОГІКА МОДАЛЬНОГО ВІКНА ГРУПИ
+// 3. ЛОГІКА МОДАЛЬНОГО ВІКНА ГРУПИ (С затемнением)
 // ==========================================
 
 function openGroupModal() {
-    groupModal.hidden = false;
+    // Включаем отображение модалки и активируем overlay через CSS-класс active
+    groupModal.classList.add("active");
     groupStepUsers.hidden = false;
     groupStepName.hidden = true;
 }
 
 function closeGroupModal() {
-    groupModal.hidden = true;
+    // Выключаем отображение модалки и убираем затемнение
+    groupModal.classList.remove("active");
     groupNameInput.value = "";
     selectedUsersList.innerHTML = "";
-    // Сбрасываем все чекбоксы динамически
     document.querySelectorAll(".group-user-checkbox").forEach(cb => cb.checked = false);
     updateSelectedCount();
 }
 
 function updateSelectedCount() {
-    // Считаем только реально выбранные чекбоксы на данный момент
     const count = document.querySelectorAll(".group-user-checkbox:checked").length;
     selectedCount.textContent = count;
 }
 
 function renderSelectedUsers() {
-    selectedUsersList.innerHTML = ""; // Очищаем список перед рендером
-    
-    // Находим все выбранные чекбоксы динамически
+    selectedUsersList.innerHTML = ""; 
     const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
     
     checkedCheckboxes.forEach(checkbox => {
-        // Ищем родительский label, чтобы достать data-name друга
         const friendLabel = checkbox.closest(".group-friend");
         const userName = friendLabel ? friendLabel.dataset.name : "Користувач";
         const userId = checkbox.value;
 
-        // Создаем контейнер для выбранного пользователя (как в вашем HTML)
         const userRow = document.createElement("div");
         userRow.className = "selected-user";
         userRow.dataset.userId = userId;
 
-        // Наполняем версткой из вашего примера
         userRow.innerHTML = `
             <div class="selected-user-info">
                 <img class="img-placeholder" src="/static/chats_app/images/Avatar.svg">
@@ -349,12 +324,11 @@ function renderSelectedUsers() {
             </button>
         `;
         
-        // Навешиваем событие клика на кнопку удаления ("хрестик")
         const removeBtn = userRow.querySelector(".remove-user-btn");
         removeBtn.addEventListener("click", () => {
-            checkbox.checked = false; // Снимаем галочку с основного списка
-            updateSelectedCount();    // Обновляем счетчик "Вибрано: X"
-            renderSelectedUsers();    // Перерисовываем этот список (текущий юзер исчезнет)
+            checkbox.checked = false; 
+            updateSelectedCount();    
+            renderSelectedUsers();    
         });
 
         selectedUsersList.appendChild(userRow);
@@ -362,13 +336,10 @@ function renderSelectedUsers() {
 }
 
 function showNameStep() {
-    // Считаем количество выбранных чекбоксов
     const count = document.querySelectorAll(".group-user-checkbox:checked").length;
-    
-    // Если выбрано меньше 3 участников, показываем предупреждение и прерываем выполнение
     if (count < 2) {
         alert("Для створення групи необхідно вибрати щонайменше 2-х учасників.");
-        return; // Останавливает функцию, не давая переключить шаг
+        return; 
     }
 
     renderSelectedUsers();
@@ -382,27 +353,21 @@ function showUsersStep() {
 }
 
 function addGroupButtonToSidebar(chatId, name) {
-    // 1. Проверяем, есть ли заглушка "Чатів поки немає" внутри списка групп, и удаляем её
     const emptyMessage = groupList.querySelector("p");
     if (emptyMessage && emptyMessage.textContent.includes("Чатів поки немає")) {
         emptyMessage.remove();
     }
     
-    // 2. Генерируем текущее время (например, "15:30")
     const now = new Date();
     const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    // 3. Делаем срез первых двух букв названия группы для аватара (аналог chat.name|slice:":2")
     const avatarLetters = name ? name.slice(0, 2) : "Гр";
     
-    // 4. Создаем главный контейнер кнопки группы
     const div = document.createElement("div");
     div.className = "right-side-contacts-notifications-body chat-group-button";
     div.dataset.chatId = chatId;
     div.dataset.chatTitle = name;
     div.style.cursor = "pointer";
     
-    // 5. Вставляем точную копию твоей HTML-структуры с сохранением всех стилей и классов
     div.innerHTML = `
         <div class="right-side-contacts-notifications-body-contact">
             <div class="chat-avatar-stub">${avatarLetters}</div>
@@ -416,20 +381,17 @@ function addGroupButtonToSidebar(chatId, name) {
         </div>
     `;
     
-    // 6. Добавляем готовую карточку в сайдбар
     groupList.appendChild(div);
 }
 
 async function createGroup() {
-    // Проверяем количество участников еще раз перед отправкой на сервер
     const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
     
     if (checkedCheckboxes.length < 2) {
         alert("У групі має бути не менше 2-х учасників. Будь ласка, поверніться та додайте учасників.");
-        return; // Блокирует отправку запроса на бэкенд
+        return; 
     }
 
-    // Дополнительная базовая проверка: введено ли имя группы
     if (!groupNameInput.value.trim()) {
         alert("Будь ласка, введіть назву групи.");
         return;
@@ -471,6 +433,15 @@ if (cancelGroupModalButton) cancelGroupModalButton.addEventListener("click", clo
 if (nextGroupStepButton) nextGroupStepButton.addEventListener("click", showNameStep);
 if (backGroupStepButton) backGroupStepButton.addEventListener("click", showUsersStep);
 if (createGroupButton) createGroupButton.addEventListener("click", createGroup);
+
+// Закрытие модального окна при клике на темный фон вокруг формы
+if (groupModal) {
+    groupModal.addEventListener("click", (e) => {
+        if (e.target.classList.contains("group-modal-overlay")) {
+            closeGroupModal();
+        }
+    });
+}
 
 // Делегирование событий для чекбоксов внутри контейнера друзей
 const friendsListContainer = document.getElementById("friendsList");

@@ -471,16 +471,19 @@
     max-height: 55.625rem;
     top: -5.75rem;
     left:-90rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.group-modal-overlay{
+/* .group-modal-overlay{
     height: 105%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 
-}
+} */
 
 .group-modal-box{
     padding: 1.5rem 2.75rem;
@@ -748,4 +751,48 @@
     border-radius: 0.25rem;        /* Скругление */
     text-align: center;
     width: max-content;
+}
+
+/* Контейнер модалки (изначально скрыт, центрирует контент) */
+.group-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Чтобы быть поверх чатов */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Класс, который мы будем добавлять через JS для показа модалки */
+.group-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Подложка (overlay), которая и делает затемнение */
+.group-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Черный цвет с 50% прозрачностью */
+}
+
+/* Само белое окошко с контентом (чтобы оно было выше затемнения) */
+.group-modal-box {
+    position: relative;
+    z-index: 1001;
+    background: #fff;
+    /* Твои текущие стили для скругления, паддингов и т.д. */
+    border-radius: 12px; 
+    padding: 24px;
+    max-width: 450px;
+    width: 100%;
 }
