@@ -91,6 +91,7 @@
             <div class="right-side-contacts-notifications-header">
                 <p class="right-side-contacts-notifications-txt-left">
                     <img src="{% static 'chats_app/images/Group.svg' %}"/>Повідомлення
+                    <span id="countNotificationsContacts">0</span>
                 </p>
             </div>
             <div class="right-side-contacts-content">
@@ -129,6 +130,7 @@
             <div class="right-side-contacts-notifications-header">
                 <p class="right-side-contacts-notifications-txt-left">
                     <img src="{% static 'chats_app/images/Group.svg' %}"/>Групові чати
+                    <span id="countNotificationsGroups">0</span>
                 </p>
             </div>
             <div id="group-list" class="right-side-contacts-content">
@@ -247,4 +249,5 @@
     <script src="{% static 'chats_app/js/chatHelper.js' %}"></script>
     <script src="{% static 'chats_app/js/sendImages.js' %}"></script>
     <script src="{% static 'chats_app/js/group_edit.js' %}"></script>
+    <script src="{% static 'chats_app/js/unread_messages.js' %}"></script>
 {% endblock %}
