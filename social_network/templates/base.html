@@ -34,7 +34,10 @@
             </a>
         
             <a href="{% url 'chats' %}" class="navbar-url">
-                <img class="navbar-image" src="{% static 'images/Group (1).svg' %}" />
+                <div class="navbar-icon-wrapper" style="position: relative; display: inline-block;">
+                    <img class="navbar-image" src="{% static 'images/Group (1).svg' %}" />
+                    <span id="globalChatBadge" class="notification-badge"></span>
+                </div>
                 <p class="navbar-text"><b>Чати</b></p>
             </a>
         
@@ -79,5 +82,6 @@
     {% block scripts %}{% endblock %}
     <script src="{% static 'js/base.js' %}"></script>
     <script src="{% static 'chats_app/js/onlineStatus.js' %}"></script>
+    <script src="{% static 'chats_app/js/unread_messages.js' %}"></script>
 </body>
 </html>

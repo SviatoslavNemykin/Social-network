@@ -89,36 +89,38 @@
         
         <div class="right-side-contacts-notifications">
             <div class="right-side-contacts-notifications-header">
-                <p class="right-side-contacts-notifications-txt-left">
-                    <img src="{% static 'chats_app/images/Group.svg' %}"/>Повідомлення
-                    <span id="countNotificationsContacts">0</span>
-                </p>
+                <div class="notifications-heading-flex">
+                    <div class="notification-icon-wrapper">
+                        <img src="{% static 'chats_app/images/Group.svg' %}" alt="Icon"/>
+                        <span id="countNotificationsContacts" class="notification-badge">0</span>
+                    </div>
+                    <p class="right-side-contacts-notifications-txt-left">Повідомлення</p>
+                </div>
             </div>
             <div class="right-side-contacts-content">
                 {% for chat in personal_chats %}
                     {% for person in chat.users.all %}
-                        {% if person.id != request.user.id %}
-                            <div class="right-side-contacts-notifications-body chat-user-button" data-chat-user="{{ person.id }}" data-chat-username="{{ person.first_name }}" style="cursor: pointer;">
-                                <div class="right-side-contacts-notifications-body-contact">
-                                    <div class="avatar-wrapper" style="position: relative; display: inline-block;">
-                                        <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Avatar.svg' %}" />
-                                        
-                                        <img class="js-status-dynamic-icon" 
-                                            src="{% static 'chats_app/images/offline.svg' %}" 
-                                            data-offline-src="{% static 'chats_app/images/offline.svg' %}"
-                                            alt="Status"
-                                            style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px;" />
-                                    </div>
-                                    <div class="right-side-contacts-notifications-body-contact-main-txt">
-                                        <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
-                                        <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
-                                    </div>
-                                    <p class="right-side-contacts-notifications-body-contact-time">
-                                        10:45
-                                    </p>
-                                </div>
+                    {% if person.id != request.user.id %}
+                        <div class="right-side-contacts-notifications-body chat-user-button" 
+                            data-chat-id="{{ chat.id }}" 
+                            data-chat-user="{{ person.id }}" 
+                            data-chat-username="{{ person.first_name }}" 
+                            style="cursor: pointer;">
+                        
+                        <div class="right-side-contacts-notifications-body-contact">
+                            <div class="avatar-wrapper" style="position: relative; display: inline-block;">
+                            <img class="right-side-contacts-notifications-body-contact-img" src="{% static 'chats_app/images/Avatar.svg' %}" />
+                            <img class="js-status-dynamic-icon" src="{% static 'chats_app/images/offline.svg' %}" data-offline-src="{% static 'chats_app/images/offline.svg' %}" alt="Status" style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px;" />
                             </div>
-                        {% endif %}
+                            <div class="right-side-contacts-notifications-body-contact-main-txt">
+                            <p class="right-side-contacts-notifications-body-contact-main-txt-name">{{ person.first_name }}</p>
+                            <p class="right-side-contacts-notifications-body-contact-main-txt-message">Натисніть, щоб відкрити чат</p>
+                            </div>
+                            <p class="right-side-contacts-notifications-body-contact-time"> 10:45 </p>
+                        </div>
+                        
+                        </div>
+                    {% endif %}
                     {% endfor %}
                 {% empty %}
                     <p style="padding: 10px; color: gray; font-size: 0.875rem;">Чатів поки немає</p>
@@ -128,10 +130,13 @@
 
         <div class="right-side-contacts-notifications">
             <div class="right-side-contacts-notifications-header">
-                <p class="right-side-contacts-notifications-txt-left">
-                    <img src="{% static 'chats_app/images/Group.svg' %}"/>Групові чати
-                    <span id="countNotificationsGroups">0</span>
-                </p>
+                <div class="notifications-heading-flex">
+                    <div class="notification-icon-wrapper">
+                        <img src="{% static 'chats_app/images/Group.svg' %}" alt="Icon"/>
+                        <span id="countNotificationsGroups" class="notification-badge">0</span>
+                    </div>
+                    <p class="right-side-contacts-notifications-txt-left">Групові чати</p>
+                </div>
             </div>
             <div id="group-list" class="right-side-contacts-content">
                 
@@ -249,5 +254,4 @@
     <script src="{% static 'chats_app/js/chatHelper.js' %}"></script>
     <script src="{% static 'chats_app/js/sendImages.js' %}"></script>
     <script src="{% static 'chats_app/js/group_edit.js' %}"></script>
-    <script src="{% static 'chats_app/js/unread_messages.js' %}"></script>
 {% endblock %}

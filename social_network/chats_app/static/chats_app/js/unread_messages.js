@@ -1,43 +1,77 @@
 // chats_app/static/chats_app/js/unread_messages.js
 
-// Находим твои два глобальных счетчика
+// Глобальный счетчик в навбаре (шапке сайта)
+const globalChatBadge = document.querySelector("#globalChatBadge");
+
+// Локальные счетчики на странице чатов
 const personalUnreadCount = document.querySelector("#countNotificationsContacts");
 const groupUnreadCount = document.querySelector("#countNotificationsGroups");
 
-// Функция форматирования текста (если 0 — просто пишем 0 или скрываем, как тебе нравится)
+// Функция-фильтр: если сообщений 0, возвращаем пустую строку, чтобы сработал CSS :empty
 function formatCount(count) {
-    return count === 0 ? "0" : count;
+    return (count === 0 || !count) ? "" : count;
 }
 
-// Показываем актуальные данные, прилетевшие из вебсокета
 function showUnreadData(data) {
-    // 1. Обновляем счетчик ВСЕХ личных сообщений (сумма по всем контактам)
-    if (personalUnreadCount) {
-        personalUnreadCount.textContent = formatCount(data.personal_total);
+    // 1. ОБНОВЛЕНИЕ НАВБАРА (работает на всех страницах)
+    if (globalChatBadge && typeof data.total !== 'undefined') {
+        globalChatBadge.textContent = formatCount(data.total);
     }
 
-    // 2. Обновляем счетчик ВСЕХ групповых сообщений (сумма по всем группам)
-    if (groupUnreadCount) {
-        groupUnreadCount.textContent = formatCount(data.group_total);
+    // 2. ОБНОВЛЕНИЕ СТРАНИЦЫ ЧАТОВ (теперь тоже чисто убирает нули)
+    if (personalUnreadCount) personalUnreadCount.textContent = formatCount(data.personal_total);
+    if (groupUnreadCount) groupUnreadCount.textContent = formatCount(data.group_total);
+    
+    // 3. Динамическая сортировка плашек чатов по новизне
+    if (data.chats) {
+        const reversedChats = [...data.chats].reverse();
+
+        reversedChats.forEach((chat) => {
+            const chatRow = document.querySelector(`.right-side-contacts-notifications-body[data-chat-id="${chat.id}"]`);
+            
+            if (chatRow) {
+                // Обновляем текст сообщения
+                const messageParagraph = chatRow.querySelector(".right-side-contacts-notifications-body-contact-main-txt-message");
+                if (messageParagraph && chat.last) {
+                    messageParagraph.textContent = chat.last;
+                }
+
+                // Обновляем время
+                const timeParagraph = chatRow.querySelector(".right-side-contacts-notifications-body-contact-time");
+                if (timeParagraph && chat.time) {
+                    timeParagraph.textContent = chat.time;
+                }
+
+                // Подсветка непрочитанного
+                if (chat.unread > 0) {
+                    chatRow.classList.add("chat-has-unread");
+                } else {
+                    chatRow.classList.remove("chat-has-unread");
+                }
+
+                // Перебрасываем плашку в самый верх списка
+                const parentContainer = chatRow.parentElement;
+                if (parentContainer) {
+                    parentContainer.prepend(chatRow);
+                }
+            }
+        });
     }
 }
 
-// Открываем WebSocket для получения обновлений в реальном времени
+// Настройка и запуск WebSocket соединения
 const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 const unreadSocket = new WebSocket(`${wsProtocol}${window.location.host}/chat/unread/`);
 
-// Ловим сообщения от сервера
 unreadSocket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     showUnreadData(data);
 };
 
-// Функция принудительного запроса обновлений (вызывается из chat.js при кликах на чаты)
 function updateUnreadData() {
     if (unreadSocket.readyState === WebSocket.OPEN) {
         unreadSocket.send(JSON.stringify({ "action": "update" }));
     }
 }
 
-// Делаем функцию доступной глобально для chat.js
 window.updateUnreadData = updateUnreadData;

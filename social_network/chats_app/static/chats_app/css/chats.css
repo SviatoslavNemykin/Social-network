@@ -803,3 +803,48 @@
     font-family: 'GT Walsheim Pro', sans-serif;
     align-items: center;
 }
+
+/* Выравниваем иконку и текст строго по центру в одну линию */
+.notifications-heading-flex {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Расстояние между иконкой и текстом */
+}
+
+/* Обертка иконки. Ролительский элемент ДОЛЖЕН быть relative */
+.notification-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Настройка размеров самой иконки (можешь подогнать под свои) */
+.notification-icon-wrapper img {
+    display: block;
+}
+
+/* Красный круглый индикатор как на фото */
+.notification-badge {
+    position: absolute;
+    top: -5px;          /* Смещение вверх за пределы иконки */
+    right: -5px;        /* Смещение вправо за пределы иконки */
+    background-color: #FF4D4D; /* Идеальный красный цвет */
+    color: #FFFFFF;      /* Белый цвет цифры */
+    font-size: 11px;     /* Размер шрифта внутри круга */
+    font-weight: bold;
+    font-family: sans-serif;
+    min-width: 16px;     /* Минимальная ширина */
+    height: 16px;        /* Высота равна ширине для идеального круга */
+    border-radius: 50%;  /* Делает элемент круглым */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+/* Эстетика: если уведомлений 0, скрываем красный кружок, чтобы не мозолил глаза */
+.notification-badge:empty,
+.notification-badge-hidden {
+    display: none;
+}

@@ -3,9 +3,10 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.utils import timezone
 from .models import Chat, Message
+from django.db.models import Max # Обязательно добавь этот импорт в самый верх файла consumers.py
 
 # =====================================================================
-# CONSUMER 1: УПРАВЛЕНИЕ НЕПРОЧИТАННЫМИ (ОБЩИЕ СЧЕТЧИКИ ДЛЯ КОНТАКТОВ И ГРУПП)
+# CONSUMER 1: УПРАВЛЕНИЕ НЕПРОЧИТАННЫМИ (С СОРТИРОВКОЙ ПО НОВИЗНЕ)
 # =====================================================================
 class UnreadConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -38,10 +39,13 @@ class UnreadConsumer(AsyncWebsocketConsumer):
         group_total = 0
         chat_data = []
         
-        # Получаем все чаты пользователя
-        chats = Chat.objects.filter(users=self.user)
+        # Находим чаты пользователя и аннотируем их датой последнего сообщения, 
+        # затем сортируем от самых новых к самым старым (-last_message_time)
+        chats = Chat.objects.filter(users=self.user).annotate(
+            last_message_time=Max('messages__id')  # Сортируем по ID последнего сообщения (чем больше ID, тем оно новее)
+        ).order_by('-last_message_time')
+
         for chat in chats:
-            # Считаем сообщения, отправленные другими и не прочитанные текущим пользователем
             unread = chat.messages.exclude(sender=self.user).exclude(readers=self.user).count()
             
             if chat.is_group:
@@ -49,9 +53,22 @@ class UnreadConsumer(AsyncWebsocketConsumer):
             else:
                 personal_total += unread
             
+            # Получаем текст и время самого последнего сообщения в этом чате
+            last_msg_obj = chat.messages.order_by('-id').first()
+            last_msg_text = last_msg_obj.text if last_msg_obj else "Натисніть, щоб відкрити чат"
+            
+            # Форматируем время локально
+            last_msg_time = ""
+            if last_msg_obj:
+                last_msg_time = timezone.localtime(last_msg_obj.created_at).strftime('%H:%M') if hasattr(last_msg_obj, 'created_at') else "10:45"
+            else:
+                last_msg_time = "10:45"
+            
             chat_data.append({
                 "id": chat.id,
-                "unread": unread
+                "unread": unread,
+                "last": last_msg_text,
+                "time": last_msg_time
             })
 
         return {
@@ -60,7 +77,6 @@ class UnreadConsumer(AsyncWebsocketConsumer):
             "total": personal_total + group_total,
             "chats": chat_data
         }
-
 
 # =====================================================================
 # CONSUMER 2: ОСНОВНОЙ ЧАТ (ОТПРАВКА СООБЩЕНИЙ И АВТО-ПРОЧТЕНИЕ)
