@@ -199,6 +199,8 @@
 }
 
 .chat-window-header-icon {
+    all: unset;
+    cursor: pointer;
     margin-left: auto;
 }
 
@@ -471,19 +473,16 @@
     max-height: 55.625rem;
     top: -5.75rem;
     left:-90rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* .group-modal-overlay{
+.group-modal-overlay{
     height: 105%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 
-} */
+}
 
 .group-modal-box{
     padding: 1.5rem 2.75rem;
@@ -497,13 +496,13 @@
     flex-direction: column;
 }
 
-#group-step-users  {
+#group-step-users, #edit-group-step-add-users  {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-#group-step-name {
+#group-step-name, #edit-group-step-details {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -513,7 +512,7 @@
   display: none !important;
 }
 
-.group-modal-close{
+.group-modal-close, .js-close-edit-form-modal, #edit-cancel-add-users-x{
     margin: 0;
     all: unset;
     cursor: pointer;
@@ -599,7 +598,7 @@
     text-align: center;
 }
 
-.group-user-checkbox{
+.group-user-checkbox, .edit-group-user-checkbox{
     margin-left: auto;
     height: 1.25rem;
 }
@@ -610,7 +609,7 @@
     margin-left: auto;
 }
 
-#cancel-group-modal, #back-group-step{
+#cancel-group-modal, #back-group-step, #js-close-edit-form-modal, #edit-cancel-add-users{
         all: unset;
     cursor: pointer;
     border-style: solid;
@@ -631,7 +630,7 @@
     border-width: 0.0625rem;
 }
 
-#next-group-step, #create-group{
+#next-group-step, #create-group, #edit-save-group-changes, #edit-confirm-add-users{
     all: unset;
     cursor: pointer;
     border-style: solid;
@@ -753,46 +752,54 @@
     width: max-content;
 }
 
-/* Контейнер модалки (изначально скрыт, центрирует контент) */
-.group-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.edit-modal{
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000; /* Чтобы быть поверх чатов */
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-/* Класс, который мы будем добавлять через JS для показа модалки */
-.group-modal.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-/* Подложка (overlay), которая и делает затемнение */
-.group-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Черный цвет с 50% прозрачностью */
-}
-
-/* Само белое окошко с контентом (чтобы оно было выше затемнения) */
-.group-modal-box {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    min-width: 19.4375rem;
+    border-radius: 0.625rem;
+    background-color: #E9E5EE;
+    height: min-content;
     position: relative;
-    z-index: 1001;
-    background: #fff;
-    /* Твои текущие стили для скругления, паддингов и т.д. */
-    border-radius: 12px; 
-    padding: 24px;
-    max-width: 450px;
-    width: 100%;
+    left: -44.25rem;   
+    top: 0.55rem;
+}
+
+.three-dots{
+    all: unset;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.group-media{
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    gap: 0.625rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #070A1C; 
+    letter-spacing: -1%;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    align-items: center;
+}
+
+.group-hr{
+    border: none;
+    height: 0.0625rem;
+    background-color: #CDCED2;
+    min-width: 19rem;
+}
+
+#edit-add-participant-trigger{
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #543C52; 
+    font-family: 'GT Walsheim Pro', sans-serif;
+    align-items: center;
 }

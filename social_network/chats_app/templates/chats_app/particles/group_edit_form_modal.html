@@ -1,0 +1,66 @@
+\{% load static %}
+
+<div id="edit-group-form-modal" class="group-modal" hidden>
+    <div class="group-modal-overlay">
+        <div class="group-modal-box">
+            
+            <div id="edit-group-step-details">
+                <button class="group-modal-close js-close-edit-form-modal" type="button">×</button>
+                <p class="group-modal-title">Редагування групи</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1.5rem;">
+                    <label for="edit-group-name" class="group-name-label">Назва</label>
+                    <input id="edit-group-name" type="text" class="group-name-input" placeholder="Введіть назву">
+                </div>
+                <div class="avatar-for-group">
+                    <img src="{% static 'chats_app/images/Indicator.svg' %}">
+                    <div class="avatar-for-group-bottom">
+                        <button id="change-avatar-btn" type="button">
+                            <p><img src="{% static 'chats_app/images/Component 5 (8).svg' %}" alt="Змінити аватар">Додайте фото</p>
+                            <p><img src="{% static 'chats_app/images/Component 5 (9).svg' %}" alt="Змінити аватар">Оберiть фото</p>
+                        </button>
+                    </div>
+                </div>
+                <div class="edit-members-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <p class="group-name-label" style="margin: 0;">Учасники</p>
+                        <button type="button" id="edit-add-participant-trigger">
+                            <img src="{% static 'chats_app/images/Component 5 (15).svg' %}" alt="Змінити аватар">
+                            Додайте учасника
+                        </button>
+                    </div>
+                    
+                    <div id="edit-current-members-list" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+                        </div>
+                </div>
+                
+                <div class="group-modal-actions" style="margin-top: 1.5rem;">
+                    <button  id= "js-close-edit-form-modal" class="js-close-edit-form-modal" type="button">Скасувати</button>
+                    <button id="edit-save-group-changes" type="button">Зберегти зміни</button>
+                </div>
+            </div>
+
+            <div id="edit-group-step-add-users" hidden>
+                <button id="edit-cancel-add-users-x" class="group-modal-close" type="button">×</button>
+                <p class="group-modal-title">Виберіть учасників</p>
+                
+                <div class="search-input-modal">
+                    <img src="{% static 'chats_app/images/Vector (2).svg' %}" alt="">
+                    <input id="edit-group-search-input" class="friendSearch" placeholder="Пошук" />
+                </div>
+                
+                <p class="group-modal-count">Вибрано: <span id="edit-selected-count">0</span></p>
+                
+                <div class="group-friends-container">
+                    <div class="group-friends" id="editFriendsList"></div>
+                </div>
+                
+                <div class="group-modal-actions">
+                    <button id="edit-cancel-add-users" type="button">Назад</button>
+                    <button id="edit-confirm-add-users" type="button">Зберегти</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

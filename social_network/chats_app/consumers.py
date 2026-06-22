@@ -81,3 +81,62 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if hasattr(user, 'avatar') and user.avatar:
             return user.avatar.url
         return ""
+    
+
+GLOBAL_ONLINE_USERS = set()
+
+class OnlineStatusConsumer(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        self.user = self.scope["user"]
+        
+        if self.user.is_anonymous:
+            await self.close()
+            return
+
+        self.user_id = str(self.user.id)
+        self.group_name = "online_users"
+        
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+        await self.accept()
+        
+        # Добавляем в общий глобальный сет
+        GLOBAL_ONLINE_USERS.add(self.user_id)
+
+        # Отправляем текущему подключившемуся актуальный список ВСЕХ, кто прямо сейчас онлайн
+        for uid in list(GLOBAL_ONLINE_USERS):
+            await self.send_status(uid, "online")
+
+        # Оповещаем ОСТАЛЬНЫХ, что мы вошли в сеть
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                "type": "online_status",
+                "user_id": self.user_id,
+                "status": "online"
+            }
+        )
+
+    async def disconnect(self, code):
+        # Удаляем из глобального сета
+        GLOBAL_ONLINE_USERS.discard(self.user_id)
+        
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                "type": "online_status",
+                "user_id": self.user_id,
+                "status": "offline"
+            }
+        )
+
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
+
+    async def online_status(self, event):
+        await self.send_status(event["user_id"], event["status"])
+
+    async def send_status(self, user_id, status):
+        await self.send(text_data=json.dumps({
+            "user_id": user_id,
+            "status": status
+        }))

@@ -13,6 +13,9 @@ class Chat(models.Model):
     def __str__(self):
         return self.name or f"Chat {self.id}"
     
+    def get_last_message(self):
+        """Возвращает последнее сообщение в чате или None, если сообщений нет."""
+        return self.messages.select_related('sender').order_by('-created_at').first()
 
 class Message(models.Model):
     text = models.TextField()

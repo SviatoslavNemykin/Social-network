@@ -13,7 +13,7 @@
 {% endblock links %}
 
 {% block content %}
-    {%if form_user_setup %}
+    {% if form_user_setup %}
         <style>
             body::before {
             content: "";
@@ -70,7 +70,7 @@
     <div class="profile-block">
         <div class="top-data">
             <div class="indicator">
-                <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
+                <img src="{% static 'home_app/images/avatar.svg' %}" alt="Аватар">
                 <span class="avatar-indicator"></span>
             </div>
             <div class="text-data">
@@ -88,7 +88,6 @@
             <div class="user-data border-style">
                 <p class="number-text">12.1K</p>
                 <p class="text">Читачі</p>
-
             </div>
 
             <div class="user-data">
@@ -97,88 +96,71 @@
             </div>
         </div>
     </div>
-    <div class="requests">
 
+    <div class="requests">
         <div class="requests-header">
             <p class="requests-title"><img src="{% static 'home_app/images/people.svg' %}" alt="Запити на дружбу">Запити</p>
-            <a class="requests-watch" href="#">Дивитись всі</a>
+            <a class="requests-watch" href="{% url 'friends' %}?tab=requests">Дивитись всі</a>
         </div>
 
         <div class="requests-list">
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
-                <div class="request-text">
-                    <p class="request-name">Yehor Aung</p>
-                    <p class="request-count-folower">4.3к підписників</p>
-                </div>
-            </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user2.svg' %}" alt="Користувач">
-                <div class="request-text">
-                    <p class="request-name">Ann Ann</p>
-                    <p class="request-count-folower">1.6к підписників</p>
-                </div>
-            </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user3.svg' %}" alt="Користувач">
-                <div class="request-text">
-                    <p class="request-name">Yeugen Jenua</p>
-                    <p class="request-count-folower">10.3к підписників</p>
-                </div>
-            </a>
-
+            {% for req in friend_requests %}
+                <a class="request-item" href="{% url 'user_posts' user_id=req.sender.id %}">
+                    <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
+                    <div class="request-text">
+                        <p class="request-name">{{ req.sender.first_name|default:req.sender.username }}</p>
+                        <p class="request-count-folower">@{{ req.sender.username }}</p>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="request-count-folower" style="padding: 10px 15px;">Немає нових запитів</p>
+            {% endfor %}
         </div>
     </div>
 
     <div class="messages">
-
         <div class="requests-header">
-            <p class="requests-title"><img src="{% static 'home_app/images/chat.svg' %}" alt="Запити на дружбу">Повідомлення</p>
-            <a class="requests-watch" href="#">Дивитись всі</a>
+            <p class="requests-title"><img src="{% static 'home_app/images/chat.svg' %}" alt="Повідомлення">Повідомлення</p>
+            <a class="requests-watch" href="{% url 'chats' %}">Дивитись всі</a>
         </div>
 
         <div class="requests-list">
-            <a class="request-item, message-read" href="#">
-                <img src="{% static 'home_app/images/user4.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Mona Lisa</p>
-                        <p class="message-time">09:41</p>
+            {% for item in recent_chats %}
+                <a class="request-item {% if not item.last_message or request.user in item.last_message.readers.all %}message-read{% endif %}" 
+                   href="{% if item.other_user %}{% url 'chat_with' user_id=item.other_user.id %}{% else %}{% url 'chats' %}{% endif %}">
+                    
+                    {% if item.display_avatar %}
+                        <img src="{{ item.display_avatar }}" alt="Користувач">
+                    {% else %}
+                        <img src="{% static 'home_app/images/user4.svg' %}" alt="Користувач">
+                    {% endif %}
+                    
+                    <div class="message-text">
+                        <div class="message-information">
+                            <p class="message-name">{{ item.display_name }}</p>
+                            {% if item.last_message %}
+                                <p class="message-time">{{ item.last_message.created_at|date:"H:i" }}</p>
+                            {% endif %}
+                        </div>
+                        <p class="message-text-preview">
+                            {% if item.last_message %}
+                                {{ item.last_message.text|truncatechars:30 }}
+                            {% else %}
+                                Натисніть, щоб відкрити чат
+                            {% endif %}
+                        </p>
                     </div>
-                    <p class="message-text-preview">Привіт! Як справи ?</p>
-                </div>
-            </a>
-
-            <a class="request-item, message-read" href="#">
-                <img src="{% static 'home_app/images/user5.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Ann Ti</p>
-                        <p class="message-time">25.04.2025</p>
-                    </div>
-                    <p class="message-text-preview">Привіт!</p>
-                </div>
-            </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user6.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Ness Ty</p>
-                        <p class="message-time">25.04.2025</p>
-                    </div>
-                    <p class="message-text-preview">Привіт!</p>
-                </div>
-            </a>
-
+                </a>
+            {% empty %}
+                <p class="request-count-folower" style="padding: 10px 15px;">Немає активних діалогів</p>
+            {% endfor %}
         </div>
     </div>
-{% endblock  %}
+{% endblock %}
 
 {% block scripts %}
     <script src="{% static 'home_app/js/usernameSetup.js' %}"></script>
     <script src="{% static 'my_publications/js/showForm.js' %}"></script> 
     <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
+    <script src="{% static 'home_app/js/home.js' %}"></script>
 {% endblock scripts %}
