@@ -130,42 +130,36 @@
 
         <div class="requests-header">
             <p class="requests-title"><img src="{% static 'home_app/images/chat.svg' %}" alt="Запити на дружбу">Повідомлення</p>
-            <a class="requests-watch" href="#">Дивитись всі</a>
+            <a class="requests-watch" href="{% url 'chats' %}">Дивитись всі</a>
         </div>
 
         <div class="requests-list">
-            <a class="request-item, message-read" href="#">
-                <img src="{% static 'home_app/images/user4.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Mona Lisa</p>
-                        <p class="message-time">09:41</p>
+            {% for item in recent_chats %}
+                <a class="request-item" href="{% url 'chats' %}?id={{ item.chat_id }}">
+                    
+                    {% if item.other_user.avatar %}
+                        <img src="{{ item.other_user.avatar.url }}" alt="Користувач" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'home_app/images/user4.svg' %}" alt="Користувач">
+                    {% endif %}
+                    
+                    <div class="message-text">
+                        <div class="message-informarion">
+                            <p class="message-name">
+                                {{ item.other_user.first_name|default:item.other_user.username }}
+                            </p>
+                            <p class="message-time">
+                                {% if item.time %}
+                                    {{ item.time|date:"H:i" }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <p class="message-text-preview">{{ item.preview_text|truncatechars:40 }}</p>
                     </div>
-                    <p class="message-text-preview">Привіт! Як справи ?</p>
-                </div>
-            </a>
-
-            <a class="request-item, message-read" href="#">
-                <img src="{% static 'home_app/images/user5.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Ann Ti</p>
-                        <p class="message-time">25.04.2025</p>
-                    </div>
-                    <p class="message-text-preview">Привіт!</p>
-                </div>
-            </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user6.svg' %}" alt="Користувач">
-                <div class="message-text">
-                    <div class="message-informarion">
-                        <p class="message-name">Ness Ty</p>
-                        <p class="message-time">25.04.2025</p>
-                    </div>
-                    <p class="message-text-preview">Привіт!</p>
-                </div>
-            </a>
+                </a>
+            {% empty %}
+                <p class="empty-requests">У вас ще немає активних діалогів</p>
+            {% endfor %}
 
         </div>
     </div>

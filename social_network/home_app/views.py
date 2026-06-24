@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UsernameSetupForm
 from my_publications.forms import PostForm
 from my_publications.models import Tag, Post
+from django.db.models import Max  # Не забудь импортировать Max
+from chats_app.models import Chat  # Импортируем модель чата
 
 from django.template.loader import render_to_string
 from django.core.paginator import Page
@@ -55,8 +57,47 @@ class HomeView(LoginRequiredMixin, ListView):
 
         context['form'] = PostForm()
         context['tag_list'] = Tag.objects.all()
-
         context['friend_requests'] = get_friendship_requests(self.request.user)[:3]
+
+        # --- ЛОГИКА ДЛЯ ПОСЛЕДНИХ ЛИЧНЫХ ЧАТОВ ---
+        # 1. Находим только ЛИЧНЫЕ чаты текущего пользователя и сортируем по свежести сообщений
+        active_personal_chats = Chat.objects.filter(
+            users=self.request.user,
+            is_group=False
+        ).annotate(
+            last_activity=Max('messages__created_at')
+        ).order_by('-last_activity')[:3]
+
+        recent_chats_data = []
+
+        for chat in active_personal_chats:
+            # Находим второго участника чата (собеседника)
+            other_user = chat.users.exclude(id=self.request.user.id).first()
+            if not other_user:
+                continue
+
+            # Достаем самое последнее сообщение в этом чате вместе с картинками
+            last_message = chat.messages.order_by('-created_at').prefetch_related('images').first()
+            
+            preview_text = "Немає повідомлень"
+            msg_time = None
+
+            if last_message:
+                msg_time = last_message.created_at
+                # Если у сообщения есть связанные картинки в MessageImage
+                if last_message.images.exists():
+                    preview_text = "📷 Зображення"
+                else:
+                    preview_text = last_message.text
+
+            recent_chats_data.append({
+                'chat_id': chat.id,
+                'other_user': other_user,
+                'preview_text': preview_text,
+                'time': msg_time
+            })
+
+        context['recent_chats'] = recent_chats_data
         return context
 
 class UsernameSetupView(LoginRequiredMixin, View):

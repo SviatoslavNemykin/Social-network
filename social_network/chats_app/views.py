@@ -56,7 +56,7 @@ class ChatsView(LoginRequiredMixin, TemplateView):
                     # Для личного чата ищем второго участника, чтобы взять его юзернейм как заголовок
                     other_user = chat_obj.users.exclude(id=self.request.user.id).first()
                     if other_user:
-                        context["active_chat_title"] = other_user.username
+                        context["active_chat_title"] = other_user.first_name
                         context["active_chat_user_id"] = other_user.id
                     context["active_chat_type"] = "personal"
             except Chat.DoesNotExist:
