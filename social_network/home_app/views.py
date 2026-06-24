@@ -13,15 +13,6 @@ from django.core.paginator import Page
 from django.shortcuts import redirect
 from friends_app.services.friend_quries import get_friendship_requests
 
-# class HomeView(LoginRequiredMixin, View):
-#     login_url = 'auth'
-#     def get(self, request):
-#         if request.user.username == ' ' or request.user.username is None:
-#             form = UsernameSetupForm()
-#             return render(request=request, template_name='home_app/home.html', context={'form_user_setup': form})
-#         form = PostForm()
-#         return render(request=request, template_name='home_app/home.html', context={'form': form, 'tag_list': Tag.objects.all()})
-    
 
 class HomeView(LoginRequiredMixin, ListView):
     model = Post

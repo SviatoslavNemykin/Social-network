@@ -490,5 +490,31 @@ if (friendsListContainer) {
 
 // Запуск при завантаженні сторінки
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Привязываем клики к кнопкам сайдбара, как и раньше
     bindChatButtons();
+
+    // 2. Проверяем, передан ли активный чат через Django Context
+    const activeChatIdEl = document.getElementById("activeChatId");
+    if (activeChatIdEl) {
+        const chatId = activeChatIdEl.value;
+        const chatTitleText = document.getElementById("activeChatTitle").value;
+        const chatType = document.getElementById("activeChatType").value;
+
+        // Автоматически открываем чат (загрузит историю и подключит WebSocket)
+        setupChatRoom(chatId, chatTitleText);
+
+        // Визуально выделяем чат в сайдбаре в зависимости от его типа
+        if (chatType === "group") {
+            const groupBtn = document.querySelector(`.chat-group-button[data-chat-id="${chatId}"]`);
+            if (groupBtn) setActiveChat(groupBtn);
+        } else if (chatType === "personal") {
+            const userIdEl = document.getElementById("activeChatUserId");
+            if (userIdEl) {
+                const userId = userIdEl.value;
+                // Ищем личный чат по data-chat-user, так как у тебя setActiveChat завязан на него
+                const userBtn = document.querySelector(`.chat-user-button[data-chat-user="${userId}"]`);
+                if (userBtn) setActiveChat(userBtn);
+            }
+        }
+    }
 });

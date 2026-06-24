@@ -34,11 +34,34 @@ class ChatsView(LoginRequiredMixin, TemplateView):
             is_group=False
         ).order_by("id")
         
-        # Групові чати (ДОДАНО)
+        # Групові чати
         context["group_chats"] = Chat.objects.filter(
             users=self.request.user,
             is_group=True
         ).order_by("id")
+        
+        # --- ЛОГИКА ДЛЯ АВТООТКРЫТИЯ ЧАТА ПО ?id=10 ---
+        chat_id = self.request.GET.get('id')
+        if chat_id:
+            try:
+                # Ищем чат по ID и сразу проверяем, состоит ли в нем текущий юзер (безопасность!)
+                chat_obj = Chat.objects.prefetch_related('users').get(id=chat_id, users=self.request.user)
+                
+                context["active_chat_id"] = chat_obj.id
+                
+                if chat_obj.is_group:
+                    context["active_chat_title"] = chat_obj.name  # Имя группы
+                    context["active_chat_type"] = "group"
+                else:
+                    # Для личного чата ищем второго участника, чтобы взять его юзернейм как заголовок
+                    other_user = chat_obj.users.exclude(id=self.request.user.id).first()
+                    if other_user:
+                        context["active_chat_title"] = other_user.username
+                        context["active_chat_user_id"] = other_user.id
+                    context["active_chat_type"] = "personal"
+            except Chat.DoesNotExist:
+                # Если чата нет или у юзера нет к нему доступа — просто ничего не делаем
+                pass
         
         return context
 

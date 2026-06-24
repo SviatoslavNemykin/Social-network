@@ -14,6 +14,15 @@
 {% block content-chats %}
 <input type="hidden" id="currentUserEmail" value="{{ request.user.email }}">
 
+{% if active_chat_id %}
+    <input type="hidden" id="activeChatId" value="{{ active_chat_id }}">
+    <input type="hidden" id="activeChatTitle" value="{{ active_chat_title }}">
+    <input type="hidden" id="activeChatType" value="{{ active_chat_type }}">
+    {% if active_chat_user_id %}
+        <input type="hidden" id="activeChatUserId" value="{{ active_chat_user_id }}">
+    {% endif %}
+{% endif %}
+
 <div class="chats-page-wrapper">
     
     <div class="profile-container">
