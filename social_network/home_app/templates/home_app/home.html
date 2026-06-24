@@ -148,11 +148,8 @@
                             <p class="message-name">
                                 {{ item.other_user.first_name|default:item.other_user.username }}
                             </p>
-                            <p class="message-time">
-                                {% if item.time %}
-                                    {{ item.time|date:"H:i" }}
-                                {% endif %}
-                            </p>
+                            
+                            <p class="message-time home-msg-time" data-utc="{{ item.iso_time }}"></p>
                         </div>
                         <p class="message-text-preview">{{ item.preview_text|truncatechars:40 }}</p>
                     </div>
@@ -167,6 +164,7 @@
 
 {% block scripts %}
     <script src="{% static 'home_app/js/usernameSetup.js' %}"></script>
+    <script src="{% static 'home_app/js/home.js' %}"></script>
     <script src="{% static 'my_publications/js/showForm.js' %}"></script> 
     <script src="{% static 'my_publications/js/postLoad.js' %}"></script>
 {% endblock scripts %}

@@ -9,6 +9,7 @@ from my_publications.forms import PostForm
 from my_publications.models import Tag, Post
 from django.db.models import Max  # Не забудь импортировать Max
 from chats_app.models import Chat  # Импортируем модель чата
+from django.utils import timezone
 
 from django.template.loader import render_to_string
 from django.core.paginator import Page
@@ -59,8 +60,6 @@ class HomeView(LoginRequiredMixin, ListView):
         context['tag_list'] = Tag.objects.all()
         context['friend_requests'] = get_friendship_requests(self.request.user)[:3]
 
-        # --- ЛОГИКА ДЛЯ ПОСЛЕДНИХ ЛИЧНЫХ ЧАТОВ ---
-        # 1. Находим только ЛИЧНЫЕ чаты текущего пользователя и сортируем по свежести сообщений
         active_personal_chats = Chat.objects.filter(
             users=self.request.user,
             is_group=False
@@ -69,22 +68,25 @@ class HomeView(LoginRequiredMixin, ListView):
         ).order_by('-last_activity')[:3]
 
         recent_chats_data = []
+        
+        # Получаем ТЕКУЩЕЕ МЕСТНОЕ время (не UTC)
+        local_now = timezone.localtime(timezone.now())
+        today = local_now.date()
 
         for chat in active_personal_chats:
-            # Находим второго участника чата (собеседника)
             other_user = chat.users.exclude(id=self.request.user.id).first()
             if not other_user:
                 continue
 
-            # Достаем самое последнее сообщение в этом чате вместе с картинками
             last_message = chat.messages.order_by('-created_at').prefetch_related('images').first()
             
             preview_text = "Немає повідомлень"
-            msg_time = None
+            iso_time = ""  # Передаем ISO строку
 
             if last_message:
-                msg_time = last_message.created_at
-                # Если у сообщения есть связанные картинки в MessageImage
+                # Берем чистое время из БД (оно там в UTC) и превращаем в строку ISO
+                iso_time = last_message.created_at.isoformat()
+
                 if last_message.images.exists():
                     preview_text = "📷 Зображення"
                 else:
@@ -94,7 +96,7 @@ class HomeView(LoginRequiredMixin, ListView):
                 'chat_id': chat.id,
                 'other_user': other_user,
                 'preview_text': preview_text,
-                'time': msg_time
+                'iso_time': iso_time  # Отдаем на фронтенд
             })
 
         context['recent_chats'] = recent_chats_data
