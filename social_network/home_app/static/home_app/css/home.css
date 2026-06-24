@@ -312,3 +312,13 @@ input{
     display: flex;
     justify-content: flex-end;
 }
+
+.empty-requests{
+    font-family: GT Walsheim Pro, sans-serif;
+    font-weight: 500;
+    font-style: medium; 
+    font-size: 0.875rem;
+    color: #543C52;
+    margin: 0;
+    margin-bottom: 1rem;
+}

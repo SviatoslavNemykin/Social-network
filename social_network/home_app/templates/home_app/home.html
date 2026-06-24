@@ -99,38 +99,32 @@
     </div>
     <div class="requests">
 
-        <div class="requests-header">
-            <p class="requests-title"><img src="{% static 'home_app/images/people.svg' %}" alt="Запити на дружбу">Запити</p>
-            <a class="requests-watch" href="#">Дивитись всі</a>
-        </div>
+    <div class="requests-header">
+        <p class="requests-title"><img src="{% static 'home_app/images/people.svg' %}" alt="Запити на дружбу">Запити</p>
+        <a class="requests-watch" href="{% url 'friends' %}">Дивитись всі</a>
+    </div>
 
-        <div class="requests-list">
-            <a class="request-item" href="#">
+    <div class="requests-list">
+        {% for person in friend_requests %}
+            <a class="request-item" href="{% url 'user_posts' person.id %}">
                 <img src="{% static 'home_app/images/user1.svg' %}" alt="Користувач">
                 <div class="request-text">
-                    <p class="request-name">Yehor Aung</p>
+                    <p class="request-name">
+                        {% if person.first_name %}
+                            {{ person.first_name }}
+                        {% else %}
+                            {{ person.username }}
+                        {% endif %}
+                    </p>
                     <p class="request-count-folower">4.3к підписників</p>
                 </div>
             </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user2.svg' %}" alt="Користувач">
-                <div class="request-text">
-                    <p class="request-name">Ann Ann</p>
-                    <p class="request-count-folower">1.6к підписників</p>
-                </div>
-            </a>
-
-            <a class="request-item" href="#">
-                <img src="{% static 'home_app/images/user3.svg' %}" alt="Користувач">
-                <div class="request-text">
-                    <p class="request-name">Yeugen Jenua</p>
-                    <p class="request-count-folower">10.3к підписників</p>
-                </div>
-            </a>
-
-        </div>
+        {% empty %}
+            <p class="empty-requests">Немає нових запитів</p>
+        {% endfor %}
     </div>
+
+</div>
 
     <div class="messages">
 

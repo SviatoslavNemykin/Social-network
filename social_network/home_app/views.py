@@ -11,7 +11,7 @@ from my_publications.models import Tag, Post
 from django.template.loader import render_to_string
 from django.core.paginator import Page
 from django.shortcuts import redirect
-
+from friends_app.services.friend_quries import get_friendship_requests
 
 # class HomeView(LoginRequiredMixin, View):
 #     login_url = 'auth'
@@ -65,6 +65,7 @@ class HomeView(LoginRequiredMixin, ListView):
         context['form'] = PostForm()
         context['tag_list'] = Tag.objects.all()
 
+        context['friend_requests'] = get_friendship_requests(self.request.user)[:3]
         return context
 
 class UsernameSetupView(LoginRequiredMixin, View):
