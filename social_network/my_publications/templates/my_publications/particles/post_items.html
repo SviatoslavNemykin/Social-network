@@ -4,7 +4,14 @@
         <div class="post-header">
             <div class="post-header-content">
                 <div class="post-avatar">
-                    <img src="{% static 'my_publications/images/avatar.svg' %}" alt="avatar">
+                    <div class="indicator" data-chat-user="{{ post.author.id }}">
+                        <img src="{% static 'my_publications/images/avatar.svg' %}" alt="avatar">
+                        
+                        <img class="avatar-indicator js-status-dynamic-icon" 
+                             src="{% static 'chats_app/images/offline.svg' %}" 
+                             data-offline-src="{% static 'chats_app/images/offline.svg' %}" 
+                             alt="status">
+                    </div>
 
                     <p class="user-name">
                         {{ post.author.first_name }}
