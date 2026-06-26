@@ -16,8 +16,9 @@
     <div class="profile-block">
         <div class="top-data">
             <div class="indicator">
-                <img src="{%static 'home_app/images/avatar.svg'%}" alt="Аватар">
-                <span class="avatar-indicator"></span>
+                <img src="{% static 'home_app/images/avatar.svg' %}" alt="Аватар" class="avatar-img">
+                
+                <img src="{% static 'home_app/images/online.svg' %}" alt="Online" class="avatar-indicator">
             </div>
             <div class="text-data">
                 <p class="nickname">{{ request.user.first_name }}</p>

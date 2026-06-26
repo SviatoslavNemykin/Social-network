@@ -564,6 +564,11 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    scrollbar-color: #543C52 #E9E5EE;
+    scrollbar-width: thin;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 26rem;
 }
 
 .friend-letter{

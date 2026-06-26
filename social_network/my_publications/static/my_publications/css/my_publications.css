@@ -580,3 +580,20 @@ form{
     align-items: center;
     border-width: 0.0625rem;
 }
+
+.indicator {
+    position: relative;
+    display: inline-block;
+    line-height: 0; 
+}
+
+
+.avatar-indicator {
+    position: absolute;
+   
+    bottom: 0.125rem;  
+    right: 0.125rem;   
+    
+
+    border-radius: 50%;
+}
