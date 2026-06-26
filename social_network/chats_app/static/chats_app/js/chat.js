@@ -175,6 +175,15 @@ function setupChatRoom(chatId, title, chatType, targetUserId = null) {
     chatPlaceholder.style.display = "none";
     chatWindow.style.display = "flex";
     chatTitle.textContent = title;
+
+    // === НОВА ЛОГІКА ДЛЯ ЗАМІНИ "NG" НА ІНІЦІАЛИ ГРУПИ/ЧАТУ ===
+    const headerAvatarStub = document.getElementById("ChatTittle");
+    if (headerAvatarStub) {
+        // Беремо перші 2 літери та робимо їх великими (наприклад, "Нова Група" -> "НО")
+        headerAvatarStub.textContent = title ? title.slice(0, 2): "ГР";
+    }
+    // ========================================================
+
     messagesContainer.innerHTML = "";
 
     let lastHistoryDateObj = null;
