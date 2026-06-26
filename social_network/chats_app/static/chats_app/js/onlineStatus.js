@@ -46,6 +46,10 @@ onlineSocket.onmessage = function (event) {
   if (typeof window.updateOpenChatOnlineCount === 'function') {
     window.updateOpenChatOnlineCount();
   }
+
+  if (typeof window.updateOpenChatStatus === 'function') {
+      window.updateOpenChatStatus();
+  }
 };
 
 onlineSocket.onopen = function() {

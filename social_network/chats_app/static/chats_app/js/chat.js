@@ -1,5 +1,4 @@
 // chats_app/static/chats_app/js/chat.js
-
 let chatSocket = null;
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const currentUserEmail = document.getElementById("currentUserEmail").value;
@@ -30,9 +29,8 @@ const selectedUsersList = document.querySelector("#selected-users-list");
 const groupUserCheckboxes = document.querySelectorAll(".group-user-checkbox");
 const groupList = document.querySelector("#group-list");
 
-
 // ==========================================
-// ФУНКЦИИ ДЛЯ РАБОТЫ С КОНВЕРТАЦИЕЙ ВРЕМЕНИ И ДАТ
+// ФУНКЦІЇ ДЛЯ РОБОТИ З КОНВЕРТАЦІЄЮ ЧАСУ І ДАТ
 // ==========================================
 function parseIsoToLocalDateTime(isoString) {
     if (!isoString) return new Date();
@@ -52,21 +50,23 @@ function renderDateSeparator(formattedDate) {
     return `<div class="chat-date-separator">${formattedDate}</div>`;
 }
 
-// Функция для переключения активного класса чата
-// Функция для переключения активного класса чата (с поддержкой списка контактов)
+// Повертаємо функцію прокручування вниз, якої не вистачало!
+function scrollToBottom() {
+    if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+}
+
+// Функція для переключення активного класу чату (з підтримкою списку контактів)
 function setActiveChat(clickedElement) {
-    // 1. Сначала удаляем активный класс у всех чатов в сайдбаре сообщений
     document.querySelectorAll(".right-side-contacts-notifications-body-contact").forEach(el => {
         el.classList.remove("right-side-contacts-notifications-body-contact-active");
     });
-    
-    // 2. Получаем ID пользователя или группы из дата-атрибутов
+
     const userId = clickedElement.dataset.chatUser;
     const chatId = clickedElement.dataset.chatId;
 
     if (userId) {
-        // Если есть userId (кликнули в контактах ИЛИ в личных сообщениях)
-        // Ищем элемент чата конкретно в сайдбаре сообщений (по классу .right-side-contacts-notifications-body)
         const sidebarChatElement = document.querySelector(`.right-side-contacts-notifications-body.chat-user-button[data-chat-user="${userId}"]`);
         if (sidebarChatElement) {
             const contactTarget = sidebarChatElement.querySelector(".right-side-contacts-notifications-body-contact");
@@ -75,7 +75,6 @@ function setActiveChat(clickedElement) {
             }
         }
     } else if (chatId) {
-        // Если есть chatId (кликнули по группе)
         const sidebarGroupElement = document.querySelector(`.chat-group-button[data-chat-id="${chatId}"]`);
         if (sidebarGroupElement) {
             const contactTarget = sidebarGroupElement.querySelector(".right-side-contacts-notifications-body-contact");
@@ -87,14 +86,12 @@ function setActiveChat(clickedElement) {
 }
 
 // ==========================================
-// ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ (Твої рідні CSS класи)
+// ФУНКЦІЯ РЕНДЕРУ ПОВІДОМЛЕНЬ
 // ==========================================
-// Измени заголовок функции, добавив аргумент imageUrls в конец
 function renderMessage(senderEmail, senderName, text, time, avatarUrl, imageUrls = []) {
     const isMe = senderEmail === currentUserEmail;
     const bubbleClass = isMe ? "msg-outgoing" : "msg-incoming";
-    
-    // Безопасная генерация блока картинок
+
     let imagesHtml = "";
     if (imageUrls && imageUrls.length > 0) {
         imagesHtml = '<div class="chat-attached-images" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">';
@@ -132,30 +129,46 @@ function renderMessage(senderEmail, senderName, text, time, avatarUrl, imageUrls
 }
 
 // ==========================================
-// 1. ЛОГІКА ВЕБСОКЕТІВ ТА ВІД КРИТТЯ ЧАТІВ
+// ЛОГІКА ОНОВЛЕННЯ СТАТУСІВ ТА ВЕБСОКЕТІВ
 // ==========================================
 
-window.updateOpenChatOnlineCount = function() {
-    if (!window.currentChatMembers || !window.onlineUsers) return;
-    
-    let onlineCount = 0;
-    // Рахуємо скільки людей з поточного чату зараз є в Set онлайну
-    window.currentChatMembers.forEach(id => {
-        if (window.onlineUsers.has(String(id))) {
-            onlineCount++;
+// Функція динамічного оновлення єдиного рядка статусу
+window.updateOpenChatStatus = function() {
+    const statusEl = document.getElementById("chat-status");
+    if (!statusEl) return;
+
+    // ЛОГІКА ДЛЯ ГРУП
+    if (window.currentChatType === "group") {
+        if (!window.currentChatMembers || !window.onlineUsers) return;
+        
+        let onlineCount = 0;
+        window.currentChatMembers.forEach(id => {
+            if (window.onlineUsers.has(String(id))) {
+                onlineCount++;
+            }
+        });
+
+        statusEl.innerHTML = `<span id="countPeopleGroup">${window.currentChatMembers.length}</span> учасники, <span id="countPeopleOnline">${onlineCount}</span> в мережі`;
+    } 
+    // ЛОГІКА ДЛЯ ОСОБИСТИХ ЧАТІВ
+    else if (window.currentChatType === "personal") {
+        if (!window.currentChatTargetUserId || !window.onlineUsers) return;
+
+        const isOnline = window.onlineUsers.has(String(window.currentChatTargetUserId));
+        if (isOnline) {
+            statusEl.innerHTML = `в мережі`;
+        } else {
+            statusEl.innerHTML = `не в мережі`;
         }
-    });
-
-    // Знаходимо твої спани з HTML
-    const countGroupEl = document.getElementById("countPeopleGroup");
-    const countOnlineEl = document.getElementById("countPeopleOnline");
-
-    if (countGroupEl) countGroupEl.textContent = window.currentChatMembers.length;
-    if (countOnlineEl) countOnlineEl.textContent = onlineCount;
+    }
 };
 
-function setupChatRoom(chatId, title) {
+// Головна функція кімнати чату
+function setupChatRoom(chatId, title, chatType, targetUserId = null) {
     window.currentActiveChatId = chatId;
+    window.currentChatType = chatType; 
+    window.currentChatTargetUserId = targetUserId; 
+    
     if (chatSocket) {
         chatSocket.close();
     }
@@ -178,12 +191,11 @@ function setupChatRoom(chatId, title) {
                 window.updateUnreadData();
             }
 
-            // === ЛОГІКА ОБЧИСЛЕННЯ УЧАСНИКІВ ОНЛАЙН ===
-            // Перетворюємо всі ID на рядки та зберігаємо глобально
+            // Зберігаємо масив ID учасників для розрахунку групового онлайну
             window.currentChatMembers = data.user_ids ? data.user_ids.map(String) : [];
-            // Запускаємо перерахунок статус-бару
-            window.updateOpenChatOnlineCount();
-            // =========================================
+            
+            // Відразу ж рендеримо правильний статус
+            window.updateOpenChatStatus();
 
             data.history.forEach(msg => {
                 const currentMsgDate = parseIsoToLocalDateTime(msg.time);
@@ -238,51 +250,9 @@ function setupChatRoom(chatId, title) {
     };
 }
 
-function scrollToBottom() {
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-// Відправка повідомлення через форму
-messageForm.addEventListener("submit", async function(e) {
-    e.preventDefault();
-    const messageText = messageInput.value.trim();
-
-    // Проверяем: если выбраны картинки, шлем через HTTP (sendImages.js)
-    if (window.hasSelectedImages && window.hasSelectedImages()) {
-        const response = await window.sendMessageWithImages(messageText);
-        if (response.success) {
-            messageInput.value = "";
-            window.clearSelectedImages(); // Очищаем выбранные файлы
-        } else {
-            alert("Помилка відправки зображень");
-        }
-    } 
-    // Если картинок нет — отправляем как обычный текст по WebSocket
-    else if (messageText && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
-        chatSocket.send(JSON.stringify({
-            'messageText': messageText, 
-            'message': messageText
-        }));
-        messageInput.value = "";
-    }
-});
-
-// Кнопка назад
-backToPlaceholder.addEventListener("click", () => {
-    if (chatSocket) chatSocket.close();
-    chatWindow.style.display = "none";
-    chatPlaceholder.style.display = "flex";
-
-    document.querySelectorAll(".right-side-contacts-notifications-body-contact").forEach(el => {
-        el.classList.remove("right-side-contacts-notifications-body-contact-active");
-    });
-});
-
-
 // ==========================================
-// 2. ДИНАМІЧНЕ ПРИВ'ЯЗУВАННЯ КЛІКІВ SIDEBAR
+// ДИНАМІЧНЕ ПРИВ'ЯЗУВАННЯ КЛІКІВ SIDEBAR
 // ==========================================
-
 function bindChatButtons() {
     // Кліки по людях (Особисті чати)
     document.querySelectorAll(".chat-user-button").forEach(button => {
@@ -290,15 +260,14 @@ function bindChatButtons() {
             setActiveChat(this);
             const userId = this.dataset.chatUser;
             const username = this.dataset.chatUsername;
-            
-            // Отримуємо або створюємо персональну кімнату чату
+
             const response = await fetch(`/chat/chat_with/${userId}/`, {
                 method: "POST",
                 headers: { "X-CSRFToken": csrfToken }
             });
             const data = await response.json();
             if (data.chat_id) {
-                setupChatRoom(data.chat_id, username);
+                setupChatRoom(data.chat_id, username, "personal", userId);
             }
         };
     });
@@ -309,16 +278,14 @@ function bindChatButtons() {
             setActiveChat(this);
             const chatId = this.dataset.chatId;
             const chatTitle = this.dataset.chatTitle;
-            setupChatRoom(chatId, chatTitle);
+            setupChatRoom(chatId, chatTitle, "group");
         };
     });
 }
 
-
 // ==========================================
-// 3. ЛОГІКА МОДАЛЬНОГО ВІКНА ГРУПИ
+// ЛОГІКА МОДАЛЬНОГО ВІКНА ГРУПИ
 // ==========================================
-
 function openGroupModal() {
     groupModal.hidden = false;
     groupStepUsers.hidden = false;
@@ -329,35 +296,28 @@ function closeGroupModal() {
     groupModal.hidden = true;
     groupNameInput.value = "";
     selectedUsersList.innerHTML = "";
-    // Сбрасываем все чекбоксы динамически
     document.querySelectorAll(".group-user-checkbox").forEach(cb => cb.checked = false);
     updateSelectedCount();
 }
 
+// Обновлення лічильника обраних друзів для групи
 function updateSelectedCount() {
-    // Считаем только реально выбранные чекбоксы на данный момент
     const count = document.querySelectorAll(".group-user-checkbox:checked").length;
-    selectedCount.textContent = count;
+    if (selectedCount) selectedCount.textContent = count;
 }
 
 function renderSelectedUsers() {
-    selectedUsersList.innerHTML = ""; // Очищаем список перед рендером
-    
-    // Находим все выбранные чекбоксы динамически
+    selectedUsersList.innerHTML = ""; 
     const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
     
     checkedCheckboxes.forEach(checkbox => {
-        // Ищем родительский label, чтобы достать data-name друга
         const friendLabel = checkbox.closest(".group-friend");
         const userName = friendLabel ? friendLabel.dataset.name : "Користувач";
         const userId = checkbox.value;
 
-        // Создаем контейнер для выбранного пользователя (как в вашем HTML)
         const userRow = document.createElement("div");
         userRow.className = "selected-user";
         userRow.dataset.userId = userId;
-
-        // Наполняем версткой из вашего примера
         userRow.innerHTML = `
             <div class="selected-user-info">
                 <img class="img-placeholder" src="/static/chats_app/images/Avatar.svg">
@@ -367,13 +327,12 @@ function renderSelectedUsers() {
                 <img src="/static/chats_app/images/Component%205%20(10).svg" alt="Видалити">
             </button>
         `;
-        
-        // Навешиваем событие клика на кнопку удаления ("хрестик")
+
         const removeBtn = userRow.querySelector(".remove-user-btn");
         removeBtn.addEventListener("click", () => {
-            checkbox.checked = false; // Снимаем галочку с основного списка
-            updateSelectedCount();    // Обновляем счетчик "Вибрано: X"
-            renderSelectedUsers();    // Перерисовываем этот список (текущий юзер исчезнет)
+            checkbox.checked = false;
+            updateSelectedCount();
+            renderSelectedUsers();
         });
 
         selectedUsersList.appendChild(userRow);
@@ -381,15 +340,11 @@ function renderSelectedUsers() {
 }
 
 function showNameStep() {
-    // Считаем количество выбранных чекбоксов
     const count = document.querySelectorAll(".group-user-checkbox:checked").length;
-    
-    // Если выбрано меньше 3 участников, показываем предупреждение и прерываем выполнение
     if (count < 2) {
         alert("Для створення групи необхідно вибрати щонайменше 2-х учасників.");
-        return; // Останавливает функцию, не давая переключить шаг
+        return;
     }
-
     renderSelectedUsers();
     groupStepUsers.hidden = true;
     groupStepName.hidden = false;
@@ -401,27 +356,21 @@ function showUsersStep() {
 }
 
 function addGroupButtonToSidebar(chatId, name) {
-    // 1. Проверяем, есть ли заглушка "Чатів поки немає" внутри списка групп, и удаляем её
     const emptyMessage = groupList.querySelector("p");
     if (emptyMessage && emptyMessage.textContent.includes("Чатів поки немає")) {
         emptyMessage.remove();
     }
-    
-    // 2. Генерируем текущее время (например, "15:30")
+
     const now = new Date();
     const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    // 3. Делаем срез первых двух букв названия группы для аватара (аналог chat.name|slice:":2")
     const avatarLetters = name ? name.slice(0, 2) : "Гр";
-    
-    // 4. Создаем главный контейнер кнопки группы
+
     const div = document.createElement("div");
     div.className = "right-side-contacts-notifications-body chat-group-button";
     div.dataset.chatId = chatId;
     div.dataset.chatTitle = name;
     div.style.cursor = "pointer";
-    
-    // 5. Вставляем точную копию твоей HTML-структуры с сохранением всех стилей и классов
+
     div.innerHTML = `
         <div class="right-side-contacts-notifications-body-contact">
             <div class="chat-avatar-stub">${avatarLetters}</div>
@@ -434,21 +383,15 @@ function addGroupButtonToSidebar(chatId, name) {
             </p>
         </div>
     `;
-    
-    // 6. Добавляем готовую карточку в сайдбар
     groupList.appendChild(div);
 }
 
 async function createGroup() {
-    // Проверяем количество участников еще раз перед отправкой на сервер
     const checkedCheckboxes = document.querySelectorAll(".group-user-checkbox:checked");
-    
     if (checkedCheckboxes.length < 2) {
         alert("У групі має бути не менше 2-х учасників. Будь ласка, поверніться та додайте учасників.");
-        return; // Блокирует отправку запроса на бэкенд
+        return;
     }
-
-    // Дополнительная базовая проверка: введено ли имя группы
     if (!groupNameInput.value.trim()) {
         alert("Будь ласка, введіть назву групи.");
         return;
@@ -456,7 +399,6 @@ async function createGroup() {
 
     const formData = new FormData();
     formData.append("name", groupNameInput.value);
-    
     checkedCheckboxes.forEach(checkbox => {
         formData.append("users", checkbox.value);
     });
@@ -466,23 +408,23 @@ async function createGroup() {
         headers: { "X-CSRFToken": csrfToken },
         body: formData
     });
-    
     const data = await response.json();
+
     if (data.success) {
         addGroupButtonToSidebar(data.chat_id, data.name);
         closeGroupModal();
-        bindChatButtons(); 
-
+        bindChatButtons();
         const newGroupBtn = groupList.querySelector(`[data-chat-id="${data.chat_id}"]`);
         if (newGroupBtn) setActiveChat(newGroupBtn);
-
-        setupChatRoom(data.chat_id, data.name); 
+        setupChatRoom(data.chat_id, data.name, "group");
     } else {
         alert("Помилка створення групи: " + (data.error || "невідома помилка"));
     }
 }
 
-// Слухачі подій модалки
+// ==========================================
+// СЛУХАЧІ ПОДІЙ ТА СТАРТ СТОРІНКИ
+// ==========================================
 if (openGroupModalButton) openGroupModalButton.addEventListener("click", openGroupModal);
 if (closeGroupModalButton) closeGroupModalButton.addEventListener("click", closeGroupModal);
 if (closeGroupNameModalButton) closeGroupNameModalButton.addEventListener("click", closeGroupModal);
@@ -491,7 +433,6 @@ if (nextGroupStepButton) nextGroupStepButton.addEventListener("click", showNameS
 if (backGroupStepButton) backGroupStepButton.addEventListener("click", showUsersStep);
 if (createGroupButton) createGroupButton.addEventListener("click", createGroup);
 
-// Делегирование событий для чекбоксов внутри контейнера друзей
 const friendsListContainer = document.getElementById("friendsList");
 if (friendsListContainer) {
     friendsListContainer.addEventListener("change", (e) => {
@@ -501,31 +442,61 @@ if (friendsListContainer) {
     });
 }
 
-// Запуск при завантаженні сторінки
+// Відправка форми повідомлення
+messageForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const messageText = messageInput.value.trim();
+
+    if (window.hasSelectedImages && window.hasSelectedImages()) {
+        const response = await window.sendMessageWithImages(messageText);
+        if (response.success) {
+            messageInput.value = "";
+            window.clearSelectedImages();
+        } else {
+            alert("Помилка відправки зображень");
+        }
+    }
+    else if (messageText && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+        chatSocket.send(JSON.stringify({ 'messageText': messageText, 'message': messageText }));
+        messageInput.value = "";
+    }
+});
+
+// Кнопка назад
+backToPlaceholder.addEventListener("click", () => {
+    if (chatSocket) chatSocket.close();
+    chatWindow.style.display = "none";
+    chatPlaceholder.style.display = "flex";
+    document.querySelectorAll(".right-side-contacts-notifications-body-contact").forEach(el => {
+        el.classList.remove("right-side-contacts-notifications-body-contact-active");
+    });
+});
+
+// Запуск при завантаженні сторінки (Django Context)
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Привязываем клики к кнопкам сайдбара, как и раньше
     bindChatButtons();
 
-    // 2. Проверяем, передан ли активный чат через Django Context
     const activeChatIdEl = document.getElementById("activeChatId");
     if (activeChatIdEl) {
         const chatId = activeChatIdEl.value;
         const chatTitleText = document.getElementById("activeChatTitle").value;
         const chatType = document.getElementById("activeChatType").value;
+        
+        let targetUserId = null;
+        if (chatType === "personal") {
+            const userIdEl = document.getElementById("activeChatUserId");
+            if (userIdEl) targetUserId = userIdEl.value;
+        }
 
-        // Автоматически открываем чат (загрузит историю и подключит WebSocket)
-        setupChatRoom(chatId, chatTitleText);
+        // Автоматично відкриваємо з урахуванням типів при старті
+        setupChatRoom(chatId, chatTitleText, chatType, targetUserId);
 
-        // Визуально выделяем чат в сайдбаре в зависимости от его типа
         if (chatType === "group") {
             const groupBtn = document.querySelector(`.chat-group-button[data-chat-id="${chatId}"]`);
             if (groupBtn) setActiveChat(groupBtn);
         } else if (chatType === "personal") {
-            const userIdEl = document.getElementById("activeChatUserId");
-            if (userIdEl) {
-                const userId = userIdEl.value;
-                // Ищем личный чат по data-chat-user, так как у тебя setActiveChat завязан на него
-                const userBtn = document.querySelector(`.chat-user-button[data-chat-user="${userId}"]`);
+            if (targetUserId) {
+                const userBtn = document.querySelector(`.chat-user-button[data-chat-user="${targetUserId}"]`);
                 if (userBtn) setActiveChat(userBtn);
             }
         }
