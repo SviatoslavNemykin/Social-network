@@ -19,7 +19,13 @@ const observer = new IntersectionObserver(async (entries) => {
     const data = await response.json();
 
     if (data.html) {
+      // 1. Вставляем новые посты в DOM
       postList.insertAdjacentHTML("beforeend", data.html);
+      
+      // 2. Проверяем, загружен ли скрипт онлайна, и обновляем статусы для новых постов
+      if (typeof window.syncOnlineStatuses === 'function') {
+        window.syncOnlineStatuses();
+      }
     }
 
     if (!data.has_next) {
@@ -34,4 +40,3 @@ const observer = new IntersectionObserver(async (entries) => {
 if (sentinel) {
     observer.observe(sentinel);
 }
-
