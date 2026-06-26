@@ -42,6 +42,10 @@ onlineSocket.onmessage = function (event) {
 
   // Запускаем обновление всех иконок на странице
   window.syncOnlineStatuses();
+
+  if (typeof window.updateOpenChatOnlineCount === 'function') {
+    window.updateOpenChatOnlineCount();
+  }
 };
 
 onlineSocket.onopen = function() {

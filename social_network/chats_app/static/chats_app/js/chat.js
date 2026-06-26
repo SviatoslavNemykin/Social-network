@@ -135,91 +135,104 @@ function renderMessage(senderEmail, senderName, text, time, avatarUrl, imageUrls
 // 1. ЛОГІКА ВЕБСОКЕТІВ ТА ВІД КРИТТЯ ЧАТІВ
 // ==========================================
 
+window.updateOpenChatOnlineCount = function() {
+    if (!window.currentChatMembers || !window.onlineUsers) return;
+    
+    let onlineCount = 0;
+    // Рахуємо скільки людей з поточного чату зараз є в Set онлайну
+    window.currentChatMembers.forEach(id => {
+        if (window.onlineUsers.has(String(id))) {
+            onlineCount++;
+        }
+    });
+
+    // Знаходимо твої спани з HTML
+    const countGroupEl = document.getElementById("countPeopleGroup");
+    const countOnlineEl = document.getElementById("countPeopleOnline");
+
+    if (countGroupEl) countGroupEl.textContent = window.currentChatMembers.length;
+    if (countOnlineEl) countOnlineEl.textContent = onlineCount;
+};
+
 function setupChatRoom(chatId, title) {
     window.currentActiveChatId = chatId;
     if (chatSocket) {
         chatSocket.close();
     }
-
     chatPlaceholder.style.display = "none";
     chatWindow.style.display = "flex";
     chatTitle.textContent = title;
-    messagesContainer.innerHTML = ""; 
+    messagesContainer.innerHTML = "";
 
-    // Завантажуємо історію повідомлень
-    // 1. ДОБАВИТЬ ЭТИ ДВЕ СТРОКИ ПЕРЕД FETCH:
     let lastHistoryDateObj = null;
     let globalLastMessageDateObj = null;
 
-    // 3. Завантажуємо історію повідомлень з нового універсального URL
     fetch(`/chat/history/${chatId}/`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                if (typeof window.updateChatAdminStatus === 'function') {
-                    window.updateChatAdminStatus(data.is_admin, chatId); // <-- ИЗМЕНЕНО ТУТ
-                }
-                if (typeof window.updateUnreadData === 'function') {
-                    window.updateUnreadData(); 
-                }
-                // ЗАМЕНИТЬ СТАРЫЙ data.history.forEach НА ЭТОТ КУСОК:
-                data.history.forEach(msg => {
-                    const currentMsgDate = parseIsoToLocalDateTime(msg.time);
-                    const timeHhMm = formatTimeToHhMm(currentMsgDate);
-                    const dateDisplayStr = formatDateToDisplayStr(currentMsgDate);
-
-                    // Проверка смены дня для отображения разделителя
-                    if (!lastHistoryDateObj || lastHistoryDateObj.toDateString() !== currentMsgDate.toDateString()) {
-                        messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
-                        lastHistoryDateObj = currentMsgDate;
-                    }
-
-                    messagesContainer.insertAdjacentHTML(
-                        'beforeend', 
-                        renderMessage(msg.sender_email, msg.sender_name, msg.text, timeHhMm, msg.avatar, msg.images)
-                    );
-                });
-                scrollToBottom();
-                
-                // ДОБАВИТЬ ЭТУ СТРОКУ после цикла истории:
-                globalLastMessageDateObj = lastHistoryDateObj; 
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            if (typeof window.updateChatAdminStatus === 'function') {
+                window.updateChatAdminStatus(data.is_admin, chatId);
             }
-        });
+            if (typeof window.updateUnreadData === 'function') {
+                window.updateUnreadData();
+            }
+
+            // === ЛОГІКА ОБЧИСЛЕННЯ УЧАСНИКІВ ОНЛАЙН ===
+            // Перетворюємо всі ID на рядки та зберігаємо глобально
+            window.currentChatMembers = data.user_ids ? data.user_ids.map(String) : [];
+            // Запускаємо перерахунок статус-бару
+            window.updateOpenChatOnlineCount();
+            // =========================================
+
+            data.history.forEach(msg => {
+                const currentMsgDate = parseIsoToLocalDateTime(msg.time);
+                const timeHhMm = formatTimeToHhMm(currentMsgDate);
+                const dateDisplayStr = formatDateToDisplayStr(currentMsgDate);
+
+                if (!lastHistoryDateObj || lastHistoryDateObj.toDateString() !== currentMsgDate.toDateString()) {
+                    messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+                    lastHistoryDateObj = currentMsgDate;
+                }
+                messagesContainer.insertAdjacentHTML(
+                    'beforeend',
+                    renderMessage(msg.sender_email, msg.sender_name, msg.text, timeHhMm, msg.avatar, msg.images)
+                );
+            });
+            scrollToBottom();
+            globalLastMessageDateObj = lastHistoryDateObj;
+        }
+    });
 
     const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     chatSocket = new WebSocket(`${wsProtocol}${window.location.host}/chat/${chatId}/`);
-
+    
     chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
+        const data = JSON.parse(e.data);
+        if (data.action === "chat_message" || !data.action) {
+            const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
+            const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
+            const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
 
-    if (data.action === "chat_message" || !data.action) {
-        const currentNewMsgDate = data.time ? parseIsoToLocalDateTime(data.time) : new Date();
-        const timeHhMm = formatTimeToHhMm(currentNewMsgDate);
-        const dateDisplayStr = formatDateToDisplayStr(currentNewMsgDate);
+            const messageText = data.message_text || data.message || "";
+            const senderName = data.sender_name || (data.sender_email ? data.sender_email.split('@')[0] : "Користувач");
+            const senderEmail = data.sender_email || "";
+            const avatar = data.avatar || "";
+            const images = data.images || [];
 
-        // ✅ Получаем данные из объекта `data`, а не из несуществующего `msg`
-        const messageText = data.message_text || data.message || "";
-        const senderName = data.sender_name || (data.sender_email ? data.sender_email.split('@')[0] : "Користувач");
-        const senderEmail = data.sender_email || "";
-        const avatar = data.avatar || "";
-        const images = data.images || []; // Массив картинок из вебсокета
+            if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
+                messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
+                globalLastMessageDateObj = currentNewMsgDate;
+            }
 
-        // Проверка разделителя даты
-        if (!globalLastMessageDateObj || globalLastMessageDateObj.toDateString() !== currentNewMsgDate.toDateString()) {
-            messagesContainer.insertAdjacentHTML('beforeend', renderDateSeparator(dateDisplayStr));
-            globalLastMessageDateObj = currentNewMsgDate;
+            messagesContainer.insertAdjacentHTML(
+                'beforeend',
+                renderMessage(senderEmail, senderName, messageText, timeHhMm, avatar, images)
+            );
+            scrollToBottom();
         }
-
-        // ⚠️ ПРОВЕРЬ ЭТУ СТРОКУ (Здесь должны быть локальные переменные, без всяких "msg.")
-        messagesContainer.insertAdjacentHTML(
-            'beforeend', 
-            renderMessage(senderEmail, senderName, messageText, timeHhMm, avatar, images)
-        );
-        
-        scrollToBottom();
-    }
-};
-
+    };
+    
     chatSocket.onclose = function() {
         console.log("WebSocket закритий.");
     };

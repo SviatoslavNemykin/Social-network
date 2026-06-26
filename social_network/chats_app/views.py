@@ -105,11 +105,14 @@ class ChatHistoryView(LoginRequiredMixin, View):
                     'images': image_urls # ПЕРЕДАЕМ В JSON: Массив картинок для фронтенда
                 })
             
+            group_user_ids = list(chat_obj.users.values_list('id', flat=True))
+
             # Внутри класса ChatHistoryView, в самом конце блока try:
             return JsonResponse({
                 "success": True,
                 "chat_id": chat_id,
                 "is_admin": chat_obj.admin == request.user,  # <-- ДОБАВИЛИ ЭТУ СТРОКУ
+                "user_ids": group_user_ids,
                 "history": messages_list
             })
         except Chat.DoesNotExist:
